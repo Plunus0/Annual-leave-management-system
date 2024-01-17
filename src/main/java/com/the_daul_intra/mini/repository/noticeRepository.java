@@ -1,2 +1,10 @@
-package com.the_daul_intra.mini.repository;public class noticeRepository {
+package com.the_daul_intra.mini.repository;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class noticeRepository {
+
+
+
 }
