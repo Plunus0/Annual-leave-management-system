@@ -1,4 +1,4 @@
-// notice_detail.js
+// noticeDetail.js
 document.addEventListener('DOMContentLoaded', function () {
     // Simulated data
     const noticeData = {
