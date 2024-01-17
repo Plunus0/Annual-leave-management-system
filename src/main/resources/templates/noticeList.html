@@ -1,6 +1,6 @@
 <!-- notice_list.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,16 @@
     <div class="container">
         <div class="notice">
             <h1>공지사항</h1>
-            <h2><a href="/notice/test/"> 테스트 테스트</a></h2>
+            <p th:text="${message}"></p>
+
+            <form action="/notice/test" method="get">
+
+                <input type="text" name="data" th:value="${data}">
+
+                <button type="submit">송신</button>
+            </form>
+
+
             <ul id="noticeList">
                 <!-- 공지사항 목록이 여기에 추가될 것입니다. -->
 
