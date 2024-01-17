@@ -6,40 +6,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee List</title>
     <link rel="stylesheet" href="css/employee.css">
+    <script>
+        window.onload = function() {
+            var rows = document.getElementsByTagName("tr");
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].onclick = function() {
+                    window.location.href = "employeeDetail.html";
+                }
+            }
+
+            document.getElementById("addEmployee").onclick = function() {
+                alert("추가되었습니다.");
+                // 여기에 직원 추가 기능을 구현합니다.
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>직원 목록</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Contact Number</th>
-                <!-- Add other fields as needed -->
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>blah blah</td>
-                <td>inwoo@naver.com</td>
-                <td>장인우</td>
-                <td>backend Engineer</td>
-                <td>010-1234-1234</td>
-                <!-- Add other fields as needed -->
-            </tr>
+<h1>직원 목록</h1>
+<div id="buttonContainer">
+    <button id="addEmployee">직원 추가</button>
+</div>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Position</th>
+        <th>Contact Number</th>
+        <!-- Add other fields as needed -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>blah blah</td>
+        <td>inwoo@naver.com</td>
+        <td>장인우</td>
+        <td>backend Engineer</td>
+        <td>010-1234-1234</td>
+        <!-- Add other fields as needed -->
+    </tr>
 
-            <tr>
-                <td>blah</td>
-                <td>suyeon@naver.com</td>
-                <td>박수연</td>
-                <td>backend Engineer</td>
-                <td>010-1234-1234</td>
-                <!-- Add other fields as needed -->
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
+    <tr>
+        <td>blah</td>
+        <td>suyeon@naver.com</td>
+        <td>박수연</td>
+        <td>backend Engineer</td>
+        <td>010-1234-1234</td>
+        <!-- Add other fields as needed -->
+    </tr>
+    <!-- Add more rows as needed -->
+    </tbody>
+</table>
 </body>
 </html>
