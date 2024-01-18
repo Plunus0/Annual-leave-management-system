@@ -26,7 +26,4 @@ public class Employee {
 
     @Enumerated(EnumType.STRING)
     private YesNo adminStatus;
-
-    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY)
-    private EmployeeProfile employeeProfile;
 }

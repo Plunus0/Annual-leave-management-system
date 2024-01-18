@@ -1,25 +1,80 @@
 package com.the_daul_intra.mini.controller;
 
-import com.the_daul_intra.mini.dto.request.LoginRequest;
-import com.the_daul_intra.mini.dto.response.LoginResponse;
+import com.the_daul_intra.mini.dto.entity.Employee;
+import com.the_daul_intra.mini.repository.LoginRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class LoginController {
+
+    private final LoginRepository repository;
+
+    LoginController(LoginRepository repository) {
+        this.repository = repository;
+    }
+
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
-        // 로그인 처리 로직
-        // 아래는 예시로, 실제로는 데이터베이스에서 사용자를 조회하고 인증을 수행해야 합니다.
-        if ("test@example.com".equals(request.getEmail()) && "password".equals(request.getPassword())) {
-            LoginResponse response = new LoginResponse();
-            response.setToken("token");
-            response.setName("name");
-            response.setId(1L);
-            return response;
+    public String login(@RequestBody Employee loginEmployee, Model model) {
+        Employee employee = repository.findByEmail(loginEmployee.getEmail());
+        if (employee != null && employee.getPassword().equals(loginEmployee.getPassword())) {
+            return "redirect:/dashboard";
         } else {
-            throw new RuntimeException("Invalid email or password");
+            model.addAttribute("error", "Invalid email or password");
+            return "login";
         }
+    }
+
+    // Create
+    @PostMapping("/employees")
+    Employee createEmployee(@RequestBody Employee newEmployee) {
+        return repository.save(newEmployee);
+    }
+
+    // Read
+    @GetMapping("/employees")
+    List<Employee> readAllEmployees() {
+        return repository.findAll();
+    }
+
+    @GetMapping("/employees/{id}")
+    Employee readEmployee(@PathVariable Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Could not find employee " + id));
+    }
+
+    // Update
+    @PutMapping("/employees/{id}")
+    Employee updateEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
+        return repository.findById(id)
+                .map(employee -> {
+                    Employee updatedEmployee = Employee.builder()
+                            .id(employee.getId())
+                            .email(newEmployee.getEmail())
+                            .password(newEmployee.getPassword())
+                            .adminStatus(newEmployee.getAdminStatus())
+                            .build();
+                    return repository.save(updatedEmployee);
+                })
+                .orElseGet(() -> {
+                    Employee employeeWithId = Employee.builder()
+                            .id(id)
+                            .email(newEmployee.getEmail())
+                            .password(newEmployee.getPassword())
+                            .adminStatus(newEmployee.getAdminStatus())
+                            .build();
+                    return repository.save(employeeWithId);
+                });
+    }
+
+
+
+    // Delete
+    @DeleteMapping("/employees/{id}")
+    void deleteEmployee(@PathVariable Long id) {
+        repository.deleteById(id);
     }
 }
