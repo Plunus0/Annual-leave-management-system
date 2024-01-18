@@ -6,6 +6,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class ApiLoginRequest {
+
     private String email;
     private String password;
+
 }
