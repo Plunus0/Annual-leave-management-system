@@ -39,3 +39,25 @@ tr:hover {
     background-color: #e2f3ff;
     transition: all 0.3s ease-in-out;
 }
+
+/* 추가된 부분 */
+#buttonContainer {
+    width: 60%;
+    margin: 20px auto;
+    text-align: right;
+}
+
+#buttonContainer button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+#buttonContainer button:hover {
+    background-color: #0056b3;
+}
