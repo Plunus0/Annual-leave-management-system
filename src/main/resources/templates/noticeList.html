@@ -1,35 +1,29 @@
-<!-- notice_list.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항</title>
-    <link rel="stylesheet" href="/css/noticeList.css">
+    <link rel="stylesheet" th:href="@{/css/noticeList.css}">
 </head>
 <body>
-    <div class="container">
-        <div class="notice">
-            <h1>공지사항</h1>
-            <p th:text="${message}"></p>
+<div class="container">
+    <div class="notice">
+        <h1>공지사항</h1>
+        <p th:text="${message}"></p>
 
-            <form action="/notice/test" method="get">
+        <form action="/notice/test" method="get">
+            <input type="text" name="data" th:value="${data}">
+            <button type="submit">송신</button>
+        </form>
 
-                <input type="text" name="data" th:value="${data}">
-
-                <button type="submit">송신</button>
-            </form>
-
-
-            <ul id="noticeList">
-                <!-- 공지사항 목록이 여기에 추가될 것입니다. -->
-
-
-
-            </ul>
-        </div>
+        <ul id="noticeList">
+            <!-- 공지사항 목록이 여기에 추가될 것입니다. -->
+            <li th:each="notice : ${list}" class="notice-box">
+                <h2 th:text="${notice.title}"></h2>
+            </li>
+        </ul>
     </div>
-
-    <script src="/js/noticeList.js"></script>
+</div>
 </body>
 </html>
