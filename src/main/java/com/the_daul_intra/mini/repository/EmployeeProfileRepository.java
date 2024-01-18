@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmployeeProfileRepository extends JpaRepository<EmployeeProfile , Long> {
-    EmployeeProfile findByEmployeeProfile(String email);
-    EmployeeProfile findByEmployeeProfile(String email, String password);
-
+public interface EmployeeProfileRepository extends JpaRepository<EmployeeProfile, Long> {
+    EmployeeProfile findByEmail(String email);
 }
