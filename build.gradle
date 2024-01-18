@@ -11,7 +11,7 @@ java {
 	sourceCompatibility = '17'
 }
 
-configurations {
+configurations{
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
