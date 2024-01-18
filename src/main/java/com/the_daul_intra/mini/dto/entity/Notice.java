@@ -40,5 +40,5 @@ public class Notice {
     private LocalDateTime unusedDate;
 
     @Enumerated(EnumType.STRING)
-    private YesNo unused; // Assuming Status is an enum with values like ACTIVE, INACTIVE, etc.
+    private YesNo unused;
 }
