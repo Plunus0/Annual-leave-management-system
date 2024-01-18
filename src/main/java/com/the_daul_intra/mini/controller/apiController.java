@@ -1,7 +1,7 @@
 package com.the_daul_intra.mini.controller;
 
 
-import com.the_daul_intra.mini.dto.request.loginRequestDTO;
+import com.the_daul_intra.mini.dto.request.ApiLoginRequest;
 import com.the_daul_intra.mini.service.apiEmpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class apiController {
 
     private final apiEmpService apiEmpService;
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody loginRequestDTO dto){
+    public ResponseEntity<String> login(@RequestBody ApiLoginRequest dto){
 
         return ResponseEntity.ok().body(apiEmpService.apiLogin(dto.getEmail(), dto.getPassword()));
     }
