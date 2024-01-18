@@ -1,14 +1,14 @@
 package com.the_daul_intra.mini.service;
 
-import com.the_daul_intra.mini.repository.apiEmpLoginRepository;
+import com.the_daul_intra.mini.repository.ApiEmpLoginRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class apiEmpService{
+public class ApiEmpService{
 
-    private final apiEmpLoginRepository apiEmpLoginRepository;
+    private final ApiEmpLoginRepository apiEmpLoginRepository;
 
         public String apiLogin(String email, String password){
             //1. 인증과정
