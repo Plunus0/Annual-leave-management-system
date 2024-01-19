@@ -1,26 +1,26 @@
-<!-- notice_detail.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항 상세 페이지</title>
-    <link rel="stylesheet" href="css/noticeDetail.css">
+    <link rel="stylesheet" th:href="@{/css/noticeDetail.css}">
 </head>
 <body>
-    <div class="container">
-        <div class="notice-detail">
-            <h1 id="noticeTitle"></h1>
-            <div class="notice-divider"></div>
-            <div id="noticeContents"></div>
-            <div class="notice-divider"></div>
-            <div class="buttons">
-                <button class="editButton">수정</button>
-                <button class="deleteButton">삭제</button>
-            </div>
+<div class="container">
+    <div class="notice-detail">
+        <!-- Thymeleaf를 사용하여 데이터를 바인딩 -->
+        <h1 th:text="${noticeDetail.title}" id="noticeTitle"></h1>
+        <div class="notice-divider"></div>
+        <div th:utext="${noticeDetail.content}" id="noticeContents"></div>
+        <div class="notice-divider"></div>
+        <div class="buttons">
+            <button class="editButton">수정</button>
+            <button class="deleteButton">삭제</button>
         </div>
     </div>
+</div>
 
-    <script src="js/noticeDetail.js"></script>
+
 </body>
 </html>

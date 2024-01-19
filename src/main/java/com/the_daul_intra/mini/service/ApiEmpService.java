@@ -45,14 +45,14 @@ public class ApiEmpService{
 
         }*/
 
-        return ApiLoginResponse.builder()
-                .token(/*JwtUtil.createJwt(dto.getEmail(), secretKey)*/"2st token")
-                .name(/*selectedEmp.getEmployeeProfile().getName()*/"테스트사용자")
-                .id(/*selectedEmp.getId()*/empId)
+/*        return ApiLoginResponse.builder()
+                .token(*//*JwtUtil.createJwt(dto.getEmail(), secretKey)*//*"2st token")
+                .name(*//*selectedEmp.getEmployeeProfile().getName()*//*"테스트사용자")
+                .id(*//*selectedEmp.getId()*//*empId)
                 .build();
-    }
+    }*/
 
-    public ApiLoginResponse apiLogin(ApiLoginPostRequest request){
+/*    public ApiLoginResponse apiLogin(ApiLoginPostRequest request){
         //1. 인증과정
         //1-1. 이메일 확인
         Employee selectedEmp = apiEmpLoginRepository.findActiveByEmail(request.getEmail())
@@ -62,16 +62,16 @@ public class ApiEmpService{
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호가 일치하지 않습니다.");
         }
         //복호화하여 비밀번호 확인하기
-/*        if(!encoder.matches(dto.getPassword(), selectedEmp.getPassword())){
+*//*        if(!encoder.matches(dto.getPassword(), selectedEmp.getPassword())){
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호가 틀렸습니다.");
-        }*/
+        }*//*
         //인증성공시 반환
         return ApiLoginResponse.builder()
-                .token(/*JwtUtil.createJwt(dto.getEmail(), secretKey)*/"1st token")
-                .name(/*selectedEmp.getEmployeeProfile().getName()*/"테스트사용자")
-                .id(/*selectedEmp.getId()*/empId)
+                .token(*//*JwtUtil.createJwt(dto.getEmail(), secretKey)*//*"1st token")
+                .name(*//*selectedEmp.getEmployeeProfile().getName()*//*"테스트사용자")
+                .id(*//*selectedEmp.getId()*//*empId)
                 .build();
-    }
+    }*/
 
 
     //관리자 여부에 따른 권한 부여
@@ -88,7 +88,7 @@ public class ApiEmpService{
             System.out.println("is Employee");
         }
         return authorities;
-    }*/
+    }
 
 }
 */
