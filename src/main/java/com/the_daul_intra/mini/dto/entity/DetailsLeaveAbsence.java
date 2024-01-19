@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -24,14 +25,8 @@ public class DetailsLeaveAbsence {
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
     private Employee employee;
 
-    @Column(name = "START_DATE", nullable = false, length = 19)
-    private LocalDateTime startDate;
-
-    @Column(name = "END_DATE", length = 19)
-    private LocalDateTime endDate;
-
     @Column(name = "ABSENCE_LEAVE_PERIOD", nullable = false)
-    private Integer absenceLeavePeriod;
+    private Long absenceLeavePeriod;
 
     @Column(name = "ABSENCE_TYPE", nullable = false, length = 10)
     private String absenceType;
@@ -61,4 +56,7 @@ public class DetailsLeaveAbsence {
 
     @Column(name = "ADMIN_COMMENT", columnDefinition = "TEXT")
     private String adminComment;
+
+    @OneToMany(mappedBy = "leaveRequest", fetch = FetchType.LAZY)
+    private Set<DetailsLeaveDate> leaveDates;
 }

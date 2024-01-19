@@ -27,8 +27,8 @@ public class EmployeeProfile {
     @Column(name = "E_MAIL", nullable = false, length = 200)
     private String email;
 
-    @Column(name = "RESIDENT_REGISTRATION_INT", length = 200)
-    private String residentRegistrationNumber; // 주민등록번호 (암호화 필요)
+    @Column(name = "RESIDENT_REGISTRATION_INT", length = 256)
+    private String residentRegistrationNumber;
 
     @Column(name = "POSITION", length = 10)
     private String position;
@@ -53,5 +53,5 @@ public class EmployeeProfile {
     private String adminComment;
 
     @Column(name = "ANNUAL_QUANTITY", nullable = false)
-    private Integer annualQuantity;
+    private Long annualQuantity;
 }

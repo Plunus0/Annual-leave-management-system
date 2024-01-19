@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+
 @Getter
 @Entity
 @AllArgsConstructor
@@ -41,4 +43,7 @@ public class Notice {
 
     @Enumerated(EnumType.STRING)
     private YesNo unused;
+
+    @OneToMany(mappedBy = "notice", fetch = FetchType.LAZY)
+    private Set<NoticeReadStatus> readStatuses;
 }
