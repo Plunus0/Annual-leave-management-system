@@ -15,4 +15,10 @@ public interface ApiEmpLoginRepository extends JpaRepository<Employee, Long> {
             "WHERE e.email = :email " +
             "AND (ep.retirementDate > CURRENT_DATE OR ep.retirementDate IS NULL)")
     Optional<Employee> findActiveByEmail(String email);
+
+    @Query("SELECT e FROM Employee e " +
+            "JOIN e.employeeProfile ep " +
+            "WHERE e.id = :id " +
+            "AND (ep.retirementDate > CURRENT_DATE OR ep.retirementDate IS NULL)")
+    Optional<Employee> findActiveById(Long id);
 }

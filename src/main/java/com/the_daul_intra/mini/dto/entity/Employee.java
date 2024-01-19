@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Set;
+
 @Getter
 @Entity
 @AllArgsConstructor
@@ -18,10 +20,10 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 200, unique = true)
     private String email;
 
-    @Column(length = 30)
+    @Column(length = 256)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -29,4 +31,7 @@ public class Employee {
 
     @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY)
     private EmployeeProfile employeeProfile;
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    private Set<NoticeReadStatus> noticeReadStatuses;
 }
