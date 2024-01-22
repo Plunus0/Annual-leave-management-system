@@ -54,6 +54,7 @@ public class ApiEmpService{
     public ApiLoginResponse apiLogin(ApiLoginPostRequest request){
         //1. 인증과정
         //1-1. 이메일 확인
+
         Employee selectedEmp = apiEmpLoginRepository.findActiveByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, request.getEmail() + " 해당하는 아이디가 없습니다."));
         //1-2. 비밀번호 확인
@@ -67,8 +68,8 @@ public class ApiEmpService{
         //인증성공시 반환
         return ApiLoginResponse.builder()
                 .token(/*JwtUtil.createJwt(dto.getEmail(), secretKey)*/"1st token")
-                .name(/*selectedEmp.getEmployeeProfile().getName()*/"테스트사용자")
-                .id(/*selectedEmp.getId()*/empId)
+                .name(selectedEmp.getEmployeeProfile().getName())
+                .id(selectedEmp.getId())
                 .build();
     }
 
