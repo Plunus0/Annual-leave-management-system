@@ -1,0 +1,93 @@
+/* writeNotice.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.notice-form {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #343a40;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input,
+textarea {
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.submit-button, .cancel-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button {
+    background-color: #28a745;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: #ffffff;
+    text-decoration: none;
+
+    text-align: center;
+    display: inline-block; /* 가로로 정렬되도록 설정 */
+
+}
+
+/* 버튼 가로로 나란히 배치 */
+.form-buttons {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 8px;
+}
+
+/* 작은 화면에서는 버튼들을 세로로 배치 */
+@media screen and (max-width: 600px) {
+    .form-buttons {
+        flex-direction: column;
+        align-items: flex-end; /* 작은 화면에서는 오른쪽 정렬 */
+    }
+
+    .submit-button, .cancel-button {
+        width: auto; /* 글자 크기에 맞게 너비 자동 조정 */
+        margin-bottom: 8px;
+    }
+}
