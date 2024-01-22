@@ -1,26 +1,10 @@
-<!-- employee/list.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee List</title>
     <link rel="stylesheet" href="css/employee.css">
-    <script>
-        window.onload = function() {
-            var rows = document.getElementsByTagName("tr");
-            for (var i = 0; i < rows.length; i++) {
-                rows[i].onclick = function() {
-                    window.location.href = "employeeDetail.html";
-                }
-            }
-
-            document.getElementById("addEmployee").onclick = function() {
-                alert("추가되었습니다.");
-                // 여기에 직원 추가 기능을 구현합니다.
-            }
-        }
-    </script>
 </head>
 <body>
 <h1>직원 목록</h1>
@@ -39,21 +23,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>blah blah</td>
-        <td>inwoo@naver.com</td>
-        <td>장인우</td>
-        <td>backend Engineer</td>
-        <td>010-1234-1234</td>
-        <!-- Add other fields as needed -->
-    </tr>
-
-    <tr>
-        <td>blah</td>
-        <td>suyeon@naver.com</td>
-        <td>박수연</td>
-        <td>backend Engineer</td>
-        <td>010-1234-1234</td>
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.id}"></td>
+        <td th:text="${employee.email}"></td>
+        <td th:text="${employee.name}"></td>
+        <td th:text="${employee.position}"></td>
+        <td th:text="${employee.contactInfo}"></td>
         <!-- Add other fields as needed -->
     </tr>
     <!-- Add more rows as needed -->

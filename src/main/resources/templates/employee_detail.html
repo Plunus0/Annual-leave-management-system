@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Detail</title>
+</head>
+<body>
+<h1>Employee Detail</h1>
+<table>
+    <tr>
+        <th>Id</th>
+        <td th:text="${employee.id}"></td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td th:text="${employee.name}"></td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td th:text="${employee.email}"></td>
+    </tr>
+    <tr>
+        <th>Resident Registration Number</th>
+        <td th:text="${employee.residentRegistrationNumber}"></td>
+    </tr>
+    <tr>
+        <th>Position</th>
+        <td th:text="${employee.position}"></td>
+    </tr>
+    <tr>
+        <th>Join Date</th>
+        <td th:text="${employee.joinDate}"></td>
+    </tr>
+    <tr>
+        <th>Retirement Date</th>
+        <td th:text="${employee.retirementDate}"></td>
+    </tr>
+    <tr>
+        <th>Contact Information</th>
+        <td th:text="${employee.contactInformation}"></td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td th:text="${employee.address}"></td>
+    </tr>
+    <tr>
+        <th>Project Status</th>
+        <td th:text="${employee.projectStatus}"></td>
+    </tr>
+    <tr>
+        <th>Admin Comment</th>
+        <td th:text="${employee.adminComment}"></td>
+    </tr>
+    <tr>
+        <th>Annual Quantity</th>
+        <td th:text="${employee.annualQuantity}"></td>
+    </tr>
+</table>
+<a th:href="@{/employee/{id}/edit(id=${employee.id})}">Edit</a>
+<form th:action="@{/employee/{id}(id=${employee.id})}" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" value="Delete">
+</form>
+<a href="/employees">Back to list</a>
+</body>
+</html>

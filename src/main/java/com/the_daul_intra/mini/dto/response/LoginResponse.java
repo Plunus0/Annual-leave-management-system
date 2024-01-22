@@ -13,4 +13,7 @@ public class LoginResponse {
     private String name;
     private Long id;
 
+    public LoginResponse(String token, String email, Long id) {
+
+    }
 }

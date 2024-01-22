@@ -1,81 +1,56 @@
 package com.the_daul_intra.mini.controller;
 
-import com.the_daul_intra.mini.dto.entity.Employee;
-import com.the_daul_intra.mini.repository.LoginRepository;
+import com.the_daul_intra.mini.dto.request.LoginRequest;
+import com.the_daul_intra.mini.dto.response.LoginResponse;
+import com.the_daul_intra.mini.service.LoginService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping(value="/admin")
 public class LoginController {
-
-    private final LoginRepository repository;
-
-    LoginController(LoginRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private LoginService loginService;
 
     @PostMapping("/Login")
-    public String login(@RequestBody Employee loginEmployee, Model model) {
-        Employee employee = repository.findByEmail(loginEmployee.getEmail());
-        if (employee != null && employee.getPassword().equals(loginEmployee.getPassword())) {
-            return "redirect:/dashboard";
+    public String login(@ModelAttribute LoginRequest  loginRequest, Model model, HttpSession session) {
+        LoginResponse loginResponse = loginService.login(loginRequest.getEmail(), loginRequest.getPassword(),session);
+        //위에 객체로 모델에 담아서 dashboard패이지로 이동
+        if (loginResponse != null) {
+            model.addAttribute("employee", loginResponse);
+
+            return "index"; // 로그인 성공시 이동할 페이지
         } else {
-            model.addAttribute("error", "Invalid email or password");
-            return "Login";
+            model.addAttribute("error", "로그인 실패: 이메일 또는 비밀번호를 확인해주세요.");
+
+            return "Login"; // 로그인 실패시 이동할 페이지
         }
+
+
+
     }
 
-    // Create
-    @PostMapping("/employee")
-    Employee createEmployee(@RequestBody Employee newEmployee) {
-        return repository.save(newEmployee);
-    }
 
-    // Read
+
     @GetMapping("/Login")
-    List<Employee> readAllEmployees() {
-        return repository.findAll();
+    public String showLoginPage(Model model) {
+        model.addAttribute(model.addAttribute("loginRequest", new LoginRequest()));
+        return "Login"; // 로그인 페이지를 보여주는 뷰
     }
 
-    @GetMapping("/Login/{id}")
-    Employee readEmployee(@PathVariable Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Could not find employee " + id));
-    }
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        // 세션에서 사용자 정보 제거
+        session.removeAttribute("employee");
 
-    // Update
-    @PutMapping("/Login/{id}")
-    Employee updateEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
-        return repository.findById(id)
-                .map(employee -> {
-                    Employee updatedEmployee = Employee.builder()
-                            .id(employee.getId())
-                            .email(newEmployee.getEmail())
-                            .password(newEmployee.getPassword())
-                            .adminStatus(newEmployee.getAdminStatus())
-                            .build();
-                    return repository.save(updatedEmployee);
-                })
-                .orElseGet(() -> {
-                    Employee employeeWithId = Employee.builder()
-                            .id(id)
-                            .email(newEmployee.getEmail())
-                            .password(newEmployee.getPassword())
-                            .adminStatus(newEmployee.getAdminStatus())
-                            .build();
-                    return repository.save(employeeWithId);
-                });
+        return "Login"; // 로그인 페이지를 보여주는 뷰
     }
 
 
-
-    // Delete
-    @DeleteMapping("/Login/{id}")
-    void deleteEmployee(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
 }

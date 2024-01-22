@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
+<form action="/admin/employee" th:object="${loginRequest}" method="post">
 <div class="container">
     <div class="sidebar">
         <ul>
-            <li><a th:href="notice/list">공지사항</a></li>
-            <li><a href="employeeList.html">직원관리</a></li>
+            <li><a href="#">공지사항</a></li>
+            <li><a th:href="@{/employeeList}">직원관리</a></li>
             <li><a href="#">신청서관리</a></li>
         </ul>
     </div>
@@ -39,7 +40,7 @@
         </div>
     </div>
 </div>
-
+</form>
 <script src="../static/js"></script>
 </body>
 </html>
