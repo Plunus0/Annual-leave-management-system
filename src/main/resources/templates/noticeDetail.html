@@ -5,19 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항 상세 페이지</title>
     <link rel="stylesheet" th:href="@{/css/noticeDetail.css}">
+    <link rel="stylesheet" href="../static/css/noticeDetail.css">
 </head>
 <body>
+
 <div class="container">
     <div class="notice-detail">
-        <!-- Thymeleaf를 사용하여 데이터를 바인딩 -->
-        <h1 th:text="${noticeDetail.title}" id="noticeTitle"></h1>
-        <div class="notice-divider"></div>
-        <div th:utext="${noticeDetail.content}" id="noticeContents"></div>
-        <div class="notice-divider"></div>
-        <div class="buttons">
-            <button class="editButton">수정</button>
-            <button class="deleteButton">삭제</button>
+        <div>
+            <a th:href="@{/admin/notice/list}" class="backButton">공지사항 목록</a>
         </div>
+        <form th:action="@{'/admin/notice/modify/' + ${noticeDetail.id}}" method="post">
+            <input type="hidden" name="_method" value="put" />
+            <label for="noticeTitle"></label><input name="title" type="text" th:value="${noticeDetail.title}" id="noticeTitle">
+
+            <div class="notice-divider"></div>
+            <label for="noticeContents"></label><textarea name="content" th:text="${noticeDetail.content}" id="noticeContents"></textarea>
+
+            <div class="notice-divider"></div>
+            <div th:text="${noticeDetail.id}" id="noticeId"></div>
+
+            <button class="editButton">수정</button>
+        </form>
+
+        <form th:action="@{'/admin/notice/delete/' + ${noticeDetail.id}}" method="post">
+            <input type="hidden" name="_method" value="delete" />
+            <button class="deleteButton" onclick="return confirm('정말로 삭제하시겠습니까?')">삭제</button>
+        </form>
     </div>
 </div>
 

@@ -13,7 +13,7 @@
     <div class="notice-form">
         <h1>글 작성</h1>
 
-        <form th:action="@{/notice/writepro}" method="post">
+        <form th:action="@{/admin/notice/writepro}" method="post">
             <label for="title">제목:</label>
             <input type="text" id="title" name="title" required>
 
@@ -21,7 +21,8 @@
             <textarea id="content" name="content" required></textarea>
 
             <button type="submit" class="submit-button">작성하기</button>
-            <a th:href="@{/notice/list}" class="cancel-button">취소</a>
+            <a th:href="@{/admin/notice/list}" class="cancel-button">취소</a>
+
         </form>
     </div>
 </div>

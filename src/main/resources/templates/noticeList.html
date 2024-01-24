@@ -14,7 +14,7 @@
             <!-- 공지사항 목록이 여기에 추가될 것입니다. -->
             <li th:each="notice : ${list}" class="notice-box">
                 <!-- 각 공지사항을 클릭할 수 있는 링크로 변경 -->
-                <a th:href="@{'/notice/detail/' + ${notice.id}}">
+                <a th:href="@{'/admin/notice/detail/' + ${notice.id}}">
                     <h2 th:text="${notice.title}"></h2>
                 </a>
 
@@ -23,12 +23,8 @@
 
         </ul>
 
-        <a th:with="id=${123}" th:href="@{'/notice/detail/' + ${id}}">
-            <h2>테스트용</h2>
-        </a>
 
-
-        <form th:action="@{/notice/write}" method="get">
+        <form th:action="@{/admin/notice/write}" method="get">
 
             <button type="submit">작성하기</button>
         </form>

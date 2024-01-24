@@ -1,16 +1,18 @@
 package com.the_daul_intra.mini.controller;
 
+import com.the_daul_intra.mini.dto.entity.Employee;
 import com.the_daul_intra.mini.dto.entity.Notice;
 import com.the_daul_intra.mini.dto.request.NoticeWriteDTO;
+import com.the_daul_intra.mini.dto.response.NoticeResponse;
 import com.the_daul_intra.mini.service.NoticeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
+@RequestMapping("/admin")
 public class NoticeController {
 
     public NoticeController(NoticeService noticeService) {
@@ -41,31 +43,55 @@ public class NoticeController {
     //글 작성
     @PostMapping("/notice/writepro")
     public String noticeWritepro(@ModelAttribute  NoticeWriteDTO noticeWriteDTO, Model model) {
-
-        System.out.println("진입 체크 지점");
-
-        System.out.println("title : " + noticeWriteDTO.getTitle());
-        System.out.println("content : " + noticeWriteDTO.getContent());
+        
+        // 테스트용 임시로 employee id 만들어서 사용
+        Employee employee = Employee.builder()
+                .id(1L)
+                .build();
+        
+        noticeWriteDTO.setEmployee(employee);
+        // 여기까지
 
         noticeService.noticeWrite(noticeWriteDTO);
 
-        return "redirect:/noticeList";
+        return "redirect:/admin/notice/list";
     }
 
     // 공지사항 상세페이지
     @GetMapping("/notice/detail/{id}")
     public String noticeDetail(@PathVariable Long id, Model model){
-        System.out.println("test");
 
 
         Notice noticeDetail = noticeService.noticeDetail(id);
 
-        System.out.println("title : " + noticeDetail.getTitle());
-        System.out.println("content : " + noticeDetail.getContent());
-
         model.addAttribute("noticeDetail", noticeDetail);
 
         return "noticeDetail";
+    }
+
+    // 공지사항 수정페이지
+    @PutMapping("/notice/modify/{id}")
+    public String noticeModify(@PathVariable Long id, @ModelAttribute NoticeResponse noticeResponse){
+
+        // 테스트용 임시로 employee id 만들어서 사용
+        Employee employee = Employee.builder()
+                .id(1L)
+                .build();
+
+        noticeResponse.setEmployee(employee);
+        // 여기까지
+
+        System.out.println("id : " + id);
+        noticeService.noticeModify(id, noticeResponse);
+
+        return "redirect:/admin/notice/detail/{id}";
+    }
+
+    @DeleteMapping("/notice/delete/{id}")
+    public String noticeDelete(@PathVariable Long id){
+        System.out.println("Delete id : " + id);
+        noticeService.noticeDelete(id);
+        return "redirect:/admin/notice/list";
     }
 
     //member
