@@ -1,4 +1,3 @@
-/*
 package com.the_daul_intra.mini.utils;
 
 import io.jsonwebtoken.Claims;
@@ -13,7 +12,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .claim("email", email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 31536000))//유효기간 : 1년
+                .setExpiration(new Date(System.currentTimeMillis() + 2592000))//유효기간 : 1달
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
@@ -39,4 +38,3 @@ public class JwtUtil {
         return claims.get("email", String.class);
     }
 }
-*/

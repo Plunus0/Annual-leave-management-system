@@ -42,10 +42,10 @@ public class ApiLeaveService {
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND,"  로그인 내역이 존재하지 않습니다."));
 
         DetailsLeaveAbsence leaveRequest = DetailsLeaveAbsence.builder()
-                .employee(/*writer*/employee)
+                .employee(employee)
                 .absenceLeavePeriod((long) request.getUseDates().length)
-                .absenceType(/*request.getType()*/"오전반차!")
-                .applicantComments(/*request.getReason()*/"쉬고싶어요")
+                .absenceType(request.getType())
+                .applicantComments(request.getReason())
                 .applicationDate(LocalDateTime.now())
                 .processingStatus("신청")
                 .build();
