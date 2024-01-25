@@ -30,16 +30,16 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests(requests -> {
-                    requests.requestMatchers(HttpMethod.POST, "/api/login", "/admin/login").permitAll();
-                    requests.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
-                    requests.anyRequest().authenticated();
-//                    requests.anyRequest().permitAll();
+//                    requests.requestMatchers(HttpMethod.POST, "/api/login", "/admin/login").permitAll();
+//                    requests.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
+//                    requests.anyRequest().authenticated();
+                    requests.anyRequest().permitAll();
                 })
                 .sessionManagement(
                         sessionManagement ->
                                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(new JwtFilter(empDetailsService, secretKey), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JwtFilter(empDetailsService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

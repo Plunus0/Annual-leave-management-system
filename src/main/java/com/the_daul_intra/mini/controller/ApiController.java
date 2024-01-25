@@ -34,12 +34,6 @@ public class ApiController {
         return ResponseEntity.ok(apiEmpService.apiGetLogin());
     }
 
-    //로그인 요청 -> 토큰 반환
-    //가지고 있는 토큰을 요청할때마다 보내줌 >
-
-    //모바일 처음 기동시 토큰 유효성 검사.......
-    //get으로 요청을 보냈는데 > 토큰을 검사했을때 ㅇㅋ이면 넘어가고 아니면 에러로 다시 로그인페이지로
-
     //휴가신청서 작성 컨트롤러
     @PostMapping("/offwrite")
     public ResponseEntity<DetailsLeaveAbsence> createLeaveRequest(@RequestBody ApiLeavePostRequest request) {
