@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Employee Detail</title>
+    <link rel="stylesheet" th:href="@{/css/employeeDetail.css}">
 </head>
 <body>
-<h1>Employee Detail</h1>
+<h1>직원 상세정보</h1>
 <table>
     <tr>
-        <th>Id</th>
+        <th class="small-width">Id</th>
         <td th:text="${employee.id}"></td>
     </tr>
     <tr>
@@ -56,11 +57,19 @@
         <td th:text="${employee.annualQuantity}"></td>
     </tr>
 </table>
-<a th:href="@{/employee/{id}/edit(id=${employee.id})}">Edit</a>
-<form th:action="@{/employee/{id}(id=${employee.id})}" method="post">
-    <input type="hidden" name="_method" value="delete">
-    <input type="submit" value="Delete">
-</form>
-<a href="/employees">Back to list</a>
+
+<div class="center">
+    <!-- 수정 폼 -->
+    <form th:action="@{/admin/employee/{id}(id=${employee.id})}" method="post">
+        <input type="hidden" name="_method" value="put">
+        <input type="submit" value="수정">
+    </form>
+
+    <!-- 삭제 폼 -->
+    <form th:action="@{/admin/employee/{id}(id=${employee.id})}" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <input type="submit" value="삭제">
+    </form>
+</div>
 </body>
 </html>

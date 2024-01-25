@@ -10,7 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,14 +25,13 @@ public class EmployeeService {
         this.employeeProfileRepository = employeeProfileRepository;
     }
 
-    public static List<Employee> findAll() {
-
-        return null;
+    public List<Employee> findAll() {
+        return employeeRepository.findAll();
     }
 
     @Transactional
     public Employee createEmployee(EmployeePostRequest request) {
-
+        System.out.println("nameService : " + request.getName());
         // Employee 생성
         Employee employee = Employee.builder()
                 .email(request.getEmail())
@@ -42,23 +41,29 @@ public class EmployeeService {
 
         employee = employeeRepository.save(employee);
 
+        System.out.println("nameService2 : " + request.getName());
+        System.out.println("data : " + employee.getId()+employee.getAdminStatus());
         // EmployeeProfile 생성
+
         EmployeeProfile employeeProfile = EmployeeProfile.builder()
-                .employee(employee)
-                .name(request.getName())
-                .email(request.getEmail())
-                .residentRegistrationNumber(request.getRrn())
-                .position(request.getPosition())
-                .joinDate(LocalDateTime.parse(request.getJoinDate()))
-                .retirementDate(LocalDateTime.parse(request.getRetirementDate()))
-                .contactInformation(request.getContactInfo())
+                .employee(employee)//필수
+                .name(request.getName())//필수
+                .email(request.getEmail())//필수
+                .residentRegistrationNumber(request.getRrn())//됨
+                .position(request.getPosition())//됨
+                .joinDate(LocalDate.parse(request.getJoinDate()).atStartOfDay())
+                .retirementDate(request.getRetirementDate() != null && !request.getRetirementDate().isEmpty()
+                        ? LocalDate.parse(request.getRetirementDate()).atStartOfDay()
+                        : null)
+                .contactInformation(request.getContactInfo())//필수
                 .address(request.getAddress())
                 .projectStatus(YesNo.valueOf(request.getProjectStatus()))
                 .adminComment(request.getComment())
-                .annualQuantity(request.getAnnualCount())
-                .build();
-
+                .annualQuantity(request.getAnnualCount())//필수
+                .build();//마무리
+        System.out.println("nameService3 : " + request.getName());
         employeeProfileRepository.save(employeeProfile);
+
 
         return employee;
     }

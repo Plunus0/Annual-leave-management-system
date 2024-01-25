@@ -3,22 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Employee</title>
-    <link rel="stylesheet" href="css/employeeadd.css">
+    <link rel="stylesheet" th:href="@{/css/employeeadd.css}">
+    <script>
+        let adminStatusButtons = document.querySelectorAll('#adminStatus button');
+        let projectStatusButtons = document.querySelectorAll('#projectStatus button');
+
+        adminStatusButtons.forEach((btn) => {
+            btn.addEventListener('click', function() {
+                handleButtonClick(btn, 'adminStatus');
+            });
+        });
+
+        projectStatusButtons.forEach((btn) => {
+            btn.addEventListener('click', function() {
+                handleButtonClick(btn, 'projectStatus');
+            });
+        });
+
+        function handleButtonClick(button, type) {
+            let buttons = document.querySelectorAll('#' + type + ' button');
+            let input = document.querySelector('#' + type + 'Input');
+
+            buttons.forEach((btn) => {
+                btn.classList.remove('selected');
+            });
+
+            button.classList.add('selected');
+            input.value = button.innerText;
+        }
+    </script>
 </head>
+
 <body>
 <h1>직원 이력 카드</h1>
 <div id="formContainer">
-    <form th:action="@{/employee}" method="post">
+    <form th:action="@{/admin/employee/employeeAdd}" method="post">
         <label for="name">이름:</label><br>
         <input type="text" id="name" name="name"><br>
         <label for="password">비밀번호:</label><br>
         <input type="password" id="password" name="password"><br>
         <label for="adminStatus">관리자 여부:</label><br>
-        <input type="text" id="adminStatus" name="adminStatus"><br>
+        <div id="adminStatus">
+            <button type="button" class="yes-btn">Yes</button>
+            <button type="button" class="no-btn">No</button>
+            <input type="hidden" name="adminStatus" id="adminStatusInput">
+        </div>
         <label for="rrn">주민등록번호:</label><br>
         <input type="password" id="rrn" name="rrn"><br>
         <label for="email">이메일:</label><br>
-        <input type="email" id="email" name="email"><br>
+        <input type="email" id="email" name="email" required><br>
         <label for="position">직급:</label><br>
         <input type="text" id="position" name="position"><br>
         <label for="joinDate">입사일:</label><br>
@@ -29,6 +62,12 @@
         <input type="text" id="contactInfo" name="contactInfo"><br>
         <label for="address">주소:</label><br>
         <input type="text" id="address" name="address"><br>
+        <label for="projectStatus">파견상태:</label><br>
+        <div id="projectStatus">
+            <button type="button" class="yes-btn">Yes</button>
+            <button type="button" class="no-btn">No</button>
+            <input type="hidden" name="projectStatus" id="projectStatusInput">
+        </div>
         <label for="comment">관리자 코멘트:</label><br>
         <textarea id="comment" name="comment"></textarea><br>
         <label for="annualCount">발생 연차:</label><br>

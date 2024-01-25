@@ -7,42 +7,45 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
+@RequestMapping(value = "/admin/employee")
 public class EmployeeProfileController {
     @Autowired
     private EmployeeProfileService employeeProfileService;
+/*
 
-    @GetMapping("/employees")
+    @GetMapping("/employeeProfileAdd")
     public String list(Model model) {
         List<EmployeeProfile> employees = employeeProfileService.getAllEmployees();
         model.addAttribute("employees", employees);
-        return "employees";
+        return "employeeList";
     }
+*/
 
-    @GetMapping("/employee/{id}")
+    @GetMapping("/employee_detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
         EmployeeProfile employee = employeeProfileService.getEmployee(id);
         model.addAttribute("employee", employee);
+        System.out.println("testtttt");
         return "employee_detail";
     }
 
-    @PostMapping("/employee")
+    @PostMapping("//employee_detail/{id}")
     public String create(@ModelAttribute EmployeeProfile employee) {
         employeeProfileService.saveEmployee(employee);
-        return "redirect:/employees";
+        return "redirect:/admin/employee/employeeList";
     }
 
-    @PutMapping("/employee/{id}")
+
+    @PutMapping("/employee_detail/{id}")
     public String update(@PathVariable Long id, @ModelAttribute EmployeeProfile employee) {
         employeeProfileService.saveEmployee(employee);
-        return "redirect:/employee/" + id;
+        return "redirect:/admin/employee/employee_detail" + id;
     }
 
-    @DeleteMapping("/employee/{id}")
+    @DeleteMapping("/employee_detail/{id}")
     public String delete(@PathVariable Long id) {
         employeeProfileService.deleteEmployee(id);
-        return "redirect:/employees";
+        return "redirect:/admin/employee/employeeList";
     }
 }

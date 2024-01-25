@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee List</title>
-    <link rel="stylesheet" href="css/employee.css">
+    <link rel="stylesheet" th:href="@{/css/employee.css}">
 </head>
 <body>
 <h1>직원 목록</h1>
 <div id="buttonContainer">
-    <button id="addEmployee">직원 추가</button>
+    <a id="addEmployee" th:href="@{/admin/employee/employeeAdd}" class="add-button">직원 추가</a>
 </div>
 <table border="1">
     <thead>
@@ -19,20 +19,18 @@
         <th>Name</th>
         <th>Position</th>
         <th>Contact Number</th>
-        <!-- Add other fields as needed -->
     </tr>
     </thead>
     <tbody>
     <tr th:each="employee : ${employees}">
-        <td th:text="${employee.id}"></td>
+        <td><a th:href="@{/admin/employee/employee_detail/{id}(id=${employee.id})}" th:text="${employee.id}"></a></td>
         <td th:text="${employee.email}"></td>
-        <td th:text="${employee.name}"></td>
-        <td th:text="${employee.position}"></td>
-        <td th:text="${employee.contactInfo}"></td>
-        <!-- Add other fields as needed -->
+        <td th:text="${employee.employeeProfile.name}"></td>
+        <td th:text="${employee.employeeProfile.position}"></td>
+        <td th:text="${employee.employeeProfile.contactInformation}"></td>
     </tr>
-    <!-- Add more rows as needed -->
     </tbody>
+
 </table>
 </body>
 </html>

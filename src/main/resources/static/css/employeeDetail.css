@@ -39,13 +39,8 @@ tr:hover {
     transition: all 0.3s ease-in-out;
 }
 
-#buttonContainer {
-    width: 60%;
-    margin: 20px auto;
-    text-align: right;
-}
-
-#buttonContainer .add-button {
+/* Button styles */
+form input[type=submit] {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -54,8 +49,17 @@ tr:hover {
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    text-decoration: none; /* 링크의 밑줄 제거 */
-    display: inline-block; /* 버튼처럼 보이게 하기 위한 설정 */
 }
 
-#buttonContainer .add-button:hover
+form input[type=submit]:hover {
+    background-color: #0056b3;
+}
+.small-width {
+    width: 50px; /* 원하는 너비로 조절하세요 */
+}
+.center {
+    text-align: center;
+}
+.center form {
+    display: inline-block;
+}
