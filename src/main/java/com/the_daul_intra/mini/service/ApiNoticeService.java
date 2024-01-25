@@ -48,8 +48,8 @@ public class ApiNoticeService {
     }
 
     @Transactional
-    public ApiNoticeResponse getNoticeDetails(ApiNoticeDetailRequest request) {
-        Notice notice = apiNoticeRepository.findById(request.getId())
+    public ApiNoticeResponse getNoticeDetails(Long requestId) {
+        Notice notice = apiNoticeRepository.findById(requestId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND," 해당 공지사항이 존재하지 않습니다."));
 
         //추후 인증정보를 바탕으로 로그인한 직원 id 확인 -> 없다면 로그인 페이지
@@ -58,7 +58,7 @@ public class ApiNoticeService {
         Employee employee = apiEmpLoginRepository.findById(empId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, " 로그인 내역이 존재하지 않습니다."));
 
-        NoticeReadStatus readStatus = apiNoticeReadStatusRepository.findByNoticeIdAndEmployeeId(request.getId(), empId)
+        NoticeReadStatus readStatus = apiNoticeReadStatusRepository.findByNoticeIdAndEmployeeId(requestId, empId)
                 .orElseGet(() -> {
                     return apiNoticeReadStatusRepository.save(NoticeReadStatus.builder()
                             .notice(notice)

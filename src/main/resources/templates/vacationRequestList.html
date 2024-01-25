@@ -1,58 +1,35 @@
-<!-- application/vacationList.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vacation Application List</title>
     <link rel="stylesheet" href="css/vactionRequest.css">
 </head>
 <body>
-    <div class="application-list">
+    <div class="Offlist">
         <h1>연차 신청 목록</h1>
         <table>
             <thead>
                 <tr>
-                    <th>사원 이름</th>
+                    <th>[사원이름]</th>
                     <th>연락처</th>
                     <th>신청일</th>
                     <th>신청 구분</th>
                     <th>신청자 코멘트</th>
                     <th>현재 상태</th>
-                    <th>승인 처리</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>                    
-                    <td>박수연</td>
-                    <td>010-1111-2222</td>
-                    <td>2024-01-15</td>
-                    <td>연차</td>
-                    <td>개인사유로 연차신청 합니다.</td>
-                    <td>신청</td>
-                    <td>[접수]/[승인]/[반려]</td>
-                </tr>
-
-                <tr>                    
-                    <td>유덕현</td>
-                    <td>010-1111-3333</td>
-                    <td>2024-01-15</td>
-                    <td>반차</td>
-                    <td>개인사유로 반차신청 합니다.</td>
-                    <td>승인</td>
-                    <td>[처리완료]</td>
-                </tr>
-
-                <tr>                    
-                    <td>장인우</td>
-                    <td>010-1111-4444</td>
-                    <td>2024-01-15</td>
-                    <td>병가</td>
-                    <td>개인사유로 병가신청 합니다.</td>
-                    <td>반려</td>
-                    <td>[처리완료]</td>
-                </tr>
-                <!-- Add more rows as needed -->
+            <tr th:each="offList : ${offSerchList}">
+                <td> <a th:href="@{/vacationRequestDetail/{id}(id=${offList.id})}" th:text="${offList.name}"></a></td>
+                <td> <a th:href="@{/vacationRequestDetail/{id}(id=${offList.id})}" th:text="${offList.contactInfo}"></a></td>
+                <td> <a th:href="@{/vacationRequestDetail/{id}(id=${offList.id})}" th:text="${offList.applicationDate}"></a></td>
+                <td> <a th:href="@{/vacationRequestDetail/{id}(id=${offList.id})}" th:text="${offList.requestType}"></a></td>
+                <td> <a th:href="@{/vacationRequestDetail/{id}(id=${offList.id})}" th:text="${offList.comment}"></a></td>
+                <td> <a th:href="@{/vacationRequestDetail/{id}(id=${offList.id})}" th:text="${offList.status}"></a></td>
+            </tr>
             </tbody>
         </table>
     </div>

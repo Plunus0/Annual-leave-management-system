@@ -31,4 +31,20 @@ public class LeaveSpecifications {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<DetailsLeaveAbsence> withAdminCriteria(String absenceType, String status) {
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (absenceType != null && !absenceType.isEmpty()) {
+                predicates.add(cb.equal(root.get("absenceType"), absenceType));
+            }
+
+            if (status != null && !status.isEmpty()) {
+                predicates.add(cb.equal(root.get("processingStatus"), status));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+    }
 }

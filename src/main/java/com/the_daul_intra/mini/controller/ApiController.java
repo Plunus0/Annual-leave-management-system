@@ -30,14 +30,12 @@ public class ApiController {
 
     @GetMapping("/login")
     public ResponseEntity<ApiLoginResponse> login() {
-        System.out.println("loginController");
         return ResponseEntity.ok(apiEmpService.apiGetLogin());
     }
 
     //휴가신청서 작성 컨트롤러
-    @PostMapping("/offwrite")
+    @PostMapping("/off")
     public ResponseEntity<DetailsLeaveAbsence> createLeaveRequest(@RequestBody ApiLeavePostRequest request) {
-        System.out.println("offwriteController");
         DetailsLeaveAbsence leaveRequest = apiLeaveService.createLeaveRequest(request);
         return ResponseEntity.ok(leaveRequest);
     }
@@ -45,31 +43,27 @@ public class ApiController {
     //휴가신청서 리스트
     @GetMapping("/off")
     public ResponseEntity<List<ApiOffListItemResponse>> searchLeaveListRequests(@ModelAttribute ApiLeaveSearchRequest request) {
-        System.out.println("offController");
         List<ApiOffListItemResponse> response = apiLeaveService.searchLeavesList(request);
         return ResponseEntity.ok(response);
     }
 
     //휴가신청서 상세
-    @GetMapping("/offdetail")
-    public ResponseEntity<ApiOffDetailResponse> getLeaveDetail(@RequestBody ApiOffDetailRequest request) {
-        System.out.println("offdetailController");
-        ApiOffDetailResponse response = apiLeaveService.getLeaveDetails(request.getId());
+    @GetMapping("/off/{id}")
+    public ResponseEntity<ApiOffDetailResponse> getLeaveDetail(@PathVariable Long id) {
+        ApiOffDetailResponse response = apiLeaveService.getLeaveDetails(id);
         return ResponseEntity.ok(response);
     }
 
     //공지사항 목록
     @GetMapping("/notice")
     public ResponseEntity<List<ApiNoticeListItemResponse>> getAllNotices() {
-        System.out.println("noticeController");
         List<ApiNoticeListItemResponse> notices = apiNoticeService.getNoticeList();
         return ResponseEntity.ok(notices);
     }
     //공지사항 상세
-    @GetMapping("/noticedetail")
-    public ResponseEntity<ApiNoticeResponse> getNotice(@RequestBody ApiNoticeDetailRequest request) {
-        System.out.println("noticedetailController");
-        ApiNoticeResponse response = apiNoticeService.getNoticeDetails(request);
+    @GetMapping("/notice/{id}")
+    public ResponseEntity<ApiNoticeResponse> getNotice(@PathVariable Long id) {
+        ApiNoticeResponse response = apiNoticeService.getNoticeDetails(id);
         return ResponseEntity.ok(response);
     }
 
