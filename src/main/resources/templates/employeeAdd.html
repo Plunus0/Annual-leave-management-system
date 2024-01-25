@@ -5,32 +5,25 @@
     <title>Create Employee</title>
     <link rel="stylesheet" th:href="@{/css/employeeadd.css}">
     <script>
-        let adminStatusButtons = document.querySelectorAll('#adminStatus button');
-        let projectStatusButtons = document.querySelectorAll('#projectStatus button');
+        window.onload = function() {
+            const radioGroups = ['adminStatus', 'projectStatus'];
 
-        adminStatusButtons.forEach((btn) => {
-            btn.addEventListener('click', function() {
-                handleButtonClick(btn, 'adminStatus');
-            });
+        radioGroups.forEach(group => {
+            document.querySelectorAll(`input[name="${group}"]`).forEach(button => {
+                button.addEventListener('change', () => handleButtonClick(button, group));
+              });
         });
 
-        projectStatusButtons.forEach((btn) => {
-            btn.addEventListener('click', function() {
-                handleButtonClick(btn, 'projectStatus');
-            });
-        });
-
-        function handleButtonClick(button, type) {
-            let buttons = document.querySelectorAll('#' + type + ' button');
-            let input = document.querySelector('#' + type + 'Input');
-
-            buttons.forEach((btn) => {
-                btn.classList.remove('selected');
+        function handleButtonClick(button, group) {
+            document.querySelectorAll(`input[name="${group}"]`).forEach(btn => {
+                btn.parentNode.classList.remove('selected');
             });
 
-            button.classList.add('selected');
-            input.value = button.innerText;
+        button.parentNode.classList.add('selected');
+        document.querySelector(`#${group}Input`).value = button.value;
+            }
         }
+
     </script>
 </head>
 
@@ -44,9 +37,13 @@
         <input type="password" id="password" name="password"><br>
         <label for="adminStatus">관리자 여부:</label><br>
         <div id="adminStatus">
-            <button type="button" class="yes-btn">Yes</button>
-            <button type="button" class="no-btn">No</button>
-            <input type="hidden" name="adminStatus" id="adminStatusInput">
+            <label class="radio-label">
+                <input type="radio" class="adminStatus" name="adminStatus" value="Y">YES
+            </label>
+            <label class="radio-label">
+                <input type="radio" class="adminStatus" name="adminStatus" value="N">NO
+            </label>
+            <input type="hidden" id="adminStatusInput">
         </div>
         <label for="rrn">주민등록번호:</label><br>
         <input type="password" id="rrn" name="rrn"><br>
@@ -64,9 +61,13 @@
         <input type="text" id="address" name="address"><br>
         <label for="projectStatus">파견상태:</label><br>
         <div id="projectStatus">
-            <button type="button" class="yes-btn">Yes</button>
-            <button type="button" class="no-btn">No</button>
-            <input type="hidden" name="projectStatus" id="projectStatusInput">
+            <label class="radio-label">
+                <input type="radio" class="projectStatus" name="projectStatus" value="Y">YES
+            </label>
+            <label class="radio-label">
+                <input type="radio" class="projectStatus" name="projectStatus" value="N">NO
+            </label>
+            <input type="hidden" id="projectStatusInput">
         </div>
         <label for="comment">관리자 코멘트:</label><br>
         <textarea id="comment" name="comment"></textarea><br>

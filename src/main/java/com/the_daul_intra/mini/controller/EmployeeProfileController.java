@@ -1,6 +1,8 @@
 package com.the_daul_intra.mini.controller;
 
 import com.the_daul_intra.mini.dto.entity.EmployeeProfile;
+import com.the_daul_intra.mini.repository.EmployeeProfileRepository;
+import com.the_daul_intra.mini.repository.EmployeeRepository;
 import com.the_daul_intra.mini.service.EmployeeProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,8 +12,21 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping(value = "/admin/employee")
 public class EmployeeProfileController {
-    @Autowired
+
+
     private EmployeeProfileService employeeProfileService;
+    private EmployeeProfileRepository employeeProfileRepository;
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    public EmployeeProfileController(EmployeeProfileService employeeProfileService, EmployeeProfileRepository employeeProfileRepository, EmployeeRepository employeeRepository){
+        this.employeeProfileService = employeeProfileService;
+        this.employeeProfileRepository = employeeProfileRepository;
+        this.employeeRepository = employeeRepository;
+    }
+
+
+
 /*
 
     @GetMapping("/employeeProfileAdd")
@@ -30,7 +45,7 @@ public class EmployeeProfileController {
         return "employee_detail";
     }
 
-    @PostMapping("//employee_detail/{id}")
+    @PostMapping("/employee_detail/{id}")
     public String create(@ModelAttribute EmployeeProfile employee) {
         employeeProfileService.saveEmployee(employee);
         return "redirect:/admin/employee/employeeList";
