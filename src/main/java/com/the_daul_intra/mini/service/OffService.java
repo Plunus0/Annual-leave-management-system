@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,8 +53,11 @@ public class OffService {
 
         Employee employee = leaveAbsence.getEmployee();
         EmployeeProfile employeeProfile = employee.getEmployeeProfile();
-        Employee processedAdmin = leaveAbsence.getProcessedAdmin();
-        EmployeeProfile processedAdminProfile = processedAdmin.getEmployeeProfile();
+
+        String processedAdminName = Optional.ofNullable(leaveAbsence.getProcessedAdmin())
+                .map(Employee::getEmployeeProfile)
+                .map(EmployeeProfile::getName)
+                .orElse(null);
 
         LocalDate[] useDates = leaveAbsence.getLeaveDates().stream()
                 .map(DetailsLeaveDate::getUseDate)
@@ -70,8 +74,8 @@ public class OffService {
                 .regDate(formatter.format(leaveAbsence.getApplicationDate()))
                 .receiveDate(leaveAbsence.getReceptionDate() != null ? formatter.format(leaveAbsence.getReceptionDate()) : null)
                 .confirmDate(leaveAbsence.getProcessedDate() != null ? formatter.format(leaveAbsence.getProcessedDate()) : null)
-                .receiveAdmin(processedAdminProfile.getName() != null ? processedAdminProfile.getName() : null)
-                .confirmAdmin(processedAdminProfile.getName() != null ? processedAdminProfile.getName() : null)
+                .receiveAdmin(processedAdminName)
+                .confirmAdmin(processedAdminName)
                 .reason(leaveAbsence.getApplicantComments())
                 .adminComment(leaveAbsence.getAdminComment())
                 .build();
