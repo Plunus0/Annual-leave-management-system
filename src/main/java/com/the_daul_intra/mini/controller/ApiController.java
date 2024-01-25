@@ -35,9 +35,9 @@ public class ApiController {
 
     //휴가신청서 작성 컨트롤러
     @PostMapping("/off")
-    public ResponseEntity<DetailsLeaveAbsence> createLeaveRequest(@RequestBody ApiLeavePostRequest request) {
-        DetailsLeaveAbsence leaveRequest = apiLeaveService.createLeaveRequest(request);
-        return ResponseEntity.ok(leaveRequest);
+    public ResponseEntity<?> createLeaveRequest(@RequestBody ApiLeavePostRequest request) {
+        apiLeaveService.createLeaveRequest(request);
+        return ResponseEntity.ok("목록 페이지로 돌아갑니다.");
     }
 
     //휴가신청서 리스트

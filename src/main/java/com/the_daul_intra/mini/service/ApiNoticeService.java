@@ -1,5 +1,6 @@
 package com.the_daul_intra.mini.service;
 
+import com.the_daul_intra.mini.dto.EmpDetails;
 import com.the_daul_intra.mini.dto.entity.Employee;
 import com.the_daul_intra.mini.dto.entity.Notice;
 import com.the_daul_intra.mini.dto.entity.NoticeReadStatus;
@@ -15,6 +16,9 @@ import com.the_daul_intra.mini.repository.ApiNoticeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,10 +32,17 @@ public class ApiNoticeService {
     private final ApiNoticeReadStatusRepository apiNoticeReadStatusRepository;
     private final ApiEmpLoginRepository apiEmpLoginRepository;
 
+    Long empId = null;
     public List<ApiNoticeListItemResponse> getNoticeList() {
         List<Notice> notices = apiNoticeRepository.findAll();
-        //추후 인증정보를 바탕으로 로그인한 직원 id확인
-        Long empId = 1L;
+
+        //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //authentication에서 empId 추출
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
+        }
 
         return notices.stream().map(notice -> {
             boolean isRead = apiNoticeReadStatusRepository.findByNoticeIdAndEmployeeId(notice.getId(), empId)
@@ -52,8 +63,13 @@ public class ApiNoticeService {
         Notice notice = apiNoticeRepository.findById(requestId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND," 해당 공지사항이 존재하지 않습니다."));
 
-        //추후 인증정보를 바탕으로 로그인한 직원 id 확인 -> 없다면 로그인 페이지
-        Long empId = 1L;
+        //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //authentication에서 empId 추출
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
+        }
 
         Employee employee = apiEmpLoginRepository.findById(empId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, " 로그인 내역이 존재하지 않습니다."));

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LeaveSpecifications {
-    public static Specification<DetailsLeaveAbsence> withCriteria(ApiLeaveSearchRequest request) {
+    public static Specification<DetailsLeaveAbsence> withCriteria(ApiLeaveSearchRequest request, Long id) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -24,8 +24,8 @@ public class LeaveSpecifications {
                 LocalDateTime regDate = LocalDateTime.parse(request.getRegDate());
                 predicates.add(cb.equal(root.get("applicationDate"), regDate));
             }
-            if (request.getWriterId() != null) {
-                predicates.add(cb.equal(root.get("employee").get("id"), request.getWriterId()));
+            if (id != null) {
+                predicates.add(cb.equal(root.get("employee").get("id"), id));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

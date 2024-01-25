@@ -63,12 +63,6 @@ public class EmployeeController {
         return "employeeList";
     }
 
-    @GetMapping("/employeeList")
-    public String moveEmployeeDetail(Model model) {
-        List<Employee> employees = employeeService.findAll();
-        model.addAttribute("employees", employees);
-        return "employee_detail";
-    }
 
 
 }

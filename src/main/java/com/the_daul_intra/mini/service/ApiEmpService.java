@@ -45,11 +45,9 @@ public class ApiEmpService {
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
         }
-        System.out.println("empId : "+empId);
         // authentication에서 가져온 empId로 이메일을 추출하고 이메일 확인 시작 -> empId로 이메일 추출이 안될 경우 로그인 페이지로
         emp = apiEmpLoginRepository.findActiveById(empId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, empId + " 접속정보가 없습니다. 로그인화면으로 이동합니다."));
-        System.out.println("empEmail : "+emp.getEmail());
 
         //1. 이메일 확인  -> 이메일을 확인했는데 에러가 날 경우 로그인 페이지로
         Employee selectedEmp = apiEmpLoginRepository.findActiveByEmail(emp.getEmail())

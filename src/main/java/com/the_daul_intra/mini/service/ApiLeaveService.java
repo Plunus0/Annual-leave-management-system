@@ -1,5 +1,6 @@
 package com.the_daul_intra.mini.service;
 
+import com.the_daul_intra.mini.dto.EmpDetails;
 import com.the_daul_intra.mini.dto.entity.DetailsLeaveAbsence;
 import com.the_daul_intra.mini.dto.entity.DetailsLeaveDate;
 import com.the_daul_intra.mini.dto.entity.Employee;
@@ -16,6 +17,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,16 +35,22 @@ public class ApiLeaveService {
     private final ApiDetailsLeaveAbsenceRepository apiDetailsLeaveAbsenceRepository;
     private final ApiEmpLoginRepository apiEmpLoginRepository;
     private final ApiDetailsLeaveDateRepository apiDetailsLeaveDateRepository;
-    Long empId = 1L;
+    Long empId = null;
 
     //휴가신청서 작성
     @Transactional
     public DetailsLeaveAbsence createLeaveRequest(ApiLeavePostRequest request) {
 
+        //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //authentication에서 empId 추출
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
+        }
         //인증정보를 바탕으로 empId확인 후 없다면 로그인페이지로 이동
         Employee employee = apiEmpLoginRepository.findById(empId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND,"  로그인 내역이 존재하지 않습니다."));
-
         DetailsLeaveAbsence leaveRequest = DetailsLeaveAbsence.builder()
                 .employee(employee)
                 .absenceLeavePeriod((long) request.getUseDates().length)
@@ -50,7 +60,6 @@ public class ApiLeaveService {
                 .processingStatus("신청")
                 .build();
         leaveRequest = apiDetailsLeaveAbsenceRepository.save(leaveRequest);
-
         for (LocalDate useDate : request.getUseDates()) {
 
             DetailsLeaveDate leaveDate = DetailsLeaveDate.builder()
@@ -61,14 +70,22 @@ public class ApiLeaveService {
 
             apiDetailsLeaveDateRepository.save(leaveDate);
         }
-
         return leaveRequest;
     }
 
 
     public List<ApiOffListItemResponse> searchLeavesList(ApiLeaveSearchRequest request) {
+
+        //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //authentication에서 empId 추출
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
+        }
+
         //검색 조건에 따른 검색 실행
-        List<DetailsLeaveAbsence> leaves = apiDetailsLeaveAbsenceRepository.findAll(LeaveSpecifications.withCriteria(request));
+        List<DetailsLeaveAbsence> leaves = apiDetailsLeaveAbsenceRepository.findAll(LeaveSpecifications.withCriteria(request, empId));
 
         //검색 결과 반환
         return leaves.stream().map(leave -> new ApiOffListItemResponse(
@@ -81,6 +98,15 @@ public class ApiLeaveService {
     }
 
     public ApiOffDetailResponse getLeaveDetails(Long requestId) {
+
+        //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //authentication에서 empId 추출
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
+        }
+
         DetailsLeaveAbsence leaveAbsence = apiDetailsLeaveAbsenceRepository.findById(requestId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND," 해당 신청서가 존재하지 않습니다."));
 

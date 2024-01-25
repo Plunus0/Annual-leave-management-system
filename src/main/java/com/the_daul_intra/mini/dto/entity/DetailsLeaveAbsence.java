@@ -35,14 +35,14 @@ public class DetailsLeaveAbsence {
     private LocalDateTime applicationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RECEPTION_ADMIN", nullable = false)
+    @JoinColumn(name = "RECEPTION_ADMIN")
     private Employee receptionAdmin;
 
     @Column(name = "RECEPTION_DATE", length = 19)
     private LocalDateTime receptionDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROCESSED_ADMIN", nullable = false)
+    @JoinColumn(name = "PROCESSED_ADMIN")
     private Employee processedAdmin;
 
     @Column(name = "PROCESSED_DATE", length = 19)

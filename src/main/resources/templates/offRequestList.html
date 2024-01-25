@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacation Application List</title>
+    <link rel="stylesheet" href="css/vactionRequest.css">
+    <style>
+        .Offlist table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .Offlist th, .Offlist td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .Offlist tr:nth-child(even) {background-color: #f2f2f2;}
+
+        .Offlist tr:hover {background-color: #ddd;}
+
+        .Offlist th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+    <script>
+        function redirectToDetailPage(id) {
+            window.location.href = '/admin/off/' + id;
+        }
+    </script>
+</head>
+<body>
+    <div class="Offlist">
+        <h1>연차 신청 목록</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>사원이름</th>
+                    <th>연락처</th>
+                    <th>신청일</th>
+                    <th>신청 구분</th>
+                    <th>신청자 코멘트</th>
+                    <th>현재 상태</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="offList : ${offSerchList}" th:onclick="'redirectToDetailPage(' + ${offList.id} + ')'">
+                <td th:text="${offList.name}"></td>
+                <td th:text="${offList.contactInfo}"></td>
+                <td th:text="${offList.applicationDate}"></td>
+                <td th:text="${offList.requestType}"></td>
+                <td th:text="${offList.comment}"></td>
+                <td th:text="${offList.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

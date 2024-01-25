@@ -1,0 +1,176 @@
+<!-- application/details.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .application-details {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .approve {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .reject {
+            background-color: #f44336;
+            color: white;
+        }
+        .top-buttons {
+            text-align: right;
+            padding: 10px;
+        }
+        .top-button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #008CBA;
+            color: white;
+        }
+
+        textarea {
+            width: 100%; /* 테이블 너비에 맞게 조정 */
+            height: 100px; /* 고정 높이 */
+            resize: none; /* 크기 조절 비활성화 */
+        }
+
+        table {
+            width: 100%; /* 테이블 전체 너비 */
+        }
+    </style>
+    <script>
+        function deleteApi() {
+            var leaveAbsenceId = [[${detail.id}]];;
+
+            fetch('/admin/off/' + leaveAbsenceId, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    alert("삭제가 완료되었습니다.");
+                    window.location.href = "/"; // 예: 메인 페이지로 이동
+                } else {
+                    alert("삭제 중 문제가 발생했습니다.");
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="application-details">
+        <div class="top-buttons">
+            <!--<button class="top-button" onclick="editApplication()">수정</button>-->
+            <button class="top-button" onclick="deleteApi()">삭제</button>
+        </div>
+        <h1>연차 신청서</h1>
+        <table>
+            <tr>
+                <td>사원이름:</td>
+                <td th:text="${detail.writerName}"></td>
+            </tr>
+            <tr>
+                <td>시작일:</td>
+                <td th:text="${detail.useDates[0]}"></td>
+            </tr>
+            <tr>
+                <td>종료일:</td>
+                <!-- useDates의 길이가 1이면 첫 번째 요소를 종료일로 사용, 그렇지 않으면 마지막 요소를 사용 -->
+                <td th:if="${#arrays.length(detail.useDates) == 1}" th:text="${detail.useDates[0]}"></td>
+                <td th:if="${#arrays.length(detail.useDates) > 1}" th:text="${detail.useDates[#arrays.length(detail.useDates) - 1]}"></td>
+            </tr>
+            <tr>
+                <td>휴가사용일수:</td>
+                <td th:text="${detail.leavePeriod}"></td>
+            </tr>
+            <tr>
+                <td>휴가종류:</td>
+                <td th:text="${detail.requestType}"></td>
+            </tr>
+            <tr>
+                <td>제출일:</td>
+                <td th:text="${detail.regDate}"></td>
+            </tr>
+            <tr>
+                <td>접수 관리자:</td>
+                <td th:text="${detail.receiveAdmin}"></td>
+            </tr>
+            <tr>
+                <td>접수일:</td>
+                <td th:text="${detail.receiveDate}"></td>
+            </tr>
+            <tr>
+                <td>처리 관리자:</td>
+                <td th:text="${detail.confirmAdmin}"></td>
+            </tr>
+            <tr>
+                <td>처리일:</td>
+                <td th:text="${detail.confirmDate}"></td>
+            </tr>
+            <tr>
+                <td>신청자 코멘트:</td>
+                <td th:text="${detail.reason}"></td>
+            </tr>
+            <tr>
+                <td>관리자 코멘트:</td>
+                <td><textarea th:text="${detail.adminComment}"></textarea></td>
+            </tr>
+        </table>
+        <div class="buttons">
+            <button class="receive" onclick="receiveApplication()">접수</button>
+            <button class="approve" onclick="approveApplication()">승인</button>
+            <button class="reject" onclick="rejectApplication()">반려</button>
+        </div>
+    </div>
+    
+
+
+</body>
+</html>

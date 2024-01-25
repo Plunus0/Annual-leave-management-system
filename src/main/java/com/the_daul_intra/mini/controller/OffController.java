@@ -1,5 +1,6 @@
 package com.the_daul_intra.mini.controller;
 
+import com.the_daul_intra.mini.dto.response.OffDetailResponse;
 import com.the_daul_intra.mini.dto.response.OffListResponse;
 import com.the_daul_intra.mini.service.OffService;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,13 @@ public class OffController {
                                Model model) {
         List<OffListResponse> offSerchList = offService.getOffSerchList(absenceType, status);
         model.addAttribute("offSerchList", offSerchList);
-        return "/vacationRequestList";
+        return "/offRequestList";
     }
 
     @GetMapping("/off/{id}")
     public String offDetail(@PathVariable Long id, Model model) {
-        // 상세 정보 로직 (생략)
-        return "vacationRequestDetail";
+        OffDetailResponse detailResponse = offService.getOffDetail(id);
+        model.addAttribute("detail", detailResponse);
+        return "/offDetail";
     }
 }
