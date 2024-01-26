@@ -35,13 +35,13 @@ public class EmpDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         //ADMIN_STATUS 필드가 Y인 경우 관리자 권한 부여
-        if (employee.getAdminStatus().equals("Y")) {
+        if (employee.getAdminStatus().name().equals("Y")) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            /*System.out.println("is Admin Authority");*/
+            System.out.println("is Admin Authority");
         } else {
             //직원에 대한 권한 설정 (선택적)
             authorities.add(new SimpleGrantedAuthority("ROLE_EMP"));
-            /*System.out.println("is Employee Authority");*/
+            System.out.println("is Employee Authority");
         }
         return authorities;
     }
