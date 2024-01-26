@@ -44,8 +44,6 @@ public class NoticeService {
     }
 
     public Notice noticeDetail(Long id){
-
-        System.out.println("test in service");
         try {
             Notice notice = noticeRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Notice not found for ID: " + id));

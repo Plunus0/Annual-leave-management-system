@@ -17,7 +17,7 @@ import java.util.List;
 import static java.util.Comparator.comparing;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/notice")
 public class NoticeController {
 
     public NoticeController(NoticeService noticeService) {
@@ -25,7 +25,7 @@ public class NoticeController {
     }
 
     //전체 공지사항 목록
-    @GetMapping("/notice/list")
+    @GetMapping("/")
     public String noticeListView(Model model){
 
         List<NoticeWriteDTO> list = noticeService.noticeList();
@@ -45,7 +45,7 @@ public class NoticeController {
     }
 
     //글 작성 페이지
-    @GetMapping("/notice/write")
+    @GetMapping("/write")
     public String noticeWrite(Model model){
 
         model.addAttribute("write", new NoticeWriteDTO());
@@ -54,8 +54,8 @@ public class NoticeController {
     }
 
     //글 작성
-    @PostMapping("/notice/writepro")
-    public String noticeWritepro(@ModelAttribute  NoticeWriteDTO noticeWriteDTO, Model model) {
+    @PostMapping("/writepro")
+    public String noticeWritepro(@ModelAttribute  NoticeWriteDTO noticeWriteDTO) {
         
         // 테스트용 임시로 employee id 만들어서 사용
         Employee employee = Employee.builder()
@@ -67,11 +67,11 @@ public class NoticeController {
 
         noticeService.noticeWrite(noticeWriteDTO);
 
-        return "redirect:/admin/notice/list";
+        return "redirect:/admin/notice/";
     }
 
     // 공지사항 상세페이지
-    @GetMapping("/notice/detail/{id}")
+    @GetMapping("/{id}")
     public String noticeDetail(@PathVariable Long id, Model model){
 
 
@@ -83,9 +83,8 @@ public class NoticeController {
     }
 
     // 공지사항 수정페이지
-    @PutMapping("/notice/modify/{id}")
+    /*@PutMapping("/modify/{id}")
     public String noticeModify(@PathVariable Long id, @ModelAttribute NoticeResponse noticeResponse){
-
         // 테스트용 임시로 employee id 만들어서 사용
         Employee employee = Employee.builder()
                 .id(1L)
@@ -93,18 +92,47 @@ public class NoticeController {
 
         noticeResponse.setEmployee(employee);
         // 여기까지
-
-
         noticeService.noticeModify(id, noticeResponse);
 
-        return "redirect:/admin/notice/detail/{id}";
+        return "redirect:/admin/notice/{id}";
+    }*/
+
+    @GetMapping("/modify/{id}")
+    public String noticeModify(@PathVariable Long id, Model model){
+        // 테스트용 임시로 employee id 만들어서 사용
+        Employee employee = Employee.builder()
+                .id(1L)
+                .build();
+
+        // 여기까지
+
+        Notice notice = noticeService.noticeDetail(id);
+
+        model.addAttribute("notice", notice);
+
+        return "noticeModify";
     }
 
-    @DeleteMapping("/notice/delete/{id}")
+    @PutMapping("/modifyPro/{id}")
+    public String noticeModifyPro(@PathVariable Long id, @ModelAttribute NoticeResponse noticeResponse){
+        // 테스트용 임시로 employee id 만들어서 사용
+        Employee employee = Employee.builder()
+                .id(1L)
+                .build();
+
+        noticeResponse.setEmployee(employee);
+        // 여기까지
+        noticeService.noticeModify(id, noticeResponse);
+
+        return "redirect:/admin/notice/{id}";
+    }
+
+
+    @DeleteMapping("/delete/{id}")
     public String noticeDelete(@PathVariable Long id){
 
         noticeService.noticeDelete(id);
-        return "redirect:/admin/notice/list";
+        return "redirect:/admin/notice/";
     }
 
     //member

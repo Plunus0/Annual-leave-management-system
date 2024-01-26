@@ -11,9 +11,9 @@
 <div class="container">
     <div class="notice-detail">
         <div>
-            <a th:href="@{/admin/notice/list}" class="backButton">공지사항 목록</a>
+            <a th:href="@{/admin/notice/}" class="backButton">공지사항 목록</a>
         </div>
-        <form th:action="@{'/admin/notice/modify/' + ${noticeDetail.id}}" method="post">
+        <!--<form th:action="@{'/admin/notice/modify/' + ${noticeDetail.id}}" method="post">
             <input type="hidden" name="_method" value="put" />
             <label for="noticeTitle"></label><input name="title" type="text" th:value="${noticeDetail.title}" id="noticeTitle">
 
@@ -21,7 +21,18 @@
             <label for="noticeContents"></label><textarea name="content" th:text="${noticeDetail.content}" id="noticeContents"></textarea>
 
             <button class="editButton">수정</button>
+        </form>-->
+
+        <form th:action="@{'/admin/notice/modify/' + ${noticeDetail.id}}" method="get">
+            <!--<input type="hidden" name="_method" value="put" />-->
+            <p th:text="${noticeDetail.title}" id="noticeTitle"></p>
+
+            <div class="notice-divider">
+            <p th:text="${noticeDetail.content}" id="noticeContents"></p>
+            </div>
+            <button class="editButton">수정</button>
         </form>
+
 
         <form th:action="@{'/admin/notice/delete/' + ${noticeDetail.id}}" method="post">
             <input type="hidden" name="_method" value="delete" />
