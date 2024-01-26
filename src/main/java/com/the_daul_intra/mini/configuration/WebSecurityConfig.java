@@ -31,6 +31,7 @@ public class WebSecurityConfig {
                 .cors().and()
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers(HttpMethod.POST, "/api/login", "/admin/login").permitAll();
+                    requests.requestMatchers(HttpMethod.GET, "/admin/login").permitAll();
                     requests.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
                     requests.anyRequest().authenticated();
 //                    requests.anyRequest().permitAll();
