@@ -8,9 +8,7 @@ import com.the_daul_intra.mini.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/admin/employee")
@@ -64,11 +62,23 @@ public class EmployeeProfileController {
     @GetMapping("/employeeUpdate/{id}")
     public String update(@PathVariable Long id, Model model) {
         EmployeeDetailResponse employeeDetailResponse = employeeProfileService.getEmployeeDetail(id);
-
-
-
+        if (employeeDetailResponse == null) {
+            // EmployeeDetailResponse 객체가 null인 경우 에러 처리
+            // 예: return "error_page";
+        }
+        model.addAttribute("employeeDetail", employeeDetailResponse);
         return "employeeUpdate";
     }
+
+    @PutMapping("/employeeUpdate/{id}")
+    public String putUpdate(@PathVariable Long id, @ModelAttribute EmployeeDetailResponse employeeDetail, @RequestParam boolean changePassword) {
+        // EmployeeDetailResponse 객체를 업데이트합니다.
+        employeeProfileService.updateEmployeeDetail(id, employeeDetail,changePassword);
+
+        // 업데이트가 완료되면 employee_detail 페이지로 리다이렉트합니다.
+        return "redirect:/admin/employee/employee_detail/" + id;
+    }
+
 
 
 

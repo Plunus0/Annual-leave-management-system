@@ -1,4 +1,3 @@
-/* employee/index.css */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -6,7 +5,7 @@ body {
     background-color: #fff;
 }
 
-#formContainer {
+.detail-table {
     width: 60%;
     margin: 20px auto;
     padding: 20px;
@@ -15,17 +14,17 @@ body {
     background-color: #f8f9fa;
 }
 
-#formContainer label {
+.detail-table label {
     display: block;
     margin-bottom: 5px;
 }
 
-#formContainer input[type="text"],
-#formContainer input[type="password"],
-#formContainer input[type="email"],
-#formContainer input[type="date"],
-#formContainer input[type="number"],
-#formContainer textarea {
+.detail-table input[type="text"],
+.detail-table input[type="password"],
+.detail-table input[type="email"],
+.detail-table input[type="date"],
+.detail-table input[type="number"],
+.detail-table textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -33,7 +32,7 @@ body {
     border: 1px solid #d1d1d1;
 }
 
-#formContainer input[type="submit"] {
+.detail-table input[type="submit"] {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -44,7 +43,7 @@ body {
     width: 100%;
 }
 
-#formContainer input[type="submit"]:hover {
+.detail-table input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
@@ -54,11 +53,11 @@ h1 {
     margin-bottom: 40px;
 }
 
-#formContainer input[type="radio"] {
+.detail-table input[type="radio"] {
     display: none;
 }
 
-#formContainer .radio-label {
+.detail-table .radio-label {
     display: inline-block;
     padding: 5px 10px;
     margin-right: 10px;
@@ -66,25 +65,7 @@ h1 {
     cursor: pointer;
 }
 
-#formContainer .selected {
+.detail-table .selected {
     background-color: #008CBA;
     color: white;
 }
-.error-message {
-    color: red;
-}
-/* ... */
-#submitButton {
-    float: left; /* "확인" 버튼을 왼쪽에 위치시킴 */
-}
-
-#cancelButton {
-    float: right; /* "취소" 버튼을 오른쪽에 위치시킴 */
-    background-color: #007bff; /* "취소" 버튼의 배경색을 "확인" 버튼과 동일하게 바꿈 */
-}
-
-#cancelButton:hover {
-    background-color: #0056b3; /* "취소" 버튼 호버 시 배경색을 "확인" 버튼과 동일하게 바꿈 */
-}
-/* ... */
-

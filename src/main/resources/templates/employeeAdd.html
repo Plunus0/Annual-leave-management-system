@@ -29,52 +29,55 @@
 
 <body>
 <h1>직원 이력 카드</h1>
-<div id="formContainer">
-    <form th:action="@{/admin/employee/employeeAdd}" method="post">
-        <label for="name">이름:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label for="password">비밀번호:</label><br>
-        <input type="password" id="password" name="password"><br>
-        <label for="adminStatus">관리자 여부:</label><br>
-        <div id="adminStatus">
-            <label class="radio-label">
-                <input type="radio" class="adminStatus" name="adminStatus" value="Y">YES
-            </label>
-            <label class="radio-label">
-                <input type="radio" class="adminStatus" name="adminStatus" value="N">NO
-            </label>
-            <input type="hidden" id="adminStatusInput">
+    <div id="formContainer">
+        <form th:action="@{/admin/employee/employeeAdd}" method="post">
+            <label for="name">이름:</label><br>
+            <input type="text" id="name" name="name"><br>
+            <label for="password">비밀번호:</label><br>
+            <input type="password" id="password" name="password"><br>
+            <label for="adminStatus">관리자 여부:</label><br>
+            <div id="adminStatus">
+                <label class="radio-label">
+                    <input type="radio" class="adminStatus" name="adminStatus" value="Y">Yes
+                </label>
+                <label class="radio-label">
+                    <input type="radio" class="adminStatus" name="adminStatus" value="N">No
+                </label>
+                <input type="hidden" id="adminStatusInput">
+            </div>
+            <label for="rrn">주민등록번호:</label><br>
+            <input type="password" id="rrn" name="rrn"><br>
+            <label for="email">이메일:</label><br>
+            <input type="email" id="email" name="email" required><br>
+            <label for="position">직급:</label><br>
+            <input type="text" id="position" name="position"><br>
+            <label for="joinDate">입사일:</label><br>
+            <input type="date" id="joinDate" name="joinDate"><br>
+            <label for="retirementDate">퇴사일:</label><br>
+            <input type="date" id="retirementDate" name="retirementDate"><br>
+            <label for="contactInfo">연락처:</label><br>
+            <input type="text" id="contactInfo" name="contactInfo"><br>
+            <label for="address">주소:</label><br>
+            <input type="text" id="address" name="address"><br>
+            <label for="projectStatus">파견상태:</label><br>
+            <div id="projectStatus">
+                <label class="radio-label">
+                    <input type="radio" class="projectStatus" name="projectStatus" value="Y">Yes
+                </label>
+                <label class="radio-label">
+                    <input type="radio" class="projectStatus" name="projectStatus" value="N">No
+                </label>
+                <input type="hidden" id="projectStatusInput">
+            </div>
+            <label for="comment">관리자 코멘트:</label><br>
+            <textarea id="comment" name="comment"></textarea><br>
+            <label for="annualCount">발생 연차:</label><br>
+            <input type="number" id="annualCount" name="annualCount"><br>
+            <input type="submit" value="확인">
+        </form>
+        <div class="center">
+            <a class="confirm-button" onclick="window.history.back();">뒤로가기</a>
         </div>
-        <label for="rrn">주민등록번호:</label><br>
-        <input type="password" id="rrn" name="rrn"><br>
-        <label for="email">이메일:</label><br>
-        <input type="email" id="email" name="email" required><br>
-        <label for="position">직급:</label><br>
-        <input type="text" id="position" name="position"><br>
-        <label for="joinDate">입사일:</label><br>
-        <input type="date" id="joinDate" name="joinDate"><br>
-        <label for="retirementDate">퇴사일:</label><br>
-        <input type="date" id="retirementDate" name="retirementDate"><br>
-        <label for="contactInfo">연락처:</label><br>
-        <input type="text" id="contactInfo" name="contactInfo"><br>
-        <label for="address">주소:</label><br>
-        <input type="text" id="address" name="address"><br>
-        <label for="projectStatus">파견상태:</label><br>
-        <div id="projectStatus">
-            <label class="radio-label">
-                <input type="radio" class="projectStatus" name="projectStatus" value="Y">YES
-            </label>
-            <label class="radio-label">
-                <input type="radio" class="projectStatus" name="projectStatus" value="N">NO
-            </label>
-            <input type="hidden" id="projectStatusInput">
-        </div>
-        <label for="comment">관리자 코멘트:</label><br>
-        <textarea id="comment" name="comment"></textarea><br>
-        <label for="annualCount">발생 연차:</label><br>
-        <input type="number" id="annualCount" name="annualCount"><br>
-        <input type="submit" value="확인">
-    </form>
-</div>
+    </div>
 </body>
 </html>

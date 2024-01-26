@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee List</title>
+    <title>Retired Employee List</title>
     <link rel="stylesheet" th:href="@{/css/employeeList.css}">
 </head>
 <body>
-<h1>직원 목록</h1>
+<h1>퇴사자 목록</h1>
 <div id="buttonContainer">
-    <a id="retiredEmployee" th:href="@{/admin/employee/retiredEmployee}" class="add-button">퇴사자만 보기</a>
-    <a id="addEmployee" th:href="@{/admin/employee/employeeAdd}" class="add-button">직원 추가</a>
+    <a class="add-button" onclick="window.history.back();">확인</a>
 </div>
 <table border="1">
     <thead>
@@ -26,12 +25,11 @@
     <tr th:each="employee : ${employees}">
         <td><a th:href="@{/admin/employee/employee_detail/{id}(id=${employee.id})}" th:text="${employee.id}"></a></td>
         <td th:text="${employee.email}"></td>
-        <td th:text="${employee.name}"></td>
-        <td th:text="${employee.position}"></td>
-        <td th:text="${employee.contactInformation}"></td>
+        <td th:text="${employee.employeeProfile.name}"></td>
+        <td th:text="${employee.employeeProfile.position}"></td>
+        <td th:text="${employee.employeeProfile.contactInformation}"></td>
     </tr>
     </tbody>
-
 </table>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.the_daul_intra.mini.controller;
 
 import com.the_daul_intra.mini.dto.entity.Employee;
+import com.the_daul_intra.mini.dto.entity.EmployeeProfile;
 import com.the_daul_intra.mini.dto.request.EmployeePostRequest;
 import com.the_daul_intra.mini.repository.EmployeeProfileRepository;
 import com.the_daul_intra.mini.repository.EmployeeRepository;
@@ -49,8 +50,6 @@ public class EmployeeController {
     @GetMapping("/employeeAdd")
     public String addEmployeePage(Model model) {
 
-        System.out.println("test용");
-
         model.addAttribute( "employee", new Employee());
         return "employeeAdd";
     }
@@ -58,11 +57,18 @@ public class EmployeeController {
 
     @GetMapping("/employeeList")
     public String showEmployeeList(Model model) {
-        List<Employee> employees = employeeService.findAll();
+        List<EmployeeProfile> employees = employeeProfileRepository.findByRetirementDateIsNull();
+
         model.addAttribute("employees", employees);
-        return "employeeList ";
+        return "employeeList";
     }
 
+    @GetMapping("/retiredEmployee")
+    public String getRetiredEmployee(Model model) {
+        List<Employee> employees = employeeRepository.findByEmployeeProfileRetirementDateIsNotNull();
+        model.addAttribute("employees", employees);
+        return "retiredEmployee";
+    }
 
 
 

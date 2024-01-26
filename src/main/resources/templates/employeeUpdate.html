@@ -3,9 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>employee Update</title>
-    <link rel="stylesheet" th:href="@{/css/employeeDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/employeeUpdate.css}">
+    <script>
+        window.onload = function() {
+            const radioGroups = ['adminStatus', 'projectStatus'];
+
+        radioGroups.forEach(group => {
+            document.querySelectorAll(`input[name="${group}"]`).forEach(button => {
+                button.addEventListener('change', () => handleButtonClick(button, group));
+              });
+        });
+
+        function handleButtonClick(button, group) {
+            document.querySelectorAll(`input[name="${group}"]`).forEach(btn => {
+                btn.parentNode.classList.remove('selected');
+            });
+
+        button.parentNode.classList.add('selected');
+        document.querySelector(`#${group}Input`).value = button.value;
+            }
+
+        document.getElementById('changePassword').addEventListener('change', function() {
+            document.getElementById('password').disabled = !this.checked;
+        });
+
+        }
+
+    </script>
 </head>
-<body th:each="employee : ${employeeDetail}">
+<body>
 <h1 class="header">직원 정보 수정</h1>
 <form class="detail-table" th:action="@{/admin/employee/employeeUpdate/{id}(id=${employeeDetail.id})}" method="post">
     <input type="hidden" name="_method" value="put">
@@ -13,11 +39,17 @@
         <label for="name">이름</label>
         <input type="text" th:field="*{name}" id="name">
 
+        <label for="changePassword"></label>
+        <input type="checkbox" id="changePassword" name="changePassword" value="true">
+        <input type="hidden" name="changePassword" value="false">
+        <label for="password">비밀번호</label>
+        <input type="password" th:field="*{password}" id="password" disabled>
+
         <label for="email">이메일</label>
         <input type="email" th:field="*{email}" id="email">
 
         <label for="rrn">주민등록번호</label>
-        <input type="text" th:field="*{rrn}" id="rrn">
+        <input type="password" th:field="*{rrn}" id="rrn">
 
         <label for="position">직급</label>
         <input type="text" th:field="*{position}" id="position">
@@ -35,18 +67,32 @@
         <input type="text" th:field="*{address}" id="address">
 
         <label for="projectStatus">파견상태</label>
-        <input type="text" th:field="*{projectStatus}" id="projectStatus">
-
+        <div id="projectStatus">
+            <label class="radio-label">
+                <input type="radio" class="projectStatus" name="projectStatus" value="Y">YES
+            </label>
+            <label class="radio-label">
+                <input type="radio" class="projectStatus" name="projectStatus" value="N">NO
+            </label>
+            <input type="hidden" id="projectStatusInput">
+        </div>
         <label for="adminStatus">관리자상태</label>
-        <input type="text" th:field="*{adminStatus}" id="adminStatus">
-
+        <div id="adminStatus">
+            <label class="radio-label">
+                <input type="radio" class="adminStatus" name="adminStatus" value="Y">YES
+            </label>
+            <label class="radio-label">
+                <input type="radio" class="adminStatus" name="adminStatus" value="N">NO
+            </label>
+            <input type="hidden" id="adminStatusInput">
+        </div>
         <label for="comment">관리자 코멘트</label>
         <input type="text" th:field="*{comment}" id="comment">
 
         <label for="annualCount">발생 연차</label>
         <input type="text" th:field="*{annualCount}" id="annualCount">
 
-        <input type="submit" value="수정완료">
+        <input type="submit" value="확인">
     </div>
 </form>
 </body>
