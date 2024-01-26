@@ -27,12 +27,12 @@ public class NoticeReadStatus {
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
     private Employee employee;
 
-    @Column(name = "READ_DATE", length = 19)
+    @Column(name = "READ_DATE")
     private LocalDateTime readDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "IS_READ", nullable = false)
-    private YesNo isRead = YesNo.N;
+    @Column(name = "IS_READ", nullable = false, columnDefinition = "ENUM('Y','N') DEFAULT 'Y'")
+    private YesNo isRead = YesNo.Y;
 
     public void setReadDate(LocalDateTime readDate) {
         this.readDate = readDate;

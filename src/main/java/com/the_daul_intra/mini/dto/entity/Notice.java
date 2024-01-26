@@ -25,28 +25,27 @@ public class Notice {
     private Long id;
 
     @Column(nullable = false, length = 200)
-    private String title = "";
+    private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String content = "";
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
     private Employee employee;
 
     @CreationTimestamp
-    @Column(name = "REG_DATE", length = 19)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDateTime regDate = LocalDateTime.now();
+    @Column(name = "REG_DATE")
+    private LocalDateTime regDate;
 
-    @Column(name = "UPDATE_DATE", length = 19)
+    @Column(name = "UPDATE_DATE")
     private LocalDateTime updateDate;
 
-    @Column(name = "UNUSED_DATE", length = 19)
+    @Column(name = "UNUSED_DATE")
     private LocalDateTime unusedDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "UNUSED", columnDefinition = "ENUM('Y','N') DEFAULT 'N'")
     private YesNo unused = YesNo.N;
 
     @OneToMany(mappedBy = "notice", fetch = FetchType.LAZY)

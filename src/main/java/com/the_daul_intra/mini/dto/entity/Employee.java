@@ -6,7 +6,6 @@ import lombok.*;
 import java.util.Set;
 
 @Getter
-@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,13 +18,13 @@ public class Employee {
     private Long id;
 
     @Column(nullable = false, length = 200, unique = true)
-    private String email = "";
+    private String email;
 
     @Column(length = 256)
-    private String password = "";
+    private String password;
 
     @Enumerated(EnumType.STRING)
-    private YesNo adminStatus = YesNo.N;
+    private YesNo adminStatus;
 
     @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY)
     private EmployeeProfile employeeProfile;

@@ -26,12 +26,12 @@ public class DetailsLeaveAbsence {
     private Employee employee;
 
     @Column(name = "ABSENCE_LEAVE_PERIOD", nullable = false)
-    private Long absenceLeavePeriod = 0L;
+    private Long absenceLeavePeriod;
 
     @Column(name = "ABSENCE_TYPE", nullable = false, length = 10)
-    private String absenceType = "";
+    private String absenceType;
 
-    @Column(name = "APPLICATION_DATE", nullable = false, length = 19)
+    @Column(name = "APPLICATION_DATE", nullable = false)
     private LocalDateTime applicationDate = LocalDateTime.now(); // 현재 시간
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,17 +45,17 @@ public class DetailsLeaveAbsence {
     @JoinColumn(name = "PROCESSED_ADMIN")
     private Employee processedAdmin;
 
-    @Column(name = "PROCESSED_DATE", length = 19)
+    @Column(name = "PROCESSED_DATE")
     private LocalDateTime processedDate;
 
     @Column(name = "PROCESSING_STATUS", nullable = false, length = 2)
-    private String processingStatus = ""; // 빈 문자열
+    private String processingStatus;
 
     @Column(name = "APPLICANT_COMMENTS", columnDefinition = "TEXT")
-    private String applicantComments = "";
+    private String applicantComments;
 
     @Column(name = "ADMIN_COMMENT", columnDefinition = "TEXT")
-    private String adminComment = "";
+    private String adminComment;
 
     @OneToMany(mappedBy = "leaveRequest", fetch = FetchType.LAZY)
     private Set<DetailsLeaveDate> leaveDates;
