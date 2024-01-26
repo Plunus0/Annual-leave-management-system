@@ -1,8 +1,12 @@
 package com.the_daul_intra.mini.dto.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -30,7 +34,10 @@ public class Notice {
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
     private Employee employee;
 
+    @CreationTimestamp
     @Column(name = "REG_DATE", length = 19)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
 
     @Column(name = "UPDATE_DATE", length = 19)

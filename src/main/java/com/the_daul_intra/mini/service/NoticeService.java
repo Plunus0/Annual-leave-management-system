@@ -8,6 +8,10 @@ import com.the_daul_intra.mini.repository.NoticeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +23,19 @@ public class NoticeService {
     }
 
     // r
-    public List<Notice> noticeList(){
+    public List<NoticeWriteDTO> noticeList(){
 
-        return noticeRepository.findAll();
+        List<NoticeWriteDTO> noticeWriteDTOS = new ArrayList<>();
+
+        List<Notice> notices = noticeRepository.findAll();
+        for (Notice notice : notices) {
+
+            NoticeWriteDTO temp = new NoticeWriteDTO(notice);
+            noticeWriteDTOS.add(temp);
+
+        }
+
+        return noticeWriteDTOS;
     }
 
     public Notice noticeWrite(NoticeWriteDTO noticeWriteDTO){
@@ -48,8 +62,13 @@ public class NoticeService {
 
         Notice notice = noticeRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("update error"));
+
+        //noticeResponse.setUpdateDate();
+
+
         notice.setTitle(noticeResponse.getTitle());
         notice.setContent(noticeResponse.getContent());
+
     }
 
     @Transactional

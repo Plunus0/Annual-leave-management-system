@@ -9,7 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
+
+import static java.util.Comparator.comparing;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,11 +28,19 @@ public class NoticeController {
     @GetMapping("/notice/list")
     public String noticeListView(Model model){
 
-        List<Notice> list = noticeService.noticeList();
+        List<NoticeWriteDTO> list = noticeService.noticeList();
+
+        list.sort(comparing(NoticeWriteDTO::getRegDate).reversed());
+
+        int count = 0;
+        for(NoticeWriteDTO iter : list){
+
+            LocalDateTime localDateTime = list.get(count).getRegDate();
+            list.get(count).setOnlyDate(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            list.get(count).setSortNum(++count);
+        }
 
         model.addAttribute("list", list);
-
-
         return "noticeList";
     }
 
@@ -48,7 +61,7 @@ public class NoticeController {
         Employee employee = Employee.builder()
                 .id(1L)
                 .build();
-        
+
         noticeWriteDTO.setEmployee(employee);
         // 여기까지
 
@@ -81,7 +94,7 @@ public class NoticeController {
         noticeResponse.setEmployee(employee);
         // 여기까지
 
-        System.out.println("id : " + id);
+
         noticeService.noticeModify(id, noticeResponse);
 
         return "redirect:/admin/notice/detail/{id}";
@@ -89,7 +102,7 @@ public class NoticeController {
 
     @DeleteMapping("/notice/delete/{id}")
     public String noticeDelete(@PathVariable Long id){
-        System.out.println("Delete id : " + id);
+
         noticeService.noticeDelete(id);
         return "redirect:/admin/notice/list";
     }
