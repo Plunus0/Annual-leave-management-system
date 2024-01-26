@@ -5,71 +5,61 @@
     <title>Employee Detail</title>
     <link rel="stylesheet" th:href="@{/css/employeeDetail.css}">
 </head>
-<body>
-<h1>직원 상세정보</h1>
-<table>
+<body th:each="employee : ${employeeDetail}" >
+<h1 class="header">직원 상세정보</h1>
+<table class="detail-table">
     <tr>
-        <th class="small-width">Id</th>
-        <td th:text="${employee.id}"></td>
+        <th>이름</th>
+        <td th:text="${employee.name}"></td>
     </tr>
     <tr>
-<!--        <th>Name</th>-->
-<!--        <td th:text="${employee.name}"></td>-->
+        <th>이메일</th>
+        <td th:text="${employee.email}"></td>
     </tr>
     <tr>
-<!--        <th>Email</th>-->
-<!--        <td th:text="${employee.email}"></td>-->
+        <th>주민등록번호</th>
+        <td th:text="${employee.rrn}"></td>
     </tr>
     <tr>
-<!--        <th>Resident Registration Number</th>-->
-<!--        <td th:text="${employee.residentRegistrationNumber}"></td>-->
+        <th>직급</th>
+        <td th:text="${employee.position}"></td>
     </tr>
     <tr>
-<!--        <th>Position</th>-->
-<!--        <td th:text="${employee.position}"></td>-->
+        <th>입사일</th>
+        <td th:text="${employee.joinDate}"></td>
     </tr>
     <tr>
-<!--        <th>Join Date</th>-->
-<!--        <td th:text="${employee.joinDate}"></td>-->
+        <th>퇴사일</th>
+        <td th:text="${employee.retirementDate}"></td>
     </tr>
     <tr>
-<!--        <th>Retirement Date</th>-->
-<!--        <td th:text="${employee.retirementDate}"></td>-->
+        <th>연락처</th>
+        <td th:text="${employee.contactInfo}"></td>
     </tr>
     <tr>
-<!--        <th>Contact Information</th>-->
-<!--        <td th:text="${employee.contactInformation}"></td>-->
+        <th>주소</th>
+        <td th:text="${employee.address}"></td>
     </tr>
     <tr>
-<!--        <th>Address</th>-->
-<!--        <td th:text="${employee.address}"></td>-->
+        <th>파견상태</th>
+        <td th:text="${employee.projectStatus}"></td>
     </tr>
     <tr>
-<!--        <th>Project Status</th>-->
-<!--        <td th:text="${employee.projectStatus}"></td>-->
+        <th>관리자상태</th>
+        <td th:text="${employee.adminStatus}"></td>
     </tr>
     <tr>
-<!--        <th>Admin Comment</th>-->
-<!--        <td th:text="${employee.adminComment}"></td>-->
+        <th>관리자 코멘트</th>
+        <td th:text="${employee.comment}"></td>
     </tr>
     <tr>
-<!--        <th>Annual Quantity</th>-->
-<!--        <td th:text="${employee.annualQuantity}"></td>-->
+        <th>발생 연차</th>
+        <td th:text="${employee.annualCount}"></td>
     </tr>
 </table>
 
 <div class="center">
-    <!-- 수정 폼 -->
-    <form th:action="@{/admin/employee/employee_detail/{id}(id=${employee.id})}" method="post">
-        <input type="hidden" name="_method" value="put">
-        <input type="submit" value="수정">
-    </form>
-
-    <!-- 삭제 폼 -->
-    <form th:action="@{/admin/employee/employee_detail/{id}(id=${employee.id})}" method="post">
-        <input type="hidden" name="_method" value="delete">
-        <input type="submit" value="삭제">
-    </form>
+    <a class="edit-button" th:href="@{/admin/employee/employeeUpdate/{id}(id=${employee.id})}">수정</a>
 </div>
 </body>
 </html>

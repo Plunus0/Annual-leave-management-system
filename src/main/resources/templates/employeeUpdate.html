@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>employee Update</title>
+    <link rel="stylesheet" th:href="@{/css/employeeDetail.css}">
+</head>
+<body th:each="employee : ${employeeDetail}">
+<h1 class="header">직원 정보 수정</h1>
+<form class="detail-table" th:action="@{/admin/employee/employeeUpdate/{id}(id=${employeeDetail.id})}" method="post">
+    <input type="hidden" name="_method" value="put">
+    <div th:object="${employeeDetail}">
+        <label for="name">이름</label>
+        <input type="text" th:field="*{name}" id="name">
+
+        <label for="email">이메일</label>
+        <input type="email" th:field="*{email}" id="email">
+
+        <label for="rrn">주민등록번호</label>
+        <input type="text" th:field="*{rrn}" id="rrn">
+
+        <label for="position">직급</label>
+        <input type="text" th:field="*{position}" id="position">
+
+        <label for="joinDate">입사일</label>
+        <input type="date" th:field="*{joinDate}" id="joinDate">
+
+        <label for="retirementDate">퇴사일</label>
+        <input type="date" th:field="*{retirementDate}" id="retirementDate">
+
+        <label for="contactInfo">연락처</label>
+        <input type="text" th:field="*{contactInfo}" id="contactInfo">
+
+        <label for="address">주소</label>
+        <input type="text" th:field="*{address}" id="address">
+
+        <label for="projectStatus">파견상태</label>
+        <input type="text" th:field="*{projectStatus}" id="projectStatus">
+
+        <label for="adminStatus">관리자상태</label>
+        <input type="text" th:field="*{adminStatus}" id="adminStatus">
+
+        <label for="comment">관리자 코멘트</label>
+        <input type="text" th:field="*{comment}" id="comment">
+
+        <label for="annualCount">발생 연차</label>
+        <input type="text" th:field="*{annualCount}" id="annualCount">
+
+        <input type="submit" value="수정완료">
+    </div>
+</form>
+</body>
+</html>

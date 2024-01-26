@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping(value = "/admin/employee")
 public class EmployeeController {
 
+    @Autowired
     private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
     private final EmployeeProfileRepository employeeProfileRepository;
@@ -32,14 +33,13 @@ public class EmployeeController {
 
     @PostMapping("/employeeAdd")
     public String addEmployee(@ModelAttribute EmployeePostRequest newEmployeePostRequest) {
-        System.out.println(newEmployeePostRequest.getEmail());
+
 
         if (newEmployeePostRequest.getEmail() == null || newEmployeePostRequest.getEmail().isEmpty()) {
             // 'email' 필드가 null이거나 빈 문자열입니다.
             // 여기에 적절한 오류 처리 코드를 추가하세요.
             return "redirect:/admin/employee/employeeAdd";
         }
-        System.out.println("employee name : " + newEmployeePostRequest.getName());
         employeeService.createEmployee(newEmployeePostRequest);
 
         //dto를 repository에 저장하는 서비스메서드호출
@@ -60,8 +60,9 @@ public class EmployeeController {
     public String showEmployeeList(Model model) {
         List<Employee> employees = employeeService.findAll();
         model.addAttribute("employees", employees);
-        return "employeeList";
+        return "employeeList ";
     }
+
 
 
 

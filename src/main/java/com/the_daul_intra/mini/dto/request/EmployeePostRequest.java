@@ -17,7 +17,7 @@ public class EmployeePostRequest {
     private String contactInfo;
     private String address;
     private String comment;
-    private Long annualCount;
+    private Long annualCount = 0L;
     private String projectStatus;
 
 }

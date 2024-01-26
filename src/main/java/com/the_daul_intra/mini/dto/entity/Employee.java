@@ -1,14 +1,12 @@
 package com.the_daul_intra.mini.dto.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.Set;
 
 @Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,4 +32,5 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private Set<NoticeReadStatus> noticeReadStatuses;
+
 }

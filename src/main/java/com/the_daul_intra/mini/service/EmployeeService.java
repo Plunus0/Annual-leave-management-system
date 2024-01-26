@@ -31,7 +31,7 @@ public class EmployeeService {
 
     @Transactional
     public Employee createEmployee(EmployeePostRequest request) {
-        System.out.println("nameService : " + request.getName());
+
         // Employee 생성
         Employee employee = Employee.builder()
                 .email(request.getEmail())
@@ -49,8 +49,8 @@ public class EmployeeService {
                 .employee(employee)//필수
                 .name(request.getName())//필수
                 .email(request.getEmail())//필수
-                .residentRegistrationNumber(request.getRrn())//됨
-                .position(request.getPosition())//됨
+                .residentRegistrationNumber(request.getRrn())
+                .position(request.getPosition())
                 .joinDate(LocalDate.parse(request.getJoinDate()).atStartOfDay())
                 .retirementDate(request.getRetirementDate() != null && !request.getRetirementDate().isEmpty()
                         ? LocalDate.parse(request.getRetirementDate()).atStartOfDay()
@@ -59,11 +59,10 @@ public class EmployeeService {
                 .address(request.getAddress())
                 .projectStatus(YesNo.valueOf(request.getProjectStatus()))
                 .adminComment(request.getComment())
-                .annualQuantity(request.getAnnualCount())//필수
+                .annualQuantity(request.getAnnualCount() != null ? request.getAnnualCount() : 0L)
                 .build();//마무리
-        System.out.println("nameService3 : " + request.getName());
-        employeeProfileRepository.save(employeeProfile);
 
+        employeeProfileRepository.save(employeeProfile);
 
         return employee;
     }

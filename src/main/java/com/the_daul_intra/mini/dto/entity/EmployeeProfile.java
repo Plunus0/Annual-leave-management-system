@@ -55,4 +55,6 @@ public class EmployeeProfile {
 
     @Column(name = "ANNUAL_QUANTITY", nullable = false)
     private Long annualQuantity;
+
+
 }
