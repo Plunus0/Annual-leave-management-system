@@ -48,6 +48,7 @@ public class ApiLeaveService {
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
         }
+
         //인증정보를 바탕으로 empId확인 후 없다면 로그인페이지로 이동
         Employee employee = apiEmpLoginRepository.findById(empId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND,"  로그인 내역이 존재하지 않습니다."));

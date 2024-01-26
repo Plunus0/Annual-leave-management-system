@@ -7,7 +7,9 @@ import com.the_daul_intra.mini.dto.response.*;
 import com.the_daul_intra.mini.service.ApiEmpService;
 import com.the_daul_intra.mini.service.ApiLeaveService;
 import com.the_daul_intra.mini.service.ApiNoticeService;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,10 +58,14 @@ public class ApiController {
 
     //공지사항 목록
     @GetMapping("/notice")
-    public ResponseEntity<List<ApiNoticeListItemResponse>> getAllNotices() {
-        List<ApiNoticeListItemResponse> notices = apiNoticeService.getNoticeList();
+    public ResponseEntity<Page<ApiNoticeListItemResponse>> getAllNotices(
+            @RequestParam(value = "page", defaultValue = "1") @Min(value = 1, message = "최소 페이지는 1페이지 입니다.") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
+
+        Page<ApiNoticeListItemResponse> notices = apiNoticeService.getNoticeList(page, size);
         return ResponseEntity.ok(notices);
     }
+
     //공지사항 상세
     @GetMapping("/notice/{id}")
     public ResponseEntity<ApiNoticeResponse> getNotice(@PathVariable Long id) {

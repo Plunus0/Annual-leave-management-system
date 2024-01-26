@@ -1,0 +1,21 @@
+.Offlist table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.Offlist th, .Offlist td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.Offlist tr:nth-child(even) {background-color: #f2f2f2;}
+
+.Offlist tr:hover {background-color: #ddd;}
+
+.Offlist th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #04AA6D;
+    color: white;
+}

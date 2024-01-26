@@ -14,8 +14,14 @@ import com.the_daul_intra.mini.repository.ApiEmpLoginRepository;
 import com.the_daul_intra.mini.repository.ApiNoticeReadStatusRepository;
 import com.the_daul_intra.mini.repository.ApiNoticeRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,8 +39,7 @@ public class ApiNoticeService {
     private final ApiEmpLoginRepository apiEmpLoginRepository;
 
     Long empId = null;
-    public List<ApiNoticeListItemResponse> getNoticeList() {
-        List<Notice> notices = apiNoticeRepository.findAll();
+    public Page<ApiNoticeListItemResponse> getNoticeList(int page, int size) {
 
         //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,7 +49,19 @@ public class ApiNoticeService {
             empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
         }
 
-        return notices.stream().map(notice -> {
+        //페이징 및 spec 구성
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("regDate").descending());
+        Specification<Notice> spec = (root, query, cb) -> {
+            Predicate conditionN = cb.equal(root.get("unused"), YesNo.N);
+            Predicate conditionNull = cb.isNull(root.get("unused"));
+            return cb.or(conditionN, conditionNull);
+        };
+
+        //공지사항 조회
+        Page<Notice> notices = apiNoticeRepository.findAll(spec, pageable);
+
+        //DTO반환
+        return notices.map(notice -> {
             boolean isRead = apiNoticeReadStatusRepository.findByNoticeIdAndEmployeeId(notice.getId(), empId)
                     .map(readStatus -> readStatus.getIsRead() == YesNo.Y)
                     .orElse(false);
@@ -55,7 +72,7 @@ public class ApiNoticeService {
                     notice.getRegDate().toString(),
                     isRead
             );
-        }).collect(Collectors.toList());
+        });
     }
 
     @Transactional

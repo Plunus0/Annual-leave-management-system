@@ -4,15 +4,19 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class JwtUtil {
     //토큰 발급
     public static String createJwt(String email, String secretKey){
+        Date expirationDate = Date.from(ZonedDateTime.now().plus(1, ChronoUnit.MONTHS).toInstant());
+
         return Jwts.builder()
                 .claim("email", email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 2592000))//유효기간 : 1달
+                .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
