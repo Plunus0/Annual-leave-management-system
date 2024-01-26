@@ -32,7 +32,7 @@ public class NoticeReadStatus {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "IS_READ", nullable = false)
-    private YesNo isRead;
+    private YesNo isRead = YesNo.N;
 
     public void setReadDate(LocalDateTime readDate) {
         this.readDate = readDate;

@@ -23,16 +23,16 @@ public class EmployeeProfile {
     private Employee employee;
 
     @Column(name = "NAME", nullable = false, length = 20)
-    private String name;
+    private String name = "";
 
     @Column(name = "E_MAIL", nullable = false, length = 200)
-    private String email;
+    private String email = "";
 
     @Column(name = "RESIDENT_REGISTRATION_INT", length = 256)
-    private String residentRegistrationNumber;
+    private String residentRegistrationNumber = "";
 
     @Column(name = "POSITION", length = 10)
-    private String position;
+    private String position = "";
 
     @Column(name = "JOIN_DATE", length = 19)
     private LocalDateTime joinDate;
@@ -41,20 +41,23 @@ public class EmployeeProfile {
     private LocalDateTime retirementDate;
 
     @Column(name = "CONTACT_INFORMATION", nullable = false, length = 20)
-    private String contactInformation;
+    private String contactInformation = "";
 
     @Column(name = "ADDRESS", length = 100)
-    private String address;
+    private String address = "";
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PROJECT_STATUS")
-    private YesNo projectStatus;
+    private YesNo projectStatus = YesNo.N;
+
+    @Column(name = "PROJECT_NAME", columnDefinition = "TEXT")
+    private String projectName = "";
 
     @Column(name = "ADMIN_COMMENT", columnDefinition = "TEXT")
-    private String adminComment;
+    private String adminComment = "";
 
     @Column(name = "ANNUAL_QUANTITY", nullable = false)
-    private Long annualQuantity;
+    private Long annualQuantity = 0L;
 
 
 }

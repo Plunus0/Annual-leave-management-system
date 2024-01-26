@@ -25,10 +25,10 @@ public class Notice {
     private Long id;
 
     @Column(nullable = false, length = 200)
-    private String title;
+    private String title = "";
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
+    private String content = "";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
@@ -38,7 +38,7 @@ public class Notice {
     @Column(name = "REG_DATE", length = 19)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDateTime regDate;
+    private LocalDateTime regDate = LocalDateTime.now();
 
     @Column(name = "UPDATE_DATE", length = 19)
     private LocalDateTime updateDate;
@@ -47,7 +47,7 @@ public class Notice {
     private LocalDateTime unusedDate;
 
     @Enumerated(EnumType.STRING)
-    private YesNo unused;
+    private YesNo unused = YesNo.N;
 
     @OneToMany(mappedBy = "notice", fetch = FetchType.LAZY)
     private Set<NoticeReadStatus> readStatuses;

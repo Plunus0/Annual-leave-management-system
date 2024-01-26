@@ -30,7 +30,11 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // POST 메서드이고 로그인 경로에 대한 요청인 경우 필터 적용을 건너뛰기
-        if (("POST".equals(method)) && (path.equals("/api/login") || path.equals("/admin/login"))) {
+        if (("POST".equals(method)) && (path.equals("/api/login") || path.equals("/admin/Login"))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (("GET".equals(method)) && path.equals("/admin/Login")) {
             filterChain.doFilter(request, response);
             return;
         }
