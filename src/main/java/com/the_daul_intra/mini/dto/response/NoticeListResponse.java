@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ApiNoticeListItemResponse {
+public class NoticeListResponse {
     private Long id;
+    private Long rowNum;
     private String title;
-    private String content;
     private String regDate;
-    private boolean isRead;
+    private String writeId;
+    private Long viewCount;
 }

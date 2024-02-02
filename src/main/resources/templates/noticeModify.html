@@ -16,7 +16,7 @@
     <div class="notice-form">
         <h1>글 작성</h1>
 
-        <form th:action="@{'/admin/notice/modifyPro/' + ${notice.id}}" method="post">
+        <form th:action="@{'/admin/notice/modify/' + ${notice.id}}" method="post">
         <input type="hidden" name="_method" value="put" />
 
             <label for="title">제목:</label>

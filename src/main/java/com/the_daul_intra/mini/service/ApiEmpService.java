@@ -1,5 +1,6 @@
 package com.the_daul_intra.mini.service;
 
+import com.the_daul_intra.mini.configuration.Encryptor;
 import com.the_daul_intra.mini.dto.EmpDetails;
 import com.the_daul_intra.mini.dto.entity.Employee;
 import com.the_daul_intra.mini.dto.request.ApiLoginPostRequest;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.List;
 public class ApiEmpService {
 
     private final ApiEmpLoginRepository apiEmpLoginRepository;
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     @Value("${jwt.secret}")
     private String secretKey;
     Long empId = null;
@@ -67,14 +70,10 @@ public class ApiEmpService {
 
         Employee selectedEmp = apiEmpLoginRepository.findActiveByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, request.getEmail() + " 해당하는 아이디가 없습니다."));
-        //1-2. 비밀번호 확인
-        if(!request.getPassword().equals(selectedEmp.getPassword())){
+        //1-2. 복호화하여 비밀번호 확인하기
+        if (!encoder.matches(request.getPassword(), selectedEmp.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호가 일치하지 않습니다.");
         }
-        //복호화하여 비밀번호 확인하기
-/*        if(!encoder.matches(dto.getPassword(), selectedEmp.getPassword())){
-            throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호가 틀렸습니다.");
-        }*/
         //인증성공시 반환
         return ApiLoginResponse.builder()
                 .token(JwtUtil.createJwt(selectedEmp.getEmail(), secretKey))

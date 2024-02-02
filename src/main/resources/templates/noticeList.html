@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,38 +11,39 @@
     <div class="page-title">
         <div class="container">
             <h3>공지사항</h3>
+            <button type="button" class="btn btn-dark">
+                <a th:href="@{/admin/index}" class="text-white">홈으로</a>
+            </button>
         </div>
     </div>
-<!-- board list area -->
-<div id="board-list">
-    <div class="container">
-        <table class="board-table">
-            <thead>
-            <tr>
-                <th scope="col" class="th-num">번호</th>
-                <th scope="col" class="th-title">제목</th>
-                <th scope="col" class="th-date">등록일</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="notice : ${list}">
-                <td th:text="${notice.sortNum}"></td>
-                <td><a th:text="${notice.title}" th:href="@{'/admin/notice/' + ${notice.id}}"></a></td>
-                <td th:text="${notice.onlyDate}"></td>
-            </tr>
-            </tbody>
 
-        </table>
-        <button type="submit" class="btn btn-dark">
-            <a th:href="@{/admin/notice/write}" class="text-white">작성하기</a>
-        </button>
+    <div id="board-list">
+        <div class="container">
+            <table class="board-table">
+                <thead>
+                <tr>
+                    <th scope="col" class="th-num">번호</th>
+                    <th scope="col" class="th-title">제목</th>
+                    <th scope="col" class="th-date">등록일</th>
+                    <th scope="col" class="th-writer">작성자</th>
+                    <th scope="col" class="th-viewcount">조회수</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="notice : ${noticeList}">
+                    <td th:text="${notice.rowNum}"></td>
+                    <td><a th:href="@{/admin/notice/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
+                    <td th:text="${notice.regDate}"></td>
+                    <td th:text="${notice.writeId}"></td>
+                    <td th:text="${notice.viewCount}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-dark">
+                <a th:href="@{/admin/notice/write}" class="text-white">작성하기</a>
+            </button>
+        </div>
     </div>
-</div>
-
 </section>
-
 </body>
 </html>
-
-<!--
-https://taehi-dev.tistory.com/164-->

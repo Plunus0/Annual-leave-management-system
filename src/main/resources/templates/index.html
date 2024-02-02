@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>대시보드</title>
+    <title>dashBoard</title>
     <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
-<form action="/admin/employee" th:object="${loginRequest}" method="post">
 <div class="container">
+    <div class="header">
+        <div class="logout-button">
+            <a th:href="@{/admin/logout}">로그아웃</a>
+        </div>
+    </div>
     <div class="sidebar">
         <ul>
-            <li><a href="#">공지사항</a></li>
+            <li><a th:href="@{/admin/notice}">공지사항</a></li>
             <li><a th:href="@{/admin/employee/employeeList}">직원관리</a></li>
-            <li><a href="#">신청서관리</a></li>
+            <li><a th:href="@{/admin/off}">신청서관리</a></li>
         </ul>
     </div>
 
@@ -40,7 +44,6 @@
         </div>
     </div>
 </div>
-</form>
 <script src="../static/js"></script>
 </body>
 </html>

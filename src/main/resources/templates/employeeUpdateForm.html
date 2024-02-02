@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>직원</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      padding: 1rem;
+      font-size: 1rem;
+      font-family: sans-serif;
+    }
+
+    h1 {
+      width: fit-content;
+      margin-inline: auto;
+      font-size: 2.2rem;
+      font-weight: normal;
+      margin-bottom: 0.5em;
+    }
+
+    button {
+      border: 1px solid #dddddd;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+      padding-inline: 1rem;
+      height: 33px;
+      cursor: pointer;
+      background-color: #e0f0ef;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    input[type=text],
+    input[type=number],
+    input[type=date] {
+      height: 33px;
+      border: 1px solid #dddddd;
+      border-radius: 5px;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      padding-inline: 0.5rem;
+    }
+
+    textarea {
+      border: 1px solid #dddddd;
+      border-radius: 5px;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      padding: 0.5rem;
+    }
+
+    .pointer-cursor {
+      cursor: pointer;
+    }
+
+    .basic-form {
+      margin-inline: auto;
+      width: 600px;
+      border: 1px solid #c0c0c0;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1rem;
+      gap: 1rem;
+      margin-bottom: 1rem;
+
+      &>div {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &>label {
+          display: block;
+          width: 100px;
+        }
+
+        &>label#check_change_password {
+          font-size: 0.8rem;
+          width: fit-content;
+          cursor: pointer;
+        }
+
+        &>input[type=text],
+        &>input[type=date] {
+          flex: 1;
+        }
+
+        & textarea[name=admin_comment] {
+          flex: 1;
+          height: 100px;
+        }
+      }
+    }
+
+    /* end of .basic-form */
+
+    #project {
+      width: fit-content;
+      min-width: 800px;
+      margin-inline: auto;
+      border: 1px solid #dddddd;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+
+      &>h2 {
+        font-size: 1.5rem;
+        font-weight: normal;
+        margin-bottom: 0.5em;
+      }
+
+      &>#new_project {
+        border: 1px solid #dddddd;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        &>div {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          &>label {
+            width: 70px;
+            text-align: right;
+          }
+
+          &>input {
+            flex: 1;
+          }
+        }
+      }
+
+      &>#project_list {
+        margin-top: 1rem;
+        border: 1px solid #dddddd;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        &>div {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          border-bottom: 1px solid #dddddd;
+          padding-block: 5px;
+          max-width: 1024px;
+
+          &>p {
+            font-size: 14px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow-x: hidden;
+          }
+        }
+      }
+    }
+
+    /* end of #project */
+
+    .button-bar {
+      margin-inline: auto;
+      margin-block: 1rem;
+      width: fit-content;
+
+      &>button {
+        width: 300px;
+      }
+    }
+  </style>
+  <script lang="javascript">
+    function addNewProject() {
+      const projectList = document.getElementById('project_list')
+      const newProject = document.createElement("div")
+      //
+      const newProjectName = document.getElementById('new_project_name').value
+      const newProjectStation = document.getElementById('new_project_station').value
+      const newStartDate = document.getElementById('new_start_date').value
+      const newEndDate = document.getElementById('new_end_date').value
+      newProject.innerHTML = `
+      <input type="hidden" name="project_name[]" value="${newProjectName}">
+<input type="hidden" name="project_station[]" value="${newProjectStation}">
+<input type="hidden" name="start_date[]" value="${newStartDate}">
+<input type="hidden" name="end_date[]" value="${newEndDate}">
+<p>프로젝트명: ${newProjectName}</p>
+<p>파견지: ${newProjectStation}</p>
+<p>${newStartDate} ~ ${newEndDate} <button type="button" onclick="deleteThis(this)">삭제</button> </p>
+  `
+      // projectList.appendChild(newProject)
+      projectList.insertBefore(newProject, projectList.firstChild)
+    }
+    function deleteThis(obj) {
+      const thisLine = obj.parentNode.parentNode
+      thisLine.remove()
+    }
+
+    function submitfunc() {
+      const form = document.getElementById('form')
+      const formData = new FormData(form)
+      formData.forEach((value, key) => {
+        console.log(`${key} : ${value}`)
+      })
+
+      return false
+    }
+  </script>
+</head>
+
+<body>
+  <h1>직원 등록(수정)</h1>
+  <form id="form" method="POST" action="./" onsubmit="javascript:submitfunc()">
+    <div class="basic-form">
+      <div><label>이름</label> <input type="text" name="name" value="" /></div>
+      <div><label>email</label> <input type="text" name="e_mail" value="" /></div>
+      <div>
+        <label>password</label>
+        <input type="text" name="password" value="" />
+        <input type="checkbox" name="change_password" id="change_password" />
+        <label class="pointer-cursor" for="change_password">패스워드 변경</label>
+      </div>
+      <div>
+        <label for="admin_status">관리자여부</label>
+        <input type="radio" name="admin_status" id="admin_status_Y" value="Y" />
+        <label class="pointer-cursor" for="admin_status_Y">관리자</label>
+        <input type="radio" name="admin_status" id="admin_status_N" value="N" checked />
+        <label class="pointer-cursor" for="admin_status_N">직원</label>
+      </div>
+      <div>
+        <label>주민등록번호</label>
+        <input type="text" name="resident_registration_int" value="" />
+      </div>
+      <div>
+        <label>직급</label>
+        <input type="text" name="position" value="" />
+      </div>
+      <div>
+        <label>입사일</label>
+        <input type="date" name="join_date" value="" />
+      </div>
+      <div>
+        <label>퇴사일</label>
+        <input type="date" name="retirement_date" value="" />
+      </div>
+      <div>
+        <label>연락처</label>
+        <input type="text" name="contact_information" value="" />
+      </div>
+      <div>
+        <label>주소</label>
+        <input type="text" name="address" value="" />
+      </div>
+      <div>
+        <label>파견상태</label>
+        <input type="radio" name="project_status" value="Y" id="project_status_Y" />
+        <label class="pointer-cursor" for="project_status_Y">파견중</label>
+        <input type="radio" name="project_status" value="N" id="project_status_N" checked />
+        <label class="pointer-cursor" for="project_status_N">대기중</label>
+      </div>
+      <div>
+        <label>관리자 코멘트</label>
+        <textarea name="admin_comment"></textarea>
+      </div>
+      <div>
+        <label>발생연차</label>
+        <input type="text" name="annual_quantity" value="0" />
+      </div>
+    </div>
+
+    <div id="project">
+      <h2>수행 프로젝트 이력</h2>
+      <div id="new_project">
+        <div>
+          <label>프로젝트명</label>
+          <input type="text" name="new_project_name" id="new_project_name" value="" />
+          <label>파견지</label>
+          <input type="text" name="new_project_station" id="new_project_station" value="" />
+        </div>
+        <div>
+          <label>시작일</label>
+          <input type="date" name="new_start_date" id="new_start_date" value="" />
+          <label>종료일</label>
+          <input type="date" name="new_end_date" id="new_end_date" value="" />
+        </div>
+        <button type="button" onclick="addNewProject()">추가</button>
+      </div>
+
+      <div id="project_list">
+        <div>
+          <input type="hidden" name="project_name" value="기존프로젝트명">
+          <input type="hidden" name="project_station" value="기존프로젝트 파견지">
+          <input type="hidden" name="start_date" value="2024.02.01">
+          <input type="hidden" name="end_date" value="2024.06.30">
+          <p>프로젝트명: 기존프로젝트명</p>
+          <p>파견지: 기존프로젝트 파견지</p>
+          <p>
+            2024-02-01 ~ 2024-06-30
+            <button type="button" onclick="deleteThis(this)">삭제</button>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="button-bar">
+      <button type="button" onclick="submitfunc()">등록(수정)</button>
+    </div>
+  </form>
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 package com.the_daul_intra.mini.dto.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ApiNoticeListItemResponse {
+public class ViewerResponse {
     private Long id;
-    private String title;
-    private String content;
-    private String regDate;
-    private boolean isRead;
+    private String name;
+    private String contactInfo;
 }

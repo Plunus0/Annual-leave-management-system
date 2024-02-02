@@ -7,6 +7,7 @@ import com.the_daul_intra.mini.dto.entity.NoticeReadStatus;
 import com.the_daul_intra.mini.dto.entity.YesNo;
 import com.the_daul_intra.mini.dto.request.ApiNoticeDetailRequest;
 import com.the_daul_intra.mini.dto.response.ApiNoticeListItemResponse;
+import com.the_daul_intra.mini.dto.response.ApiNoticeListResponse;
 import com.the_daul_intra.mini.dto.response.ApiNoticeResponse;
 import com.the_daul_intra.mini.exception.AppException;
 import com.the_daul_intra.mini.exception.ErrorCode;
@@ -28,6 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +41,33 @@ public class ApiNoticeService {
     private final ApiEmpLoginRepository apiEmpLoginRepository;
 
     Long empId = null;
-    public Page<ApiNoticeListItemResponse> getNoticeList(int page, int size) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public List<ApiNoticeListItemResponse> getNoticeAllList() {
+        List<Notice> notices = apiNoticeRepository.findAll(Sort.by(Sort.Direction.DESC, "regDate"));
+
+        //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //authentication에서 empId 추출
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            empId = ((EmpDetails) authentication.getPrincipal()).getEmpId();
+        }
+
+        return notices.stream().map(notice -> {
+            boolean isRead = apiNoticeReadStatusRepository.findByNoticeIdAndEmployeeId(notice.getId(), empId)
+                    .map(readStatus -> readStatus.getIsRead() == YesNo.Y)
+                    .orElse(false);
+
+            return ApiNoticeListItemResponse.builder()
+                    .id(notice.getId())
+                    .title(notice.getTitle())
+                    .regDate(notice.getRegDate().format(formatter))
+                    .isRead(isRead)
+                    .build();
+        }).collect(Collectors.toList());
+    }
+    public ApiNoticeListResponse getNoticePagingList(Integer page, Integer size) {
 
         //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -60,19 +88,27 @@ public class ApiNoticeService {
         //공지사항 조회
         Page<Notice> notices = apiNoticeRepository.findAll(spec, pageable);
 
-        //DTO반환
-        return notices.map(notice -> {
-            boolean isRead = apiNoticeReadStatusRepository.findByNoticeIdAndEmployeeId(notice.getId(), empId)
-                    .map(readStatus -> readStatus.getIsRead() == YesNo.Y)
-                    .orElse(false);
+        List<ApiNoticeListItemResponse> noticeItem = notices.getContent().stream()
+                .map(notice -> {
+                    boolean isRead = apiNoticeReadStatusRepository.findByNoticeIdAndEmployeeId(notice.getId(), empId)
+                            .map(readStatus -> readStatus.getIsRead() == YesNo.Y)
+                            .orElse(false);
+                    return ApiNoticeListItemResponse.builder()
+                            .id(notice.getId())
+                            .title(notice.getTitle())
+                            .content(notice.getContent())
+                            .regDate(notice.getRegDate().format(formatter))
+                            .isRead(isRead)
+                            .build();
+                    }).collect(Collectors.toList());
 
-            return new ApiNoticeListItemResponse(
-                    notice.getId(),
-                    notice.getTitle(),
-                    notice.getRegDate().toString(),
-                    isRead
-            );
-        });
+        //DTO에 담아 반환
+        return ApiNoticeListResponse.builder()
+                .content(noticeItem)
+                .pageNumber(notices.getNumber())
+                .pageSize(notices.getSize())
+                .build();
+
     }
 
     @Transactional
@@ -109,6 +145,7 @@ public class ApiNoticeService {
                 .adminName(notice.getEmployee().getEmployeeProfile().getName())
                 .title(notice.getTitle())
                 .content(notice.getContent())
+                .regDate(notice.getRegDate().format(formatter))
                 .build();
     }
 

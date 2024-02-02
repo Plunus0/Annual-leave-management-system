@@ -2,9 +2,16 @@ package com.the_daul_intra.mini.controller;
 
 import com.the_daul_intra.mini.dto.entity.Employee;
 import com.the_daul_intra.mini.dto.entity.Notice;
-import com.the_daul_intra.mini.dto.request.NoticeWriteDTO;
+import com.the_daul_intra.mini.dto.request.NoticePostRequest;
+import com.the_daul_intra.mini.dto.response.ApiNoticeListResponse;
+import com.the_daul_intra.mini.dto.response.NoticeDetailResponse;
+import com.the_daul_intra.mini.dto.response.NoticeListResponse;
 import com.the_daul_intra.mini.dto.response.NoticeResponse;
 import com.the_daul_intra.mini.service.NoticeService;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,125 +24,66 @@ import java.util.List;
 import static java.util.Comparator.comparing;
 
 @Controller
-@RequestMapping("/admin/notice")
+@RequiredArgsConstructor
+@RequestMapping("/admin")
 public class NoticeController {
 
-    public NoticeController(NoticeService noticeService) {
-        this.noticeService = noticeService;
-    }
+    private final NoticeService noticeService;
 
-    //전체 공지사항 목록
-    @GetMapping("/")
-    public String noticeListView(Model model){
-
-        List<NoticeWriteDTO> list = noticeService.noticeList();
-
-        list.sort(comparing(NoticeWriteDTO::getRegDate).reversed());
-
-        int count = 0;
-        for(NoticeWriteDTO iter : list){
-
-            LocalDateTime localDateTime = list.get(count).getRegDate();
-            list.get(count).setOnlyDate(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            list.get(count).setSortNum(++count);
-        }
-
-        model.addAttribute("list", list);
-        return "noticeList";
-    }
-
-    //글 작성 페이지
-    @GetMapping("/write")
-    public String noticeWrite(Model model){
-
-        model.addAttribute("write", new NoticeWriteDTO());
-
+    //공지사항 작성페이지
+    @GetMapping("/notice/write")
+    public String noticeWrite(){
         return "noticeWrite";
     }
 
-    //글 작성
-    @PostMapping("/writepro")
-    public String noticeWritepro(@ModelAttribute  NoticeWriteDTO noticeWriteDTO) {
-        
-        // 테스트용 임시로 employee id 만들어서 사용
-        Employee employee = Employee.builder()
-                .id(1L)
-                .build();
-
-        noticeWriteDTO.setEmployee(employee);
-        // 여기까지
-
-        noticeService.noticeWrite(noticeWriteDTO);
-
-        return "redirect:/admin/notice/";
+    //공지사항 작성요청
+    @PostMapping("/notice/write")
+    public String noticeWritePost(@ModelAttribute NoticePostRequest noticePostRequest) {
+        Long id = noticeService.noticeWrite(noticePostRequest);
+        return "redirect:/admin/notice/" + id;
     }
 
-    // 공지사항 상세페이지
-    @GetMapping("/{id}")
+    //전체 공지사항 목록
+    @GetMapping("/notice")
+    public String noticePagingList(
+            @RequestParam(value = "page", defaultValue = "1") @Min(value = 1, message = "최소 페이지는 1페이지 입니다.") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") Integer size,
+            @RequestParam(value = "delete", defaultValue = "N") String delete,
+            Model model){
+        Page<NoticeListResponse> noticeList = noticeService.getNoticePagingList(page, size, delete);
+        model.addAttribute("noticeList", noticeList);
+        return "noticeList";
+    }
+
+    //공지사항 상세페이지
+    @GetMapping("/notice/{id}")
     public String noticeDetail(@PathVariable Long id, Model model){
 
-
-        Notice noticeDetail = noticeService.noticeDetail(id);
+        NoticeDetailResponse noticeDetail = noticeService.noticeDetail(id);
 
         model.addAttribute("noticeDetail", noticeDetail);
 
         return "noticeDetail";
     }
 
-    // 공지사항 수정페이지
-    /*@PutMapping("/modify/{id}")
-    public String noticeModify(@PathVariable Long id, @ModelAttribute NoticeResponse noticeResponse){
-        // 테스트용 임시로 employee id 만들어서 사용
-        Employee employee = Employee.builder()
-                .id(1L)
-                .build();
-
-        noticeResponse.setEmployee(employee);
-        // 여기까지
-        noticeService.noticeModify(id, noticeResponse);
-
-        return "redirect:/admin/notice/{id}";
-    }*/
-
-    @GetMapping("/modify/{id}")
+    //공지사항 수정페이지
+    @GetMapping("/notice/modify/{id}")
     public String noticeModify(@PathVariable Long id, Model model){
-        // 테스트용 임시로 employee id 만들어서 사용
-        Employee employee = Employee.builder()
-                .id(1L)
-                .build();
-
-        // 여기까지
-
-        Notice notice = noticeService.noticeDetail(id);
-
+        NoticeDetailResponse notice = noticeService.noticeDetail(id);
         model.addAttribute("notice", notice);
-
         return "noticeModify";
     }
 
-    @PutMapping("/modifyPro/{id}")
+    //공지사항 수정요청
+    @PutMapping("/notice/modify/{id}")
     public String noticeModifyPro(@PathVariable Long id, @ModelAttribute NoticeResponse noticeResponse){
-        // 테스트용 임시로 employee id 만들어서 사용
-        Employee employee = Employee.builder()
-                .id(1L)
-                .build();
-
-        noticeResponse.setEmployee(employee);
-        // 여기까지
         noticeService.noticeModify(id, noticeResponse);
-
         return "redirect:/admin/notice/{id}";
     }
 
-
-    @DeleteMapping("/delete/{id}")
-    public String noticeDelete(@PathVariable Long id){
-
-        noticeService.noticeDelete(id);
-        return "redirect:/admin/notice/";
+    //공지사항 삭제요청
+    @PutMapping("/notice/delete/{id}")
+    public String noticeDelete(){
+        return "redirect:/admin/notice";
     }
-
-    //member
-    private NoticeService noticeService;
-
 }

@@ -1,5 +1,7 @@
 package com.the_daul_intra.mini.service;
 
+import com.the_daul_intra.mini.configuration.BCryptEncoder;
+import com.the_daul_intra.mini.configuration.Encryptor;
 import com.the_daul_intra.mini.dto.entity.Employee;
 import com.the_daul_intra.mini.dto.entity.EmployeeProfile;
 import com.the_daul_intra.mini.dto.entity.YesNo;
@@ -8,6 +10,7 @@ import com.the_daul_intra.mini.repository.EmployeeProfileRepository;
 import com.the_daul_intra.mini.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,7 +21,7 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeProfileRepository employeeProfileRepository;
-
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     @Autowired
     public EmployeeService(EmployeeRepository employeeRepository, EmployeeProfileRepository employeeProfileRepository) {
         this.employeeRepository = employeeRepository;
@@ -35,21 +38,19 @@ public class EmployeeService {
         // Employee 생성
         Employee employee = Employee.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
-                .adminStatus(YesNo.valueOf(request.getAdminStatus()))
+                .password(encoder.encode(request.getPassword()))
+                .adminStatus(request.getAdminStatus() != null ? YesNo.valueOf(request.getAdminStatus()) : YesNo.N)
                 .build();
 
         employee = employeeRepository.save(employee);
 
-        System.out.println("nameService2 : " + request.getName());
-        System.out.println("data : " + employee.getId()+employee.getAdminStatus());
         // EmployeeProfile 생성
 
         EmployeeProfile employeeProfile = EmployeeProfile.builder()
                 .employee(employee)//필수
                 .name(request.getName())//필수
                 .email(request.getEmail())//필수
-                .residentRegistrationNumber(request.getRrn())
+                .residentRegistrationNumber(Encryptor.encrypt(request.getRrn()))
                 .position(request.getPosition())
                 .joinDate(LocalDate.parse(request.getJoinDate()).atStartOfDay())
                 .retirementDate(request.getRetirementDate() != null && !request.getRetirementDate().isEmpty()
@@ -57,7 +58,7 @@ public class EmployeeService {
                         : null)
                 .contactInformation(request.getContactInfo())//필수
                 .address(request.getAddress())
-                .projectStatus(YesNo.valueOf(request.getProjectStatus()))
+                .projectStatus(request.getProjectStatus() != null ? YesNo.valueOf(request.getProjectStatus()) : YesNo.N)
                 .adminComment(request.getComment())
                 .annualQuantity(request.getAnnualCount() != null ? request.getAnnualCount() : 0L)
                 .build();//마무리

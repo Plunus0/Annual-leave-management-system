@@ -26,13 +26,13 @@ public class OffController {
                                Model model) {
         List<OffListResponse> offSerchList = offService.getOffSerchList(absenceType, status);
         model.addAttribute("offSerchList", offSerchList);
-        return "/offRequestList";
+        return "offRequestList";
     }
 
     @GetMapping("/off/{id}")
     public String offDetail(@PathVariable Long id, Model model) {
         OffDetailResponse detailResponse = offService.getOffDetail(id);
         model.addAttribute("detail", detailResponse);
-        return "/offDetail";
+        return "offDetail";
     }
 }

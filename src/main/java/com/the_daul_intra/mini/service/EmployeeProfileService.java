@@ -1,5 +1,6 @@
 package com.the_daul_intra.mini.service;
 
+import com.the_daul_intra.mini.configuration.Encryptor;
 import com.the_daul_intra.mini.dto.entity.Employee;
 import com.the_daul_intra.mini.dto.entity.EmployeeProfile;
 import com.the_daul_intra.mini.dto.entity.YesNo;
@@ -7,6 +8,7 @@ import com.the_daul_intra.mini.dto.response.EmployeeDetailResponse;
 import com.the_daul_intra.mini.repository.EmployeeProfileRepository;
 import com.the_daul_intra.mini.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,6 +21,8 @@ public class EmployeeProfileService {
 
     private EmployeeProfileRepository employeeProfileRepository;
     private final EmployeeRepository employeeRepository;
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
 
     @Autowired
     public EmployeeProfileService(EmployeeProfileRepository employeeProfileRepository, EmployeeRepository employeeRepository) {
@@ -51,12 +55,13 @@ public class EmployeeProfileService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+        System.out.println(Encryptor.decrypt("RRN? : "+employeeProfile.getResidentRegistrationNumber()));
 
+        assert employeeProfile != null;
         response.setId(employee.getId());
         response.setEmail(employee.getEmail());
-        assert employeeProfile != null;
         response.setName(employeeProfile.getName());
-        response.setRrn(employeeProfile.getResidentRegistrationNumber());
+        response.setRrn(Encryptor.decrypt(employeeProfile.getResidentRegistrationNumber()));
         response.setContactInfo(employeeProfile.getContactInformation());
         response.setPosition(employeeProfile.getPosition());
         if (employeeProfile.getJoinDate() != null) {
@@ -66,10 +71,10 @@ public class EmployeeProfileService {
             response.setRetirementDate(employeeProfile.getRetirementDate().format(formatter));
         }
         response.setAdminStatus(String.valueOf(employee.getAdminStatus()));
-        response.setAddress(employeeProfile.getAddress());
-        response.setProjectStatus(String.valueOf(employeeProfile.getProjectStatus()));
-        response.setComment(employeeProfile.getAdminComment());
         response.setAnnualCount(employeeProfile.getAnnualQuantity());
+        response.setProjectStatus(String.valueOf(employeeProfile.getProjectStatus()));
+        response.setAddress(employeeProfile.getAddress());
+        response.setComment(employeeProfile.getAdminComment());
 
         return response;
     }
@@ -96,10 +101,10 @@ public class EmployeeProfileService {
         employeeProfile.setName(employeeDetail.getName());
         // 비밀번호 변경 체크박스가 체크된 경우에만 비밀번호를 업데이트합니다.
         if (changePassword) {
-            employee.setPassword(employeeDetail.getPassword());
+            employee.setPassword(encoder.encode(employeeDetail.getPassword()));
         }
         employee.setEmail(employeeDetail.getEmail());
-        employeeProfile.setResidentRegistrationNumber(employeeDetail.getRrn());
+        employeeProfile.setResidentRegistrationNumber(Encryptor.encrypt(employeeDetail.getRrn()));
         employeeProfile.setPosition(employeeDetail.getPosition());
         // 날짜 정보를 처리하기 위해서는 문자열을 LocalDate 객체로 변환하는 과정이 필요합니다.
         // joinDate 업데이트
@@ -121,11 +126,28 @@ public class EmployeeProfileService {
         }
         employeeProfile.setContactInformation(employeeDetail.getContactInfo());
         employeeProfile.setAddress(employeeDetail.getAddress());
-        // 라디오 버튼의 값(Y, N)을 boolean으로 변환합니다.
-        employeeProfile.setProjectStatus(YesNo.valueOf(employeeDetail.getProjectStatus()));
-        employee.setAdminStatus(YesNo.valueOf(employeeDetail.getAdminStatus()));
         employeeProfile.setAdminComment(employeeDetail.getComment());
-        employeeProfile.setAnnualQuantity(employeeDetail.getAnnualCount());
+
+        // employeeProfile의 projectStatus 설정
+        if (employeeDetail.getProjectStatus() != null) {
+            employeeProfile.setProjectStatus(YesNo.valueOf(employeeDetail.getProjectStatus()));
+        } else {
+            // projectStatus가 null일 경우 기본값으로 N 설정
+            employeeProfile.setProjectStatus(YesNo.N);
+        }
+        // employee의 adminStatus 설정
+        if (employeeDetail.getAdminStatus() != null) {
+            employee.setAdminStatus(YesNo.valueOf(employeeDetail.getAdminStatus()));
+        } else {
+            // adminStatus가 null일 경우 기본값으로 N 설정
+            employee.setAdminStatus(YesNo.N);
+        }
+        //AunnualCount 미입력시 설정
+        if (employeeDetail.getAnnualCount() != null) {
+            employeeProfile.setAnnualQuantity(employeeDetail.getAnnualCount());
+        } else {
+            employeeProfile.setAnnualQuantity(0L);
+        }
 
         // 업데이트된 정보를 데이터베이스에 저장합니다.
         employeeRepository.save(employee);

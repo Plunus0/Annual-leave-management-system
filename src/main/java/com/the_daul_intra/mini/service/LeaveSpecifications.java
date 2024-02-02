@@ -37,11 +37,11 @@ public class LeaveSpecifications {
             List<Predicate> predicates = new ArrayList<>();
 
             if (absenceType != null && !absenceType.isEmpty()) {
-                predicates.add(cb.equal(root.get("absenceType"), absenceType));
+                predicates.add(cb.like(root.get("absenceType"), "%" + absenceType + "%"));
             }
 
             if (status != null && !status.isEmpty()) {
-                predicates.add(cb.equal(root.get("processingStatus"), status));
+                predicates.add(cb.like(root.get("processingStatus"), "%" + status + "%"));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

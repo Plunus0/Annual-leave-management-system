@@ -17,6 +17,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,6 +38,8 @@ public class ApiLeaveService {
     private final ApiEmpLoginRepository apiEmpLoginRepository;
     private final ApiDetailsLeaveDateRepository apiDetailsLeaveDateRepository;
     Long empId = null;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
 
     //휴가신청서 작성
     @Transactional
@@ -52,6 +56,7 @@ public class ApiLeaveService {
         //인증정보를 바탕으로 empId확인 후 없다면 로그인페이지로 이동
         Employee employee = apiEmpLoginRepository.findById(empId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND,"  로그인 내역이 존재하지 않습니다."));
+
         DetailsLeaveAbsence leaveRequest = DetailsLeaveAbsence.builder()
                 .employee(employee)
                 .absenceLeavePeriod((long) request.getUseDates().length)
@@ -86,13 +91,13 @@ public class ApiLeaveService {
         }
 
         //검색 조건에 따른 검색 실행
-        List<DetailsLeaveAbsence> leaves = apiDetailsLeaveAbsenceRepository.findAll(LeaveSpecifications.withCriteria(request, empId));
+        List<DetailsLeaveAbsence> leaves = apiDetailsLeaveAbsenceRepository.findAll(LeaveSpecifications.withCriteria(request, empId),Sort.by(Sort.Direction.DESC, "applicationDate"));
 
         //검색 결과 반환
         return leaves.stream().map(leave -> new ApiOffListItemResponse(
                 leave.getId(),
                 leave.getEmployee().getId(),
-                leave.getApplicationDate().toString(),
+                leave.getApplicationDate().format(formatter),
                 leave.getProcessingStatus(),
                 leave.getAbsenceType()
         )).collect(Collectors.toList());
@@ -126,11 +131,11 @@ public class ApiLeaveService {
                 .status(leaveAbsence.getProcessingStatus())
                 .leavePeriod(Long.toString(leaveAbsence.getAbsenceLeavePeriod()))
                 .useDates(useDates)
-                .regDate(leaveAbsence.getApplicationDate().toString())
-                .receiveDate(leaveAbsence.getReceptionDate().toString())
-                .confirmDate(leaveAbsence.getProcessedDate().toString())
-                .receiveAdmin(leaveAbsence.getReceptionAdmin().getEmployeeProfile().getName())
-                .confirmAdmin(leaveAbsence.getProcessedAdmin().getEmployeeProfile().getName())
+                .regDate(leaveAbsence.getApplicationDate() != null ? leaveAbsence.getApplicationDate().format(formatter) : null)
+                .receiveDate(leaveAbsence.getReceptionDate() != null ? leaveAbsence.getReceptionDate().format(formatter) : null)
+                .confirmDate(leaveAbsence.getProcessedDate() != null ? leaveAbsence.getProcessedDate().format(formatter) : null)
+                .receiveAdmin(leaveAbsence.getReceptionAdmin() != null && leaveAbsence.getReceptionAdmin().getEmployeeProfile() != null ? leaveAbsence.getReceptionAdmin().getEmployeeProfile().getName() : null)
+                .confirmAdmin(leaveAbsence.getProcessedAdmin() != null && leaveAbsence.getProcessedAdmin().getEmployeeProfile() != null ? leaveAbsence.getProcessedAdmin().getEmployeeProfile().getName() : null)
                 .reason(leaveAbsence.getApplicantComments())
                 .adminComment(leaveAbsence.getAdminComment())
                 .build();

@@ -37,8 +37,6 @@ public class EmployeeController {
 
 
         if (newEmployeePostRequest.getEmail() == null || newEmployeePostRequest.getEmail().isEmpty()) {
-            // 'email' 필드가 null이거나 빈 문자열입니다.
-            // 여기에 적절한 오류 처리 코드를 추가하세요.
             return "redirect:/admin/employee/employeeAdd";
         }
         employeeService.createEmployee(newEmployeePostRequest);

@@ -16,6 +16,10 @@ section.notice {
     text-align: center;
 }
 
+.board-table .th-writer, .board-table .th-viewcount {
+    width: 150px; /* 작성자와 조회수 열 너비 조정 */
+}
+
 #board-search .search-window {
     padding: 15px 0;
     background-color: #f9f7f9;

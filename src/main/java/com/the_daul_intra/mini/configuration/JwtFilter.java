@@ -1,11 +1,13 @@
 package com.the_daul_intra.mini.configuration;
 
 import com.the_daul_intra.mini.service.EmpDetailsService;
+import com.the_daul_intra.mini.service.LoginService;
 import com.the_daul_intra.mini.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,37 +28,16 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String method = request.getMethod();
-        String path = request.getRequestURI();
-
-        // POST 메서드이고 로그인 경로에 대한 요청인 경우 필터 적용을 건너뛰기
-        if (("POST".equals(method)) && (path.equals("/api/login") || path.equals("/admin/Login"))) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        if (("GET".equals(method)) && path.equals("/admin/Login")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        //헤더에 AUTHORIZATION로 전송받은 데이터를 가져온다.
+        //경로와 메서드 및 AUTHORIZATION 데이터를 가져온다.
+        final String method = request.getMethod();
+        final String path = request.getRequestURI();
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        logger.info("authorization = " + authorization);
+        final String cookieToken = getCookieValue(request, "daulJwt");
 
-        //AUTHORIZATION로 전송받은 데이터가 없거나 접두사가 "Daul "가 아니라면 return
-        if (authorization == null || !authorization.startsWith("Daul ")) {
-            logger.error("authorization nothing");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 상태 코드 설정
-            response.setContentType("application/json"); // 컨텐트 타입 설정
-            response.getWriter().write("{\"error\": \"인증만료: JWT 인증에 실패했습니다.\"}"); // JSON 형식의 에러 메시지 작성
-            response.getWriter().flush();
-            response.getWriter().close();
-            filterChain.doFilter(request, response);
-            return;
-        }
+        logger.info("\nmethod : " + method + "\npath : " + path + "\nauthorization = " + authorization + "\nCookie " + cookieToken);
 
-        //token 꺼내기("Daul " 접두사 없애기)
-        String token = authorization.split(" ")[1];
+        // Header의 AUTHORIZATION이 비어있거나 접두사가 Daul이 아닌 경우 헤더에서 jwt를 추출하고 그렇지 않다면 쿠키에서 jwt를 추출
+        String token = (authorization != null && authorization.startsWith("Daul ")) ? authorization.split(" ")[1] : cookieToken;
 
         try {
             if (token != null && !JwtUtil.isExpired(token, secretKey)) {
@@ -70,32 +51,59 @@ public class JwtFilter extends OncePerRequestFilter {
                 logger.error("authorization ok : "+authentication);
             } else {
                 // 토큰이 만료된 경우(401 Unauthorized)
-//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증만료: JWT 인증에 실패했습니다.");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 상태 코드 설정
-                response.setContentType("application/json"); // 컨텐트 타입 설정
-                response.getWriter().write("{\"error\": \"인증만료: JWT 인증에 실패했습니다.\"}"); // JSON 형식의 에러 메시지 작성
-                response.getWriter().flush();
-                response.getWriter().close();
+                System.out.println("else 401");
+                //접속 경로가 api일 경우 에러발생 그렇지 앉다면 토큰을 삭제한다.
+                tokenExprired(path, response);
             }
         } catch (ExpiredJwtException e) {
             // JWT 토큰 만료 예외 처리(401 Unauthorized)
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증만료: JWT 인증에 실패했습니다.");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 상태 코드 설정
-            response.setContentType("application/json"); // 컨텐트 타입 설정
-            response.getWriter().write("{\"error\": \"인증만료: JWT 인증에 실패했습니다.\"}"); // JSON 형식의 에러 메시지 작성
-            response.getWriter().flush();
-            response.getWriter().close();
+            System.out.println("catch 401");
+            tokenExprired(path, response);
         } catch (JwtException e) {
             // 기타 JWT 관련 예외 처리(403 Forbidden)
-//            response.sendError(HttpServletResponse.SC_FORBIDDEN, "유효하지 않은 토큰: JWT 인증 실패");
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 상태 코드 설정
-            response.setContentType("application/json"); // 컨텐트 타입 설정
-            response.getWriter().write("{\"error\": \"유효하지 않은 토큰: JWT 인증 실패\"}"); // JSON 형식의 에러 메시지 작성
-            response.getWriter().flush();
-            response.getWriter().close();
+            System.out.println("catch 403");
+            tokenException(path, response, e);
         }
 
         filterChain.doFilter(request, response);
+
     }
 
+    //쿠키에서 jwt를 추출하는 메서드
+    public static String getCookieValue(HttpServletRequest request, String cookieName) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    //토큰 만료 에러처리
+    private void tokenExprired(String path, HttpServletResponse response) throws IOException {
+        if(path.startsWith("/api")){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }else {
+            removeTokenCookie(response);
+        }
+    }
+
+    //토큰 오류 에러처리
+    private void tokenException(String path, HttpServletResponse response, JwtException e) throws IOException {
+        if(path.startsWith("/api")){
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        }else {
+            removeTokenCookie(response);
+        }
+    }
+
+    public void removeTokenCookie(HttpServletResponse httpResponse) {
+        Cookie cookie = new Cookie("daulJwt", null);
+        cookie.setMaxAge(0); // 쿠키의 유효기간을 0으로 설정하여 제거
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        httpResponse.addCookie(cookie);
+    }
 }

@@ -56,13 +56,20 @@ public class ApiController {
         return ResponseEntity.ok(response);
     }
 
-    //공지사항 목록
+    //공지사항 전체목록
     @GetMapping("/notice")
-    public ResponseEntity<Page<ApiNoticeListItemResponse>> getAllNotices(
-            @RequestParam(value = "page", defaultValue = "1") @Min(value = 1, message = "최소 페이지는 1페이지 입니다.") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size) {
+    public ResponseEntity<List<ApiNoticeListItemResponse>> getNoticesAllList() {
+        List<ApiNoticeListItemResponse> notices = apiNoticeService.getNoticeAllList();
+        return ResponseEntity.ok(notices);
+    }
 
-        Page<ApiNoticeListItemResponse> notices = apiNoticeService.getNoticeList(page, size);
+
+    //공지사항 최근목록
+    @GetMapping("/noticerecent")
+    public ResponseEntity<ApiNoticeListResponse> getNoticesPagingList(
+            @RequestParam(value = "page", defaultValue = "1") @Min(value = 1, message = "최소 페이지는 1페이지 입니다.") Integer page,
+            @RequestParam(value = "size", defaultValue = "100") Integer size) {
+        ApiNoticeListResponse notices = apiNoticeService.getNoticePagingList(page, size);
         return ResponseEntity.ok(notices);
     }
 

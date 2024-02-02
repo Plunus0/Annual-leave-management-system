@@ -6,11 +6,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>offDetail</title>
     <link rel="stylesheet" th:href="@{/css/offDetail.css}">
-    <script th:src="@{/js/offDetail.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        function getOffId() {
+            return document.getElementById('offId').value;
+        }
+
+        function deleteApi() {
+            var offId = getOffId();
+
+            fetch('/admin/off/' + offId, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    alert("삭제가 완료되었습니다.");
+                    window.location.href = "/";
+                } else {
+                    alert("삭제 중 문제가 발생했습니다.");
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function receiveApplication() {
+            var offId = getOffId();
+            var adminComment = document.querySelector('textarea').value;
+            // AJAX 요청
+            $.ajax({
+                url: '/admin/off/' + offId + '/receipt',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ adminComment: adminComment }),
+                success: function(response) {
+                    // 성공 시 현재 페이지 리로드
+                    window.location.reload();
+                },
+                error: function(error) {
+                    // 에러 처리
+                    console.error('에러 발생:', error);
+                    alert('작업 처리 중 문제가 발생했습니다.');
+                }
+            });
+        }
+
+        function approveApplication() {
+            var offId = getOffId();
+            var adminComment = document.querySelector('textarea').value;
+            // AJAX 요청
+            $.ajax({
+                url: '/admin/off/' + offId + '/process',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ adminComment: adminComment }),
+                success: function(response) {
+                    // 성공 시 현재 페이지 리로드
+                    window.location.reload();
+                },
+                error: function(error) {
+                    // 에러 처리
+                    console.error('에러 발생:', error);
+                    alert('작업 처리 중 문제가 발생했습니다.');
+                }
+            });
+        }
+
+        function goToList() {
+            window.location.href = '/admin/off';
+        }
+
+    </script>
+
+
+
 </head>
 <body>
     <div class="application-details">
         <div class="top-buttons">
+            <button class="top-button" onclick="goToList()">목록</button>
             <!--<button class="top-button" onclick="editApplication()">수정</button>-->
             <button class="top-button" onclick="deleteApi()">삭제</button>
         </div>
@@ -67,10 +140,11 @@
                 <td><textarea th:text="${detail.adminComment}"></textarea></td>
             </tr>
         </table>
+        <input type="text" id="offId" th:value="${detail.id}" readonly style="display: none;">
         <div class="buttons">
             <button class="receive" onclick="receiveApplication()">접수</button>
             <button class="approve" onclick="approveApplication()">승인</button>
-            <button class="reject" onclick="rejectApplication()">반려</button>
+<!--            <button class="reject" onclick="rejectApplication()">반려</button>-->
         </div>
     </div>
     
