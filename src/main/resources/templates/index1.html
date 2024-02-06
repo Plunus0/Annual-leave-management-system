@@ -1,0 +1,125 @@
+<!--
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashBoard</title>
+&lt;!&ndash;    <link rel="stylesheet" th:href="@{/css/index.css}">&ndash;&gt;
+    body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    }
+
+    .logout-button a {
+    padding: 5px 15px;
+    background-color: #f44336;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    }
+
+    .container {
+    display: flex;
+    flex-wrap: wrap; /* 자식 요소들이 한 줄에 모두 배치되도록 설정 */
+    overflow: hidden; /* 자식 요소 넘치는 부분 감춤 */
+    }
+
+    .sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #111;
+    padding-top: 20px;
+    }
+
+    .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    }
+
+    .sidebar ul li {
+    padding: 8px;
+    text-align: center;
+    }
+
+    .sidebar a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    display: block;
+    padding: 16px;
+    }
+
+    .main-content {
+    flex: 1;
+    padding: 20px;
+    }
+
+    .dashboard {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    align-self: auto; /* 초기값으로 설정 */
+    }
+
+    .dashboard-card {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 300px;
+    }
+
+    .dashboard-card h2 {
+    color: #333;
+    text-align: left;
+    margin-bottom: 10px;
+    }
+
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logout-button">
+            <a th:href="@{/admin/logout}">로그아웃</a>
+        </div>
+    </div>
+    <div class="sidebar">
+        <ul>
+            <li><a th:href="@{/admin/notice}">공지사항</a></li>
+            <li><a th:href="@{/admin/employee/employeeList}">직원관리</a></li>
+            <li><a th:href="@{/admin/off}">신청서관리</a></li>
+        </ul>
+    </div>
+
+
+    <div class="main-content">
+        <div class="dashboard">
+
+            &lt;!&ndash; 직원 현황 카드 &ndash;&gt;
+            <div class="dashboard-card">
+                <h2>직원 현황</h2>
+                <p>전체 직원 수: <span id="totalEmployees">100</span></p>
+                <p>파견중: <span id="onAssignment">20</span></p>
+                <p>대기중: <span id="onHold">5</span></p>
+            </div>
+
+            &lt;!&ndash; 신청 상태 카드 &ndash;&gt;
+            <div class="dashboard-card">
+                <h2>신청 상태</h2>
+                <p>월차 신청 수: <span id="vacationRequests">15</span></p>
+                <p>연차 신청 수: <span id="annualLeaveRequests">8</span></p>
+                <p>반차 신청 수: <span id="halfDayRequests">3</span></p>
+                <p>병가 신청 수: <span id="sickLeaveRequests">2</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/js"></script>
+</body>
+</html>
+-->

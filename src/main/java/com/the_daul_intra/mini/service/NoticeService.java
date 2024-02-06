@@ -153,9 +153,6 @@ public class NoticeService {
         Notice notice = noticeRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("update error"));
 
-        //noticeResponse.setUpdateDate();
-
-
         notice.setTitle(noticeResponse.getTitle());
         notice.setContent(noticeResponse.getContent());
 
@@ -163,11 +160,11 @@ public class NoticeService {
 
     @Transactional
     public void noticeDelete(Long id){
+        Notice notice = noticeRepository
+                .findById(id).orElseThrow(()-> new AppException(ErrorCode.NOT_FOUND," 공지사항이 존재하지 않습니다."));
 
-        System.out.println("Delete Service id : " + id);
-        noticeRepository.delete(noticeRepository
-                .findById(id).orElseThrow(()-> new IllegalArgumentException("Can't find id : " + id)));
-
+        apiNoticeReadStatusRepository.deleteAll(notice.getReadStatuses());
+        noticeRepository.delete(notice);
     }
 
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Footer</title>
+    <style>
+        footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          background-color: #AAAAAA;
+          border: 1px solid #000000;
+          border-bottom: 1px solid #dee2e6;
+          text-align: center;
+        }
+
+        footer p {
+          width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+<div th:fragment="footer">
+    <footer>
+        <p>이곳에 내용이 포함됩니다.</p>
+    </footer>
+</div>
+</body>
+</html>

@@ -17,6 +17,10 @@
 </head>
 <body th:each="employee : ${employeeDetail}" >
 <h1 class="header">직원 상세정보</h1>
+<div class="center">
+    <a class="edit-button" th:href="@{/admin/employee/employeeUpdate/{id}(id=${employee.id})}">수정</a>
+    <a class="edit-button" onclick="window.history.back();">돌아가기</a>
+</div>
 <table class="detail-table">
     <tr>
         <th>이름</th>
@@ -70,10 +74,5 @@
         <td th:text="${employee.annualCount}"></td>
     </tr>
 </table>
-
-<div class="center">
-    <a class="edit-button" th:href="@{/admin/employee/employeeUpdate/{id}(id=${employee.id})}">수정</a>
-    <a class="edit-button" th:href="@{/admin/employee/employeeList}">확인</a>
-</div>
 </body>
 </html>

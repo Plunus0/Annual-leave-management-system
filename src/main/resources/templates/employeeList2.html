@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+    <link rel="stylesheet" th:href="@{/css/employeeList.css}">
+</head>
+<body>
+<h1>직원 목록</h1>
+<div id="buttonContainer">
+    <a id="home" th:href="@{/admin/index}" class="add-button">홈 화면으로</a>
+    <a id="retiredEmployee" th:href="@{/admin/employee/retiredEmployee}" class="add-button">퇴사자만 보기</a>
+    <a id="addEmployee" th:href="@{/admin/employee/employeeAdd}" class="add-button">직원 추가</a>
+</div>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>이메일</th>
+        <th>이름</th>
+        <th>직급</th>
+        <th>전화번호</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="employee : ${employees}">
+        <td><a th:href="@{/admin/employee/employee_detail/{id}(id=${employee.id})}" th:text="${employee.id}"></a></td>
+        <td th:text="${employee.email}"></td>
+        <td th:text="${employee.name}"></td>
+        <td th:text="${employee.position}"></td>
+        <td th:text="${employee.contactInformation}"></td>
+    </tr>
+    </tbody>
+
+</table>
+</body>
+</html>

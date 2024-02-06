@@ -2,48 +2,76 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항</title>
-    <link rel="stylesheet" th:href="@{/css/noticeList.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <style>
+        .table-wrapper tbody tr:hover {background-color: #ddd;}
+
+    </style>
+    <script>
+        function redirectToDetailPage(id) {
+            window.location.href = '/admin/notice/' + id;
+        }
+    </script>
 </head>
-<body>
-<section class="notice">
-    <div class="page-title">
-        <div class="container">
-            <h3>공지사항</h3>
-            <button type="button" class="btn btn-dark">
-                <a th:href="@{/admin/index}" class="text-white">홈으로</a>
-            </button>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <div th:replace="header :: headerFragment"></div>
+
+            <!-- Content -->
+            <section>
+                <header class="main">
+                    <h2>공지사항</h2>
+                </header>
+
+                <!-- Notice List -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>등록일</th>
+                            <th>작성자</th>
+                            <th>조회수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="notice : ${noticeList}" th:onclick="'redirectToDetailPage(' + ${notice.id} + ')'">
+                            <td th:text="${notice.rowNum}"></td>
+                            <td th:text="${notice.title}"></td>
+                            <td th:text="${notice.regDate}"></td>
+                            <td th:text="${notice.writeId}"></td>
+                            <td th:text="${notice.viewCount}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <ul class="actions">
+                    <li><a href="/admin/notice/write" class="button">공지사항 작성</a></li>
+                </ul>
+            </section>
         </div>
     </div>
 
-    <div id="board-list">
-        <div class="container">
-            <table class="board-table">
-                <thead>
-                <tr>
-                    <th scope="col" class="th-num">번호</th>
-                    <th scope="col" class="th-title">제목</th>
-                    <th scope="col" class="th-date">등록일</th>
-                    <th scope="col" class="th-writer">작성자</th>
-                    <th scope="col" class="th-viewcount">조회수</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="notice : ${noticeList}">
-                    <td th:text="${notice.rowNum}"></td>
-                    <td><a th:href="@{/admin/notice/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
-                    <td th:text="${notice.regDate}"></td>
-                    <td th:text="${notice.writeId}"></td>
-                    <td th:text="${notice.viewCount}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <button type="submit" class="btn btn-dark">
-                <a th:href="@{/admin/notice/write}" class="text-white">작성하기</a>
-            </button>
-        </div>
-    </div>
-</section>
+    <div th:replace="sidebar :: sidebarFragment"></div>
+</div>
+
+<!-- Scripts -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+
 </body>
 </html>

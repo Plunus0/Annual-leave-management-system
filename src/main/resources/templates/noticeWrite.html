@@ -1,35 +1,60 @@
-<!-- writeNotice.html -->
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글 작성</title>
-    <link rel="stylesheet" th:href="@{/css/noticeWrite.css}">
+    <title>공지사항 작성 - Editorial by HTML5 UP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/assets/css/main.css" />
 </head>
-<body>
+<body class="is-preload">
 
+<!-- Wrapper -->
+<div id="wrapper">
 
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+            <!-- Content -->
+            <section>
+                <header class="main">
+                    <h1>공지사항 작성</h1>
+                </header>
 
-<div class="container">
-    <div class="notice-form">
-        <h1>글 작성</h1>
+                <!-- Form -->
+                <form th:action="@{/admin/notice/write}" method="post" class="alt">
+                    <div class="row gtr-uniform">
+                        <div class="col-12">
+                            <label for="title">제목</label>
+                            <input type="text" id="title" name="title" required />
+                        </div>
+                        <div class="col-12">
+                            <label for="content">내용</label>
+                            <textarea id="content" name="content" rows="6" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <ul class="actions">
+                                <li><input type="submit" value="작성하기" class="primary" /></li>
+                                <li><input type="reset" value="초기화" /></li>
+                                <li><a href="/admin/notice" class="button">취소</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </section>
 
-        <form th:action="@{/admin/notice/write}" method="post">
-            <label for="title">제목:</label>
-            <input type="text" id="title" name="title" required>
-
-            <label for="content">내용:</label>
-            <textarea id="content" name="content" required></textarea>
-
-            <button type="submit" class="submit-button">작성하기</button>
-            <a th:href="@{/admin/notice/}" class="cancel-button">취소</a>
-
-        </form>
+        </div>
     </div>
+
+    <div th:replace="sidebar :: sidebarFragment"></div>
+
 </div>
+
+<!-- Scripts -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+
 </body>
 </html>
-
-

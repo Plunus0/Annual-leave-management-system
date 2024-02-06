@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -81,9 +82,18 @@ public class NoticeController {
         return "redirect:/admin/notice/{id}";
     }
 
+
     //공지사항 삭제요청
-    @PutMapping("/notice/delete/{id}")
-    public String noticeDelete(){
-        return "redirect:/admin/notice";
+    @PostMapping("/notice/delete/{id}")
+    public String noticeDelete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            noticeService.noticeDelete(id);
+            redirectAttributes.addFlashAttribute("successMessage", "성공적으로 삭제되었습니다.");
+            return "redirect:/admin/notice";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "삭제 중 문제가 발생했습니다.");
+            return "redirect:/admin/notice";
+        }
     }
+
 }

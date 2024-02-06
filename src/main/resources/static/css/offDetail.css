@@ -14,7 +14,9 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 h1 {
-    color: #0056b3;
+    color: #f56a6a; /* 강조 색상 적용 */
+    font-family: "Roboto Slab", serif; /* 일관된 글꼴 적용 */
+    margin-bottom: 1em; /* 여백 추가 */
     text-align: center;
 }
 table {
@@ -67,12 +69,33 @@ button {
     color: white;
 }
 
-textarea {
-    width: 100%;
-    height: 100px;
-    resize: none;
-}
-
 table {
     width: 100%;
+}
+table td, table th {
+    text-align: center; /* 가운데 정렬 */
+}
+
+.button, .top-button, .receive, .approve, .reject {
+    background-color: transparent;
+    color: #f56a6a;
+    border: solid 2px #f56a6a;
+    padding: 0.5em 1em;
+    text-transform: uppercase;
+    font-family: "Roboto Slab", serif;
+    font-weight: 700;
+    border-radius: 0.375em;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.button:hover, .top-button:hover, .receive:hover, .approve:hover, .reject:hover {
+    background-color: #f56a6a;
+    color: white;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 1em;
 }

@@ -16,18 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class OffButtonController {
     private final OffService offService;
 
-    @DeleteMapping("/off/{id}")
-    public ResponseEntity<?> offDelete(@PathVariable Long id) {
-        try {
-            offService.deleteLeaveAbsence(id);
-            return ResponseEntity.ok().build();
-        } catch (AppException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new AppException(ErrorCode.NOT_FOUND," 신청서 삭제 중 문제가 발생했습니다."));
-        }
-    }
-
     @PutMapping("/off/{id}/receipt")
     public ResponseEntity<?> offReceipt(@PathVariable Long id, @RequestBody ReceptRequest request) {
         offService.offRecept(id, request);

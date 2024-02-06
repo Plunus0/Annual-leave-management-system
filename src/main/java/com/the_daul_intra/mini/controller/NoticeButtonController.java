@@ -19,4 +19,5 @@ public class NoticeButtonController {
     public List<ViewerResponse> getViewers(@PathVariable Long id) {
         return noticeService.getViewersByNoticeId(id);
     }
+
 }

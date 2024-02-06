@@ -1,0 +1,37 @@
+<!-- writeNotice.html -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 작성</title>
+    <link rel="stylesheet" th:href="@{/css/noticeWrite.css}">
+</head>
+<body>
+
+
+
+<div class="container">
+    <div class="notice-form">
+        <h1>글 작성</h1>
+
+        <form th:action="@{'/admin/notice/modify/' + ${notice.id}}" method="post">
+        <input type="hidden" name="_method" value="put" />
+
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" th:value="${notice.title}">
+
+            <label for="content">내용:</label>
+            <textarea id="content" name="content" th:text="${notice.content}"></textarea>
+
+            <button type="submit" class="submit-button">수정하기</button>
+            <a th:href="@{'/admin/notice/' + ${notice.id}}" class="cancel-button">취소</a>
+
+        </form>
+    </div>
+</div>
+</body>
+</html>
+
+

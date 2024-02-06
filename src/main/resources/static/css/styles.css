@@ -1,0 +1,30 @@
+#container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#leftSide, #rightSide {
+  flex: 1; /* 사이드 메뉴의 폭을 자동으로 조정 */
+  min-width: 200px; /* 최소 폭을 지정 */
+}
+
+#content {
+  flex: 4; /* 메인 컨텐츠의 폭을 사이드 메뉴보다 넓게 설정 */
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  color: black; /* 링크 색상 */
+  background-color: #f2f2f2; /* 배경 색상 */
+}
+
+nav ul li a:hover {
+  background-color: #ddd; /* 호버 시 배경 색상 */
+}

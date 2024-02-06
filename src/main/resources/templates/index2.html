@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Main Page</title>
+<!--  <link rel="stylesheet" th:href="@{/css/styles.css}" />-->
+  <style>
+    body {
+        margin: 0;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .container {
+        display: flex;
+        min-height: 100vh; /* Viewport Height */
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .sidebar {
+        flex: 0 0 20%; /* 사이드바는 전체 너비의 20%를 차지합니다. */
+        background-color: #f4f4f4; /* 사이드바의 배경색 */
+        padding: 20px;
+        box-sizing: border-box; /* 패딩을 포함한 너비를 계산 */
+    }
+
+    .content {
+        flex: 1; /* 중앙 컨텐츠는 남은 공간을 모두 차지합니다. */
+        padding: 20px;
+        background-color: #fff; /* 컨텐츠의 배경색 */
+        box-sizing: border-box; /* 패딩을 포함한 너비를 계산 */
+    }
+
+    footer {
+        margin-top: 20px; /* 푸터와 메인 컨텐츠 사이의 여백 */
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        background-color: #333; /* 헤더와 푸터의 배경색 */
+        color: #fff;
+        padding: 10px 20px;
+        text-align: center;
+    }
+  </style>
+
+</head>
+<body>
+<div th:replace="fragments/header.html :: header"></div>
+
+<div class="container">
+  <div class="sidebar" id="left-sidebar" th:replace="fragments/leftMenu.html :: leftMenu"></div>
+
+<!--  <main class="content" th:replace="fragments/main.html :: content"></main>-->
+
+  <div class="sidebar" id="right-sidebar" th:replace="fragments/rightMenu.html :: rightMenu"></div>
+</div>
+
+<div th:replace="fragments/footer.html :: footer"></div>
+</body>
+</html>
