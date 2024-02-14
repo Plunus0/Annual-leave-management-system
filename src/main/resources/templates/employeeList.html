@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="/assets/css/main.css" />
     <style>
         .table-wrapper tbody tr:hover {background-color: #ddd;}
+        .main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* 세로 중앙 정렬을 위해 추가 */
+            margin-top: 10px;
+        }
+
     </style>
     <script>
         function redirectToDetailPage(id) {
@@ -26,15 +33,15 @@
 
             <div th:replace="header :: headerFragment"></div>
 
-            <header id="contents_header">
+            <header class="main">
                 <h2>직원 목록</h2>
-            </header>
             <div>
                 <ul class="icons">
                     <li><a href="/admin/employee/retiredEmployee" class="button">퇴사자만 보기</a></li>
                     <li><a href="/admin/employee/employeeAdd" class="button primary">직원 추가</a></li>
                 </ul>
             </div>
+            </header>
 
             <!-- Content -->
             <section>
@@ -42,19 +49,19 @@
                     <thead>
                     <tr>
                         <th>번호</th>
-                        <th>이메일</th>
-                        <th>이름</th>
                         <th>직급</th>
+                        <th>이름</th>
                         <th>전화번호</th>
+                        <th>이메일</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="employee : ${employees}" th:onclick="'redirectToDetailPage(' + ${employee.id} + ')'">
                         <td></td>
-                        <td th:text="${employee.email}"></td>
-                        <td th:text="${employee.name}"></td>
                         <td th:text="${employee.position}"></td>
+                        <td th:text="${employee.name}"></td>
                         <td th:text="${employee.contactInformation}"></td>
+                        <td th:text="${employee.email}"></td>
                     </tr>
                     </tbody>
                 </table>

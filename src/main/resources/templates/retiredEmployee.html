@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="/assets/css/main.css" />
     <style>
         .table-wrapper tbody tr:hover {background-color: #ddd;}
+        .main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* 세로 중앙 정렬을 위해 추가 */
+            margin-top: 10px;
+        }
     </style>
     <script>
         function redirectToDetailPage(id) {
@@ -26,15 +32,14 @@
 
             <div th:replace="header :: headerFragment"></div>
 
-            <header id="contents_header">
+            <header class="main">
                 <h2>퇴사자 목록</h2>
-            </header>
             <div>
                 <ul class="icons">
                     <li><a href="/admin/employee/employeeList" class="button">돌아가기</a></li>
                 </ul>
             </div>
-
+            </header>
             <!-- Content -->
             <section>
                 <table class="table-wrapper">

@@ -8,9 +8,9 @@
 
 <div th:fragment="headerFragment">
   <header id="header">
-    <a href="index" class="logo"><img src="/images/logo.png" alt="Daul" class="logo-img"></a>
+    <a href="/admin/index" class="logo"><img src="/images/logo.png" alt="Daul" class="logo-img"></a>
     <ul class="icons">
-      <li><p> <!--th:text="${adminName} + '님 환영합니다.'"-->사용자님 환영합니다.</p></li>
+      <li><p th:text="${adminName} + '님 환영합니다.'">사용자님 환영합니다.</p></li>
       <li><a href="/admin/logout">Logout</a></li>
     </ul>
   </header>

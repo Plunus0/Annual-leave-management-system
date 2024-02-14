@@ -69,6 +69,8 @@ public class EmployeeProfileService {
         }
         if (employeeProfile.getRetirementDate() != null) {
             response.setRetirementDate(employeeProfile.getRetirementDate().format(formatter));
+        }else{
+            response.setRetirementDate("재직중");
         }
         response.setAdminStatus(String.valueOf(employee.getAdminStatus()));
         response.setAnnualCount(employeeProfile.getAnnualQuantity());
@@ -90,7 +92,7 @@ public class EmployeeProfileService {
         employeeProfileRepository.deleteById(id);
     }
 
-    public void updateEmployeeDetail(Long id, EmployeeDetailResponse employeeDetail, boolean changePassword) {
+    public void updateEmployeeDetail(Long id, EmployeeDetailResponse employeeDetail) {
 
         // id에 해당하는 Employee와 EmployeeProfile을 찾습니다.
         Employee employee = employeeRepository.findById(id).orElse(null);
@@ -99,10 +101,12 @@ public class EmployeeProfileService {
 
         // Employee와 EmployeeProfile의 정보를 employeeDetail 정보로 업데이트합니다.
         employeeProfile.setName(employeeDetail.getName());
-        // 비밀번호 변경 체크박스가 체크된 경우에만 비밀번호를 업데이트합니다.
-        if (changePassword) {
-            employee.setPassword(encoder.encode(employeeDetail.getPassword()));
+
+        //passwrod가 null이 아닐 경우에만 변경
+        if (employeeDetail.getPassword() != null) {
+                employee.setPassword(encoder.encode(employeeDetail.getPassword()));
         }
+
         employee.setEmail(employeeDetail.getEmail());
         employeeProfile.setResidentRegistrationNumber(Encryptor.encrypt(employeeDetail.getRrn()));
         employeeProfile.setPosition(employeeDetail.getPosition());

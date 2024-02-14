@@ -8,6 +8,18 @@
     <style>
         .table-wrapper tbody tr:hover {background-color: #ddd;}
 
+        .main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* 세로 중앙 정렬을 위해 추가 */
+            margin-top: 10px;
+        }
+
+        .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
     </style>
     <script>
         function redirectToDetailPage(id) {
@@ -25,13 +37,16 @@
         <div class="inner">
 
             <div th:replace="header :: headerFragment"></div>
-
+            <header class="main">
+                <h2>공지사항</h2>
+                <div>
+                    <ul class="actions">
+                        <li><a href="/admin/notice/write" class="button">공지사항 작성</a></li>
+                    </ul>
+                </div>
+            </header>
             <!-- Content -->
             <section>
-                <header class="main">
-                    <h2>공지사항</h2>
-                </header>
-
                 <!-- Notice List -->
                 <div class="table-wrapper">
                     <table>
@@ -55,10 +70,20 @@
                         </tbody>
                     </table>
                 </div>
-
-                <ul class="actions">
-                    <li><a href="/admin/notice/write" class="button">공지사항 작성</a></li>
-                </ul>
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="pagination-container">
+                    <ul class="pagination">
+                        <li th:if="${noticeList.hasPrevious()}">
+                            <a th:href="@{/admin/notice(page=${noticeList.number})}" aria-label="Previous">&#10096;</a>
+                        </li>
+                        <li th:each="pageNum : ${#numbers.sequence(1, noticeList.totalPages)}" th:class="${pageNum == noticeList.number + 1} ? 'active'">
+                            <a th:href="@{/admin/notice(page=${pageNum})}" th:text="${pageNum}">1</a>
+                        </li>
+                        <li th:if="${noticeList.hasNext()}">
+                            <a th:href="@{/admin/notice(page=${noticeList.number + 2})}" aria-label="Next">&#10097;</a>
+                        </li>
+                    </ul>
+                </nav>
             </section>
         </div>
     </div>

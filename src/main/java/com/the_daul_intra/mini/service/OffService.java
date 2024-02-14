@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -75,6 +76,7 @@ public class OffService {
 
         LocalDate[] useDates = leaveAbsence.getLeaveDates().stream()
                 .map(DetailsLeaveDate::getUseDate)
+                .sorted()
                 .toArray(LocalDate[]::new);
 
         return OffDetailResponse.builder()
@@ -115,6 +117,10 @@ public class OffService {
         DetailsLeaveAbsence detailsLeaveAbsence = apiDetailsLeaveAbsenceRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, "존재하지 않는 휴가신청서입니다."));
 
+        if(Objects.equals(detailsLeaveAbsence.getProcessingStatus(), "접수") || Objects.equals(detailsLeaveAbsence.getProcessingStatus(), "승인")){
+            throw new AppException(ErrorCode.INVALID_OPERATION, "이미 처리된 요청입니다.");
+        }
+
         //인증정보를 바탕으로 empId확인 후 없다면 로그인페이지로 이동
         Employee employee = apiEmpLoginRepository.findById(empId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND,"  로그인 내역이 존재하지 않습니다."));
@@ -122,6 +128,7 @@ public class OffService {
         detailsLeaveAbsence.setReceptionAdmin(employee);
         detailsLeaveAbsence.setReceptionDate(LocalDateTime.now());
         detailsLeaveAbsence.setAdminComment(request.getAdminComment());
+        detailsLeaveAbsence.setProcessingStatus("접수");
 
         apiDetailsLeaveAbsenceRepository.save(detailsLeaveAbsence);
     }
@@ -139,6 +146,10 @@ public class OffService {
         DetailsLeaveAbsence detailsLeaveAbsence = apiDetailsLeaveAbsenceRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, "존재하지 않는 휴가신청서입니다."));
 
+        if(Objects.equals(detailsLeaveAbsence.getProcessingStatus(), "승인")){
+            throw new AppException(ErrorCode.INVALID_OPERATION, "이미 처리된 요청입니다.");
+        }
+
         //인증정보를 바탕으로 empId확인 후 없다면 로그인페이지로 이동
         Employee employee = apiEmpLoginRepository.findById(empId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND,"  로그인 내역이 존재하지 않습니다."));
@@ -146,6 +157,7 @@ public class OffService {
         detailsLeaveAbsence.setProcessedAdmin(employee);
         detailsLeaveAbsence.setProcessedDate(LocalDateTime.now());
         detailsLeaveAbsence.setAdminComment(request.getAdminComment());
+        detailsLeaveAbsence.setProcessingStatus("승인");
 
         apiDetailsLeaveAbsenceRepository.save(detailsLeaveAbsence);
     }

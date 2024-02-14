@@ -4,7 +4,9 @@ import com.the_daul_intra.mini.dto.EmpDetails;
 import com.the_daul_intra.mini.dto.request.ApiLoginPostRequest;
 import com.the_daul_intra.mini.dto.request.LoginRequest;
 import com.the_daul_intra.mini.dto.response.ApiLoginResponse;
+import com.the_daul_intra.mini.dto.response.IndexResponse;
 import com.the_daul_intra.mini.dto.response.LoginResponse;
+import com.the_daul_intra.mini.service.IndexService;
 import com.the_daul_intra.mini.service.LoginService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class LoginController {
     private final LoginService loginService;
     private final RestTemplate restTemplate;
+    private final IndexService indexService;
     private final String apiUrl = "http://localhost:8090/api/login"; // API URL 설정
     private final String url = "http://thedaul.mavericksoft.xyz/api/login"; // 배포시 URL 설정
 
@@ -61,7 +64,9 @@ public class LoginController {
     }
 
     @GetMapping("/index")
-    public String index(){
+    public String index(Model model){
+        IndexResponse indexData = indexService.getIndexData();
+        model.addAttribute("indexData", indexData);
         return "index";
     }
 

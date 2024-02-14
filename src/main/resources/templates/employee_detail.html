@@ -4,6 +4,67 @@
     <meta charset="UTF-8">
     <title>Employee Detail</title>
     <link rel="stylesheet" th:href="@{/css/employeeDetail.css}">
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.center {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 1em; /* 여백 추가 */
+    text-align: center;
+}
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detail-table, th, td {
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+textarea {
+    resize: none;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between; /* 양 끝에 요소 배치 */
+    width: 100%; /* 부모 컨테이너의 전체 너비 사용 */
+}
+
+.edit-button{
+    border-radius: 5px;
+}
+
+
+
+    </style>
 
     <script>
         function showRrn() {
@@ -16,63 +77,66 @@
 
 </head>
 <body th:each="employee : ${employeeDetail}" >
-<h1 class="header">직원 상세정보</h1>
 <div class="center">
-    <a class="edit-button" th:href="@{/admin/employee/employeeUpdate/{id}(id=${employee.id})}">수정</a>
-    <a class="edit-button" onclick="window.history.back();">돌아가기</a>
+    <div class="button-group">
+        <button type="button" class="edit-button" onclick="window.location.href='/admin/employee/employeeList';">목록</button>
+        <button type="button" class="edit-button" id="editBtn" th:attr="onclick=|window.location.href='/admin/employee/employeeUpdate/' + ${employee.id};|">수정</button>
+    </div>
+    <h1 class="header">직원 상세정보</h1>
+    <table class="detail-table">
+        <tr>
+            <th>이름</th>
+            <td th:text="${employee.name}"></td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td th:text="${employee.email}"></td>
+        </tr>
+        <tr>
+            <th>주민등록번호</th>
+            <td>
+                <button id="showRrnButton" onclick="showRrn()">주민등록번호 보기</button>
+                <span id="rrn" style="display: none;" th:text="${employee.rrn}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td th:text="${employee.contactInfo}"></td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td th:text="${employee.address}"></td>
+        </tr>
+        <tr>
+            <th>관리자여부</th>
+            <td th:text="${employee.adminStatus}"></td>
+        </tr>
+        <tr>
+            <th>직급</th>
+            <td th:text="${employee.position}"></td>
+        </tr>
+        <tr>
+            <th>입사일</th>
+            <td th:text="${employee.joinDate}"></td>
+        </tr>
+        <tr>
+            <th>퇴사일</th>
+            <td th:text="${employee.retirementDate}"></td>
+        </tr>
+
+        <tr>
+            <th>발생 연차</th>
+            <td th:text="${employee.annualCount}"></td>
+        </tr>
+        <tr>
+            <th>파견상태</th>
+            <td th:text="${employee.projectStatus}"></td>
+        </tr>
+        <tr>
+            <th>관리자 코멘트</th>
+            <td th:text="${employee.comment}"></td>
+        </tr>
+    </table>
 </div>
-<table class="detail-table">
-    <tr>
-        <th>이름</th>
-        <td th:text="${employee.name}"></td>
-    </tr>
-    <tr>
-        <th>이메일</th>
-        <td th:text="${employee.email}"></td>
-    </tr>
-    <tr>
-        <th>주민등록번호</th>
-        <td>
-            <button id="showRrnButton" onclick="showRrn()">주민등록번호 보기</button>
-            <span id="rrn" style="display: none;" th:text="${employee.rrn}"></span>
-        </td>
-    </tr>
-    <tr>
-        <th>직급</th>
-        <td th:text="${employee.position}"></td>
-    </tr>
-    <tr>
-        <th>입사일</th>
-        <td th:text="${employee.joinDate}"></td>
-    </tr>
-    <tr>
-        <th>퇴사일</th>
-        <td th:text="${employee.retirementDate}"></td>
-    </tr>
-    <tr>
-        <th>연락처</th>
-        <td th:text="${employee.contactInfo}"></td>
-    </tr>
-    <tr>
-        <th>주소</th>
-        <td th:text="${employee.address}"></td>
-    </tr>
-    <tr>
-        <th>파견상태</th>
-        <td th:text="${employee.projectStatus}"></td>
-    </tr>
-    <tr>
-        <th>관리자상태</th>
-        <td th:text="${employee.adminStatus}"></td>
-    </tr>
-    <tr>
-        <th>관리자 코멘트</th>
-        <td th:text="${employee.comment}"></td>
-    </tr>
-    <tr>
-        <th>발생 연차</th>
-        <td th:text="${employee.annualCount}"></td>
-    </tr>
-</table>
 </body>
 </html>

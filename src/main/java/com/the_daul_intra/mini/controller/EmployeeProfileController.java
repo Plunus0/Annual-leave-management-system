@@ -71,9 +71,9 @@ public class EmployeeProfileController {
     }
 
     @PutMapping("/employeeUpdate/{id}")
-    public String putUpdate(@PathVariable Long id, @ModelAttribute EmployeeDetailResponse employeeDetail, @RequestParam boolean changePassword) {
+    public String putUpdate(@PathVariable Long id, @ModelAttribute EmployeeDetailResponse employeeDetail) {
         // EmployeeDetailResponse 객체를 업데이트합니다.
-        employeeProfileService.updateEmployeeDetail(id, employeeDetail,changePassword);
+        employeeProfileService.updateEmployeeDetail(id, employeeDetail);
 
         // 업데이트가 완료되면 employee_detail 페이지로 리다이렉트합니다.
         return "redirect:/admin/employee/employee_detail/" + id;

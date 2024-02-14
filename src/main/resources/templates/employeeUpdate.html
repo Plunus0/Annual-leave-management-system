@@ -2,98 +2,260 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>employee Update</title>
-    <link rel="stylesheet" th:href="@{/css/employeeUpdate.css}">
+    <title>직원 정보 수정</title>
+    <link rel="stylesheet" th:href="@{/css/employeeadd.css}">
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <style>
+        /* employee/index.css */
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+#formContainer {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+#formContainer label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#formContainer input[type="text"],
+#formContainer input[type="password"],
+#formContainer input[type="email"],
+#formContainer input[type="date"],
+#formContainer input[type="number"],
+#formContainer textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #d1d1d1;
+    resize: none;
+}
+
+#formContainer input[type="submit"] {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+}
+
+#formContainer input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+h1 {
+    margin-bottom: 1em; /* 여백 추가 */
+    text-align: center;
+}
+
+#formContainer input[type="radio"] {
+    display: none;
+}
+
+#formContainer .radio-label {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 10px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+#formContainer .selected {
+    background-color: #F56A6A;
+    color: white;
+}
+.error-message {
+    color: red;
+}
+/* ... */
+#submitButton {
+    float: left; /* "확인" 버튼을 왼쪽에 위치시킴 */
+}
+
+#cancelButton {
+    float: right; /* "취소" 버튼을 오른쪽에 위치시킴 */
+    background-color: #007bff; /* "취소" 버튼의 배경색을 "확인" 버튼과 동일하게 바꿈 */
+}
+
+#cancelButton:hover {
+    background-color: #0056b3; /* "취소" 버튼 호버 시 배경색을 "확인" 버튼과 동일하게 바꿈 */
+}
+/* ... */
+.button-group {
+    display: flex;
+    justify-content: space-between; /* 양 끝에 요소 배치 */
+    width: 100%; /* 부모 컨테이너의 전체 너비 사용 */
+}
+
+
+    </style>
     <script>
         window.onload = function() {
-            const radioGroups = ['adminStatus', 'projectStatus'];
-
-        radioGroups.forEach(group => {
-            document.querySelectorAll(`input[name="${group}"]`).forEach(button => {
-                button.addEventListener('change', () => handleButtonClick(button, group));
-              });
-        });
-
-        function handleButtonClick(button, group) {
-            document.querySelectorAll(`input[name="${group}"]`).forEach(btn => {
-                btn.parentNode.classList.remove('selected');
+            // 비밀번호 변경 체크박스 이벤트 리스너 설정
+            document.getElementById('changePassword').addEventListener('change', function() {
+                var passwordInput = document.getElementById('password');
+                passwordInput.disabled = !this.checked;
             });
 
-        button.parentNode.classList.add('selected');
-        document.querySelector(`#${group}Input`).value = button.value;
-            }
+                // 라디오 버튼 초기화
+                initializeRadioButtons();
+        };
 
-        document.getElementById('changePassword').addEventListener('change', function() {
-            document.getElementById('password').disabled = !this.checked;
-        });
+        function initializeRadioButtons() {
+            const radioGroups = ['adminStatus', 'projectStatus'];
 
+            radioGroups.forEach(group => {
+                // 라디오 버튼 변경 시 동작하는 이벤트 리스너
+                document.querySelectorAll(`input[name="${group}"]`).forEach(button => {
+                    button.addEventListener('change', function() {
+                        handleRadioButtonClick(this, group);
+                    });
+                });
+
+                // 초기 선택 상태 설정
+                const selectedValue = document.getElementById(`${group}Value`).value;
+                if(selectedValue) {
+                    document.querySelector(`input[name="${group}"][value="${selectedValue}"]`).checked = true;
+                    handleRadioButtonClick(document.querySelector(`input[name="${group}"][value="${selectedValue}"]`), group);
+                }
+            });
+        }
+
+        function handleRadioButtonClick(button, group) {
+            // 모든 라디오 버튼의 'selected' 클래스 제거
+            document.querySelectorAll(`#${group} .radio-label`).forEach(label => {
+                label.classList.remove('selected');
+            });
+
+            // 선택된 라디오 버튼의 레이블에 'selected' 클래스 추가
+            button.parentNode.classList.add('selected');
+            // 선택된 값으로 hidden 입력 필드 업데이트
+            document.getElementById(`${group}Input`).value = button.value;
         }
 
     </script>
 </head>
 <body>
-<h1 class="header">직원 정보 수정</h1>
-<form class="detail-table" th:action="@{/admin/employee/employeeUpdate/{id}(id=${employeeDetail.id})}" method="post">
-    <input type="hidden" name="_method" value="put">
-    <div th:object="${employeeDetail}">
-        <label for="name">이름</label>
-        <input type="text" th:field="*{name}" id="name">
-
-        <label for="changePassword"></label>
-        <input type="checkbox" id="changePassword" name="changePassword" value="true">
-        <input type="hidden" name="changePassword" value="false">
-        <label for="password">비밀번호</label>
-        <input type="password" th:field="*{password}" id="password" disabled>
-
-        <label for="email">이메일</label>
-        <input type="email" th:field="*{email}" id="email">
-
-        <label for="rrn">주민등록번호</label>
-        <input type="text" th:field="*{rrn}" id="rrn">
-
-        <label for="position">직급</label>
-        <input type="text" th:field="*{position}" id="position">
-
-        <label for="joinDate">입사일</label>
-        <input type="date" th:field="*{joinDate}" id="joinDate">
-
-        <label for="retirementDate">퇴사일</label>
-        <input type="date" th:field="*{retirementDate}" id="retirementDate">
-
-        <label for="contactInfo">연락처</label>
-        <input type="text" th:field="*{contactInfo}" id="contactInfo">
-
-        <label for="address">주소</label>
-        <input type="text" th:field="*{address}" id="address">
-
-        <label for="projectStatus">파견상태</label>
-        <div id="projectStatus">
-            <label class="radio-label">
-                <input type="radio" class="projectStatus" name="projectStatus" value="Y">YES
-            </label>
-            <label class="radio-label">
-                <input type="radio" class="projectStatus" name="projectStatus" value="N">NO
-            </label>
-            <input type="hidden" id="projectStatusInput">
-        </div>
-        <label for="adminStatus">관리자상태</label>
-        <div id="adminStatus">
-            <label class="radio-label">
-                <input type="radio" class="adminStatus" name="adminStatus" value="Y">YES
-            </label>
-            <label class="radio-label">
-                <input type="radio" class="adminStatus" name="adminStatus" value="N">NO
-            </label>
-            <input type="hidden" id="adminStatusInput">
-        </div>
-        <label for="comment">관리자 코멘트</label>
-        <input type="text" th:field="*{comment}" id="comment">
-
-        <label for="annualCount">발생 연차</label>
-        <input type="text" th:field="*{annualCount}" id="annualCount">
-
-        <input type="submit" value="확인">
+<div id="formContainer">
+    <div class="button-group">
+        <button type="button" class="confirm-button" onclick="window.location.href='/admin/employee/employeeList';">취소</button>
+        <button type="submit" form="employeeForm" value="Submit" class="confirm-button">수정</button>
     </div>
-</form>
+    <h1>직원 정보 수정</h1>
+    <form id="employeeForm" th:action="@{/admin/employee/employeeUpdate/{id}(id=${employeeDetail.id})}" method="post">
+        <input type="hidden" name="_method" value="put">
+        <input type="hidden" id="adminStatusValue" th:value="${employeeDetail.adminStatus}" />
+        <input type="hidden" id="projectStatusValue" th:value="${employeeDetail.projectStatus}" />
+        <table th:object="${employeeDetail}">
+            <tr>
+                <th><label for="name">이름</label></th>
+                <td><input type="text" id="name" name="name" th:field="*{name}"></td>
+            </tr>
+            <tr>
+                <th><label for="rrn">주민등록번호</label></th>
+                <td><input type="text" id="rrn" name="rrn" th:field="*{rrn}"></td>
+            </tr>
+            <tr>
+                <th><label for="contactInfo">연락처</label></th>
+                <td><input type="text" id="contactInfo" name="contactInfo" th:field="*{contactInfo}"></td>
+            </tr>
+            <tr>
+                <th><label for="address">주소</label></th>
+                <td><input type="text" id="address" name="address" th:field="*{address}"></td>
+            </tr>
+            <tr>
+                <th><label for="email">이메일</label></th>
+                <td><input type="email" id="email" name="email" required th:field="*{email}"></td>
+            </tr>
+            <tr>
+                <th>
+                    <input type="checkbox" id="changePassword" name="changePassword" />
+                    <label for="changePassword">비밀번호 변경</label>
+                </th>
+                <td>
+                    <input type="password" id="password" name="password" placeholder="새 비밀번호" disabled />
+
+                </td>
+            </tr>
+            <tr>
+                <th><label for="adminStatus">관리자 여부</label></th>
+                <td>
+                    <div id="adminStatus">
+                        <label class="radio-label">
+                            <input type="radio" class="adminStatus" name="adminStatus" value="Y">YES
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" class="adminStatus" name="adminStatus" value="N">NO
+                        </label>
+                        <input type="hidden" id="adminStatusInput">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="position">직급</label></th>
+                <td><input type="text" id="position" name="position" th:field="*{position}"></td>
+            </tr>
+            <tr>
+                <th><label for="joinDate">입사일</label></th>
+                <td><input type="date" id="joinDate" name="joinDate" th:field="*{joinDate}"></td>
+            </tr>
+            <tr>
+                <th><label for="retirementDate">퇴사일</label></th>
+                <td><input type="date" id="retirementDate" name="retirementDate" th:field="*{retirementDate}"></td>
+            </tr>
+            <tr>
+                <th><label for="annualCount">발생 연차</label></th>
+                <td><input type="number" id="annualCount" name="annualCount" th:field="*{annualCount}"></td>
+            </tr>
+            <tr>
+                <th><label for="projectStatus">파견상태</label></th>
+                <td>
+                    <div id="projectStatus">
+                        <label class="radio-label">
+                            <input type="radio" class="projectStatus" name="projectStatus" value="Y">YES
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" class="projectStatus" name="projectStatus" value="N">NO
+                        </label>
+                        <input type="hidden" id="projectStatusInput">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="comment">관리자 코멘트</label></th>
+                <td><textarea id="comment" name="comment" th:field="*{comment}"></textarea></td>
+            </tr>
+        </table>
+    </form>
+
+</div>
 </body>
 </html>

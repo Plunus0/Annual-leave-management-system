@@ -18,120 +18,43 @@
 
 							<div th:replace="header :: headerFragment"></div>
 
-							<!-- Banner -->
-								<section id="banner">
-									<div class="content">
-										<header>
-											<h1>Hi, I’m Editorial<br />
-											by HTML5 UP</h1>
-											<p>A free and fully responsive site template</p>
-										</header>
-										<p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. Pellentesque sapien ac quam. Lorem ipsum dolor sit nullam.</p>
-										<ul class="actions">
-											<li><a href="#" class="button big">Learn More</a></li>
-										</ul>
-									</div>
-									<span class="image object">
-										<img src="/images/pic10.jpg" alt="" />
-									</span>
-								</section>
+							<section id="indexDataSection">
+								<h3>최근 공지사항</h3>
+								<p><b>최근 공지사항 제목 : </b> <span th:text="${indexData.noticeTitle}">제목</span></p>
+								<p><b>최근 공지사항 내용 : </b> <span th:text="${indexData.noticeContent}">내용</span></p>
+								<p><b>최근 공지사항 작성일 : </b> <span th:text="${indexData.noticeRegDate}">작성일</span></p>
 
-							<!-- Section -->
-								<section>
-									<header class="major">
-										<h2>Erat lacinia</h2>
-									</header>
-									<div class="features">
-										<article>
-											<span class="icon fa-gem"></span>
-											<div class="content">
-												<h3>Portitor ullamcorper</h3>
-												<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											</div>
-										</article>
-										<article>
-											<span class="icon solid fa-paper-plane"></span>
-											<div class="content">
-												<h3>Sapien veroeros</h3>
-												<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											</div>
-										</article>
-										<article>
-											<span class="icon solid fa-rocket"></span>
-											<div class="content">
-												<h3>Quam lorem ipsum</h3>
-												<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											</div>
-										</article>
-										<article>
-											<span class="icon solid fa-signal"></span>
-											<div class="content">
-												<h3>Sed magna finibus</h3>
-												<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											</div>
-										</article>
-									</div>
-								</section>
+								<h3>공지사항 목록</h3>
+								<ul>
+									<li th:each="notice : ${indexData.noticeLists}">
+										<span th:text="${notice.noticeListTitle}">제목</span> -
+										<span th:text="${notice.noticeListRegDate}">작성일</span>
+									</li>
+								</ul>
 
-							<!-- Section -->
-								<section>
-									<header class="major">
-										<h2>Ipsum sed dolor</h2>
-									</header>
-									<div class="posts">
-										<article>
-											<a href="#" class="image"><img src="/images/pic01.jpg" alt="" /></a>
-											<h3>Interdum aenean</h3>
-											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											<ul class="actions">
-												<li><a href="#" class="button">More</a></li>
-											</ul>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="/images/pic02.jpg" alt="" /></a>
-											<h3>Nulla amet dolore</h3>
-											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											<ul class="actions">
-												<li><a href="#" class="button">More</a></li>
-											</ul>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="/images/pic03.jpg" alt="" /></a>
-											<h3>Tempus ullamcorper</h3>
-											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											<ul class="actions">
-												<li><a href="#" class="button">More</a></li>
-											</ul>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="/images/pic04.jpg" alt="" /></a>
-											<h3>Sed etiam facilis</h3>
-											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											<ul class="actions">
-												<li><a href="#" class="button">More</a></li>
-											</ul>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="/images/pic05.jpg" alt="" /></a>
-											<h3>Feugiat lorem aenean</h3>
-											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											<ul class="actions">
-												<li><a href="#" class="button">More</a></li>
-											</ul>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="/images/pic06.jpg" alt="" /></a>
-											<h3>Amet varius aliquam</h3>
-											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
-											<ul class="actions">
-												<li><a href="#" class="button">More</a></li>
-											</ul>
-										</article>
-									</div>
-								</section>
+								<h3>휴가신청 현황</h3>
+								<p>총 신청 수 : <span th:text="${indexData.requestOffCount}">0</span></p>
+								<p>연차 신청 수 : <span th:text="${indexData.requestOffAnnuCount}">0</span></p>
+								<p>반차(오전) 신청 수 : <span th:text="${indexData.requestOffHalfAMCount}">0</span></p>
+								<p>반차(오후) 신청 수 : <span th:text="${indexData.requestOffHalfPMCount}">0</span></p>
+								<p>병가 신청 수 : <span th:text="${indexData.requestOffSickCount}">0</span></p>
+								<p>기타 신청 수 : <span th:text="${indexData.requestOffEtcCount}">0</span></p>
 
-						</div>
-					</div>
+								<h3>출근현황</h3>
+								<p>날짜 : <span th:text="${indexData.today}">날짜</span></p>
+								<p>재직인원 : <span th:text="${indexData.rightEmpCount}">0</span></p>
+								<p>출근인원 : <span th:text="${indexData.rightEmpWorkCount}">0</span></p>
+								<p>결근인원 : <span th:text="${indexData.rightEmpAbsentCount}">0</span></p>
+								<p>투입인원 : <span th:text="${indexData.rightEmpProjectYCount}">0</span></p>
+								<p>미투입인원 : <span th:text="${indexData.rightEmpProjectNCount}">0</span></p>
+								<p>휴가사용인원 : <span th:text="${indexData.rightOffCount}">0</span></p>
+								<p>연차사용인원 : <span th:text="${indexData.rightOffAnnuCount}">0</span></p>
+								<p>반차(오전)사용인원 : <span th:text="${indexData.rightOffHalfAMCount}">0</span></p>
+								<p>반차(오후)사용인원 : <span th:text="${indexData.rightOffHalfPMCount}">0</span></p>
+								<p>병가사용인원 : <span th:text="${indexData.rightOffSickCount}">0</span></p>
+								<p>기타사용인원 : <span th:text="${indexData.rightOffEtcCount}">0</span></p>
+							</section>
+
 
 				<div th:replace="sidebar :: sidebarFragment"></div>
 
