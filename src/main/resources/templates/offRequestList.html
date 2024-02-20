@@ -70,6 +70,7 @@
                         <tr>
                             <th>번호</th>
                             <th>신청일</th>
+                            <th>사원번호</th>
                             <th>사원이름</th>
                             <th>연락처</th>
                             <th>신청 구분</th>
@@ -80,6 +81,7 @@
                         <tr th:each="offList : ${offSearchList}" th:onclick="'redirectToDetailPage(' + ${offList.id} + ')'">
                             <td th:text="${offList.rowNum}"></td>
                             <td th:text="${offList.applicationDate}"></td>
+                            <td th:text="${offList.employeeNumber}"></td>
                             <td th:text="${offList.name}"></td>
                             <td th:text="${offList.contactInfo}"></td>
                             <td th:text="${offList.requestType}"></td>

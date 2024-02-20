@@ -59,6 +59,7 @@ public class EmployeeProfileService {
 
         assert employeeProfile != null;
         response.setId(employee.getId());
+        response.setEmployeeNumber(employeeProfile.getEmployeeNumber());
         response.setEmail(employee.getEmail());
         response.setName(employeeProfile.getName());
         response.setRrn(Encryptor.decrypt(employeeProfile.getResidentRegistrationNumber()));
@@ -110,6 +111,7 @@ public class EmployeeProfileService {
         employee.setEmail(employeeDetail.getEmail());
         employeeProfile.setResidentRegistrationNumber(Encryptor.encrypt(employeeDetail.getRrn()));
         employeeProfile.setPosition(employeeDetail.getPosition());
+        employeeProfile.setEmployeeNumber(employeeDetail.getEmployeeNumber());
         // 날짜 정보를 처리하기 위해서는 문자열을 LocalDate 객체로 변환하는 과정이 필요합니다.
         // joinDate 업데이트
         String joinDateString = employeeDetail.getJoinDate();

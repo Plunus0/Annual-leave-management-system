@@ -18,4 +18,5 @@ public class EmployeeListResponse {
     private String contactInfo;
     private String email;
     private YesNo projectStatus;
+    private String employeeNumber;
 }

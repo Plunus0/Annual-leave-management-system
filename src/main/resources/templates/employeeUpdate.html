@@ -176,6 +176,10 @@ th, td {
         <input type="hidden" id="projectStatusValue" th:value="${employeeDetail.projectStatus}" />
         <table th:object="${employeeDetail}">
             <tr>
+                <th><label for="employeeNumber">사번</label></th>
+                <td><input type="text" id="employeeNumber" name="employeeNumber" th:field="*{employeeNumber}"></td>
+            </tr>
+            <tr>
                 <th><label for="name">이름</label></th>
                 <td><input type="text" id="name" name="name" th:field="*{name}"></td>
             </tr>

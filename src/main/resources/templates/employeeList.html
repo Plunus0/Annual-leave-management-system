@@ -50,6 +50,7 @@
                     <thead>
                     <tr>
                         <th>번호</th>
+                        <th>사번</th>
                         <th>직급</th>
                         <th>이름</th>
                         <th>전화번호</th>
@@ -59,6 +60,7 @@
                     <tbody>
                     <tr th:each="employee : ${empList}" th:onclick="'redirectToDetailPage(' + ${employee.id} + ')'">
                         <td th:text="${employee.rowNum}"></td>
+                        <td th:text="${employee.employeeNumber}"></td>
                         <td th:text="${employee.position}"></td>
                         <td th:text="${employee.name}"></td>
                         <td th:text="${employee.contactInfo}"></td>

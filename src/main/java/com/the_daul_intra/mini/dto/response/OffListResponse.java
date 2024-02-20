@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class OffListResponse {
     private Long id;
     private Long rowNum;
+    private String employeeNumber;
     private String name;
     private String contactInfo;
     private String applicationDate;

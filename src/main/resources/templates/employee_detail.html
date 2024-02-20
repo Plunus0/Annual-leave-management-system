@@ -85,6 +85,10 @@ textarea {
     <h1 class="header">직원 상세정보</h1>
     <table class="detail-table">
         <tr>
+            <th>사번</th>
+            <td th:text="${employee.employeeNumber}"></td>
+        </tr>
+        <tr>
             <th>이름</th>
             <td th:text="${employee.name}"></td>
         </tr>

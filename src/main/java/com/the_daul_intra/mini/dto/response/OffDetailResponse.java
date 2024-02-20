@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Builder
 public class OffDetailResponse {
     private Long id;
+    private String employeeNumber;
     private Long writerId;
     private String writerName;
     private LocalDate[] useDates;

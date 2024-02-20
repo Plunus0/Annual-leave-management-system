@@ -73,6 +73,7 @@ public class OffService {
         return offPages.map(offList -> new OffListResponse(
                 offList.getId(),
                 (long) startNumber.getAndDecrement(),
+                offList.getEmployee().getEmployeeProfile().getEmployeeNumber(),
                 offList.getEmployee().getEmployeeProfile().getName(),
                 offList.getEmployee().getEmployeeProfile().getContactInformation(),
                 offList.getApplicationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
@@ -107,6 +108,7 @@ public class OffService {
                 .toArray(LocalDate[]::new);
 
         return OffDetailResponse.builder()
+                .employeeNumber(employeeProfile.getEmployeeNumber())
                 .id(leaveAbsence.getId())
                 .writerId(employee.getId())
                 .writerName(employeeProfile.getName())

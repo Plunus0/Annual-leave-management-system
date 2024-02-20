@@ -66,6 +66,7 @@ public class EmployeeService {
                         : null)
                 .contactInformation(request.getContactInfo())//필수
                 .address(request.getAddress())
+                .employeeNumber(request.getEmployeeNumber())
                 .projectStatus(request.getProjectStatus() != null ? YesNo.valueOf(request.getProjectStatus()) : YesNo.N)
                 .adminComment(request.getComment())
                 .annualQuantity(request.getAnnualCount() != null ? request.getAnnualCount() : 0L)
@@ -102,7 +103,8 @@ public class EmployeeService {
                 empList.getName(),
                 empList.getContactInformation(),
                 empList.getEmail(),
-                empList.getProjectStatus()
+                empList.getProjectStatus(),
+                empList.getEmployeeNumber()
         ));
     }
 }

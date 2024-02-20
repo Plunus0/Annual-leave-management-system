@@ -120,6 +120,7 @@ public class NoticeService {
         return readStatuses.stream()
                 .map(readStatus -> new ViewerResponse(
                         readStatus.getEmployee().getId(),
+                        readStatus.getEmployee().getEmployeeProfile().getEmployeeNumber(),
                         readStatus.getEmployee().getEmployeeProfile().getName(),
                         readStatus.getEmployee().getEmployeeProfile().getContactInformation()))
                 .collect(Collectors.toList());
