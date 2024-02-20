@@ -23,5 +23,6 @@ public class EmployeePostRequest {
     private String comment;
     private Long annualCount = 0L;
     private String projectStatus;
+    private String employeeNumber;
 
 }

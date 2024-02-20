@@ -15,7 +15,6 @@ body {
 }
 h1 {
     color: #f56a6a; /* 강조 색상 적용 */
-    font-family: "Roboto Slab", serif; /* 일관된 글꼴 적용 */
     margin-bottom: 1em; /* 여백 추가 */
     text-align: center;
 }
@@ -82,7 +81,6 @@ table td, table th {
     border: solid 2px #f56a6a;
     padding: 0.5em 1em;
     text-transform: uppercase;
-    font-family: "Roboto Slab", serif;
     font-weight: 700;
     border-radius: 0.375em;
     cursor: pointer;

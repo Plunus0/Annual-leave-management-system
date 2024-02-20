@@ -94,9 +94,9 @@ public class NoticeService {
         Page<Notice> notices = noticeRepository.findAll(spec, pageable);
 
         // 전체 공지사항 수
-        long totalNotices = notices.getTotalElements();
+        long totalList = notices.getTotalElements();
         // 현재 페이지의 첫 번째 공지사항 번호
-        AtomicInteger startNumber = new AtomicInteger((int) totalNotices - (page - 1) * size);
+        AtomicInteger startNumber = new AtomicInteger((int) totalList - (page - 1) * size);
 
         return notices.map(notice -> {
             String writeId = notice.getEmployee() != null ? notice.getEmployee().getEmployeeProfile().getName() : null;

@@ -15,6 +15,10 @@ import com.the_daul_intra.mini.repository.ApiDetailsLeaveDateRepository;
 import com.the_daul_intra.mini.repository.ApiEmpLoginRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +44,8 @@ public class OffService {
 
     Long empId = null;
     DateTimeFormatter formatter;
-    public List<OffListResponse> getOffSerchList(String absenceType, String status) {
+
+/*    public List<OffListResponse> getOffSearchList(String absenceType, String status) {
         Specification<DetailsLeaveAbsence> spec = LeaveSpecifications.withAdminCriteria(absenceType, status);
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -53,6 +59,27 @@ public class OffService {
                         offList.getApplicantComments(),
                         offList.getProcessingStatus()
                 )).collect(Collectors.toList());
+    }*/
+    public Page<OffListResponse> getOffSearchList(Integer page, Integer size, String absenceType, String status) {
+        Specification<DetailsLeaveAbsence> spec = LeaveSpecifications.withAdminCriteria(absenceType, status);
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("applicationDate").ascending());
+        //휴가신청서 리스트 조회
+        Page<DetailsLeaveAbsence> offPages = apiDetailsLeaveAbsenceRepository.findAll(spec, pageable);
+        //휴가신청서 총 개수
+        long totalList = offPages.getTotalElements();
+        // 현재 페이지의 첫 번째 공지사항 번호
+        AtomicInteger startNumber = new AtomicInteger((int) totalList - (page - 1) * size);
+
+        return offPages.map(offList -> new OffListResponse(
+                offList.getId(),
+                (long) startNumber.getAndDecrement(),
+                offList.getEmployee().getEmployeeProfile().getName(),
+                offList.getEmployee().getEmployeeProfile().getContactInformation(),
+                offList.getApplicationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                offList.getAbsenceType(),
+                offList.getApplicantComments(),
+                offList.getProcessingStatus()
+        ));
     }
 
     public OffDetailResponse getOffDetail(Long id) {

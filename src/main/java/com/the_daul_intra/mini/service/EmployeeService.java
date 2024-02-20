@@ -4,17 +4,25 @@ import com.the_daul_intra.mini.configuration.BCryptEncoder;
 import com.the_daul_intra.mini.configuration.Encryptor;
 import com.the_daul_intra.mini.dto.entity.Employee;
 import com.the_daul_intra.mini.dto.entity.EmployeeProfile;
+import com.the_daul_intra.mini.dto.entity.Notice;
 import com.the_daul_intra.mini.dto.entity.YesNo;
 import com.the_daul_intra.mini.dto.request.EmployeePostRequest;
+import com.the_daul_intra.mini.dto.response.EmployeeListResponse;
 import com.the_daul_intra.mini.repository.EmployeeProfileRepository;
 import com.the_daul_intra.mini.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class EmployeeService {
@@ -66,5 +74,35 @@ public class EmployeeService {
         employeeProfileRepository.save(employeeProfile);
 
         return employee;
+    }
+
+    public Page<EmployeeListResponse> getEmpPagingList(Integer page, Integer size, String retire){
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("joinDate").ascending());
+
+        // 'retire' 값에 따른 Specification 조건 생성
+        Specification<EmployeeProfile> spec = (root, query, criteriaBuilder) -> {
+            if ("Y".equals(retire)) {
+                return criteriaBuilder.isNotNull(root.get("retirementDate"));
+            } else {
+                // 'retire'가 "N"이거나 null인 경우
+                return criteriaBuilder.isNull(root.get("retirementDate"));
+            }
+        };
+
+        Page<EmployeeProfile> empPage = employeeProfileRepository.findAll(spec, pageable);
+
+        long totalList = empPage.getTotalElements();
+        // 현재 페이지의 첫 번째 공지사항 번호
+        AtomicInteger startNumber = new AtomicInteger((int) totalList - (page - 1) * size);
+
+        return empPage.map(empList -> new EmployeeListResponse(
+                empList.getId(),
+                (long) startNumber.getAndDecrement(),
+                empList.getPosition(),
+                empList.getName(),
+                empList.getContactInformation(),
+                empList.getEmail(),
+                empList.getProjectStatus()
+        ));
     }
 }

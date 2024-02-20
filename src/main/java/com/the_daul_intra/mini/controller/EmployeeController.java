@@ -3,16 +3,16 @@ package com.the_daul_intra.mini.controller;
 import com.the_daul_intra.mini.dto.entity.Employee;
 import com.the_daul_intra.mini.dto.entity.EmployeeProfile;
 import com.the_daul_intra.mini.dto.request.EmployeePostRequest;
+import com.the_daul_intra.mini.dto.response.EmployeeListResponse;
 import com.the_daul_intra.mini.repository.EmployeeProfileRepository;
 import com.the_daul_intra.mini.repository.EmployeeRepository;
 import com.the_daul_intra.mini.service.EmployeeService;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -54,19 +54,25 @@ public class EmployeeController {
 
 
     @GetMapping("/employeeList")
-    public String showEmployeeList(Model model) {
-        List<EmployeeProfile> employees = employeeProfileRepository.findByRetirementDateIsNull();
+    public String showEmployeeList(
+            @RequestParam(value = "page", defaultValue = "1") @Min(value = 1, message = "최소 페이지는 1페이지 입니다.") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") Integer size,
+            @RequestParam(value = "retire", defaultValue = "N") String retire,
+            Model model) {
+        boolean isRetireY = "Y".equals(retire);
+        model.addAttribute("isRetireY", isRetireY);
+        Page<EmployeeListResponse> empList = employeeService.getEmpPagingList(page, size, retire);
+        model.addAttribute("empList", empList);
 
-        model.addAttribute("employees", employees);
         return "employeeList";
     }
 
-    @GetMapping("/retiredEmployee")
+/*    @GetMapping("/retiredEmployee")
     public String getRetiredEmployee(Model model) {
         List<Employee> employees = employeeRepository.findByEmployeeProfileRetirementDateIsNotNull();
         model.addAttribute("employees", employees);
         return "retiredEmployee";
-    }
+    }*/
 
 
 

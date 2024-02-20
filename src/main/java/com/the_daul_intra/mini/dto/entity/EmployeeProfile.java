@@ -50,8 +50,8 @@ public class EmployeeProfile {
     @Column(name = "PROJECT_STATUS")
     private YesNo projectStatus = YesNo.N;
 
-    @Column(name = "PROJECT_NAME", columnDefinition = "TEXT")
-    private String projectName;
+    @Column(name = "EMPLOYEE_NUMBER", columnDefinition = "TEXT")
+    private String employeeNumber;
 
     @Column(name = "ADMIN_COMMENT", columnDefinition = "TEXT")
     private String adminComment;

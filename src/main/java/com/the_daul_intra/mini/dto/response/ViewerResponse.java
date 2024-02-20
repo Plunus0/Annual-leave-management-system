@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ViewerResponse {
     private Long id;
+    private String employeeNumber;
     private String name;
     private String contactInfo;
 }

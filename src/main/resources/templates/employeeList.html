@@ -37,7 +37,8 @@
                 <h2>직원 목록</h2>
             <div>
                 <ul class="icons">
-                    <li><a href="/admin/employee/retiredEmployee" class="button">퇴사자만 보기</a></li>
+                    <li th:if="${!isRetireY}"><a href="/admin/employee/employeeList?retire=Y" class="button">퇴사자만 보기</a></li>
+                    <li th:if="${isRetireY}"><a href="/admin/employee/employeeList" class="button">돌아가기</a></li>
                     <li><a href="/admin/employee/employeeAdd" class="button primary">직원 추가</a></li>
                 </ul>
             </div>
@@ -56,15 +57,29 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="employee : ${employees}" th:onclick="'redirectToDetailPage(' + ${employee.id} + ')'">
-                        <td></td>
+                    <tr th:each="employee : ${empList}" th:onclick="'redirectToDetailPage(' + ${employee.id} + ')'">
+                        <td th:text="${employee.rowNum}"></td>
                         <td th:text="${employee.position}"></td>
                         <td th:text="${employee.name}"></td>
-                        <td th:text="${employee.contactInformation}"></td>
+                        <td th:text="${employee.contactInfo}"></td>
                         <td th:text="${employee.email}"></td>
                     </tr>
                     </tbody>
                 </table>
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="pagination-container">
+                    <ul class="pagination">
+                        <li th:if="${empList.hasPrevious()}">
+                            <a th:href="@{/admin/employee/employeeList(retire=${param.retire}, page=${empList.number})}" aria-label="Previous">&#10096;</a>
+                        </li>
+                        <li th:each="pageNum : ${#numbers.sequence(1, empList.totalPages)}" th:class="${pageNum == empList.number + 1} ? 'active'">
+                            <a th:href="@{/admin/employee/employeeList(retire=${param.retire}, page=${pageNum})}" th:text="${pageNum}">1</a>
+                        </li>
+                        <li th:if="${empList.hasNext()}">
+                            <a th:href="@{/admin/employee/employeeList(retire=${param.retire}, page=${empList.number + 2})}" aria-label="Next">&#10097;</a>
+                        </li>
+                    </ul>
+                </nav>
             </section>
 
         </div>

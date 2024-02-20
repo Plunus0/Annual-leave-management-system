@@ -13,6 +13,22 @@
             align-items: center; /* 세로 중앙 정렬을 위해 추가 */
             margin-top: 10px;
         }
+        #search form {
+            display: flex; /* Flexbox 레이아웃 활성화 */
+            align-items: center; /* 세로 중앙 정렬 */
+            gap: 10px; /* 요소 사이의 간격 */
+        }
+
+        #search input[type="text"] {
+            flex-grow: 1; /* 입력 필드를 유연하게 늘림 */
+        }
+
+        #search button,
+        #search a {
+            padding: 0.5em 1em; /* 버튼과 링크의 패딩 조정 */
+            text-decoration: none; /* 링크의 밑줄 제거 */
+            cursor: pointer; /* 마우스 오버 시 커서 변경 */
+        }
     </style>
     <script>
         function redirectToDetailPage(id) {
@@ -34,9 +50,15 @@
             <header class="main">
                 <h2>휴가신청 목록</h2>
                 <div>
-                    <ul class="icons">
-                        <li><a href="#" class="button">검색버튼구현하기</a></li>
-                    </ul>
+                    <!-- 검색 폼 -->
+                    <section id="search">
+                        <form action="/admin/off" method="get">
+                            <input type="text" name="absenceType" placeholder="신청 구분" th:value="${param.absenceType}" />
+                            <input type="text" name="status" placeholder="현재 상태" th:value="${param.status}"/>
+                            <button type="submit" class="button">검색</button>
+                            <a href="/admin/off" class="button">초기화</a>
+                        </form>
+                    </section>
                 </div>
             </header>
 
@@ -55,8 +77,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="offList : ${offSerchList}" th:onclick="'redirectToDetailPage(' + ${offList.id} + ')'">
-                            <td></td>
+                        <tr th:each="offList : ${offSearchList}" th:onclick="'redirectToDetailPage(' + ${offList.id} + ')'">
+                            <td th:text="${offList.rowNum}"></td>
                             <td th:text="${offList.applicationDate}"></td>
                             <td th:text="${offList.name}"></td>
                             <td th:text="${offList.contactInfo}"></td>
@@ -66,6 +88,20 @@
                         </tbody>
                     </table>
                 </div>
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="pagination-container">
+                    <ul class="pagination">
+                        <li th:if="${offSearchList.hasPrevious()}">
+                            <a th:href="@{/admin/off(page=${offSearchList.number}, absenceType=${param.absenceType}, status=${param.status})}" aria-label="Previous">&#10096;</a>
+                        </li>
+                        <li th:each="pageNum : ${#numbers.sequence(1, offSearchList.totalPages)}" th:class="${pageNum == offSearchList.number + 1} ? 'active'">
+                            <a th:href="@{/admin/off(page=${pageNum}, absenceType=${param.absenceType}, status=${param.status})}" th:text="${pageNum}">1</a>
+                        </li>
+                        <li th:if="${offSearchList.hasNext()}">
+                            <a th:href="@{/admin/off(page=${offSearchList.number + 2}, absenceType=${param.absenceType}, status=${param.status})}" aria-label="Next">&#10097;</a>
+                        </li>
+                    </ul>
+                </nav>
             </section>
 
         </div>

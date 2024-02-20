@@ -19,6 +19,7 @@ public class EmployeeDetailResponse {
     private String retirementDate;
     private String contactInfo;
     private String address;
+    private String employeeNumber;
     private String projectStatus;
     private String comment;
     private Long annualCount;
