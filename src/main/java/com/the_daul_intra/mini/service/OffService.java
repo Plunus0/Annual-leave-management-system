@@ -10,10 +10,9 @@ import com.the_daul_intra.mini.dto.response.OffDetailResponse;
 import com.the_daul_intra.mini.dto.response.OffListResponse;
 import com.the_daul_intra.mini.exception.AppException;
 import com.the_daul_intra.mini.exception.ErrorCode;
-import com.the_daul_intra.mini.repository.ApiDetailsLeaveAbsenceRepository;
-import com.the_daul_intra.mini.repository.ApiDetailsLeaveDateRepository;
-import com.the_daul_intra.mini.repository.ApiEmpLoginRepository;
+import com.the_daul_intra.mini.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +40,7 @@ public class OffService {
     private final ApiDetailsLeaveAbsenceRepository apiDetailsLeaveAbsenceRepository;
     private final ApiDetailsLeaveDateRepository apiDetailsLeaveDateRepository;
     private final ApiEmpLoginRepository apiEmpLoginRepository;
+    private final EmployeeProfileRepository employeeProfileRepository;
 
     Long empId = null;
     DateTimeFormatter formatter;
@@ -162,6 +162,7 @@ public class OffService {
         apiDetailsLeaveAbsenceRepository.save(detailsLeaveAbsence);
     }
 
+    @Transactional
     public void offProcess(Long id, ReceptRequest request) {
 
         //authentication객체에 SecurityContextHolder를 담아서 인증정보를 가져온다.
@@ -189,6 +190,15 @@ public class OffService {
         detailsLeaveAbsence.setProcessingStatus("승인");
 
         apiDetailsLeaveAbsenceRepository.save(detailsLeaveAbsence);
+
+        // 연차 사용 후 남은 연차 수 갱신
+        EmployeeProfile employeeProfile = detailsLeaveAbsence.getEmployee().getEmployeeProfile();
+        long newAnnualQuantity = employeeProfile.getAnnualQuantity() - detailsLeaveAbsence.getAbsenceLeavePeriod();
+        employeeProfile.setAnnualQuantity(newAnnualQuantity);
+
+        // 변경 사항 저장
+        apiDetailsLeaveAbsenceRepository.save(detailsLeaveAbsence);
+        employeeProfileRepository.save(employeeProfile);
     }
 
 }

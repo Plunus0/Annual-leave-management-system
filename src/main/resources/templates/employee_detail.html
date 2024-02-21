@@ -130,7 +130,8 @@ textarea {
 
         <tr>
             <th>발생 연차</th>
-            <td th:text="${employee.annualCount}"></td>
+            <td th:unless="${employee.annualCount == -1}" th:text="${employee.annualCount}"></td>
+            <td th:if="${employee.annualCount == -1}" th:utext="${employee.annualCount} + ' <br>(* 발생할 연차를 미리 신청하여 승인된 경우 -1 표기)'"></td>
         </tr>
         <tr>
             <th>파견상태</th>

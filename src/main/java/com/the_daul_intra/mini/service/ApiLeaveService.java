@@ -56,67 +56,53 @@ public class ApiLeaveService {
 
         //인증정보를 바탕으로 empId확인 후 없다면 로그인페이지로 이동
         Employee employee = apiEmpLoginRepository.findById(empId)
-                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND,"  로그인 내역이 존재하지 않습니다."));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, "  로그인 내역이 존재하지 않습니다."));
 
         // 현재 월과 일자
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = currentDate.getYear();
         int currentMonth = LocalDate.now().getMonthValue();
-        int currentDay = LocalDate.now().getDayOfMonth();
-        System.out.println("currentMonth : " + currentMonth);
-        System.out.println("currentDate : " + currentDay);
 
-
-        // 입사 일자와 월, 일, 현재 잔여 연차 갯수
+        // 입사 일자와 일, 현재 잔여 연차 갯수
         LocalDate joinDate = employee.getEmployeeProfile().getJoinDate().toLocalDate();
-        int joinMonth = joinDate.getMonthValue();
         int joinDay = joinDate.getDayOfMonth();
         Long offCount = employee.getEmployeeProfile().getAnnualQuantity();
-        System.out.println("joinDate : " + joinDate);
-        System.out.println("joinMonth : " + joinMonth);
-        System.out.println("joinDay : " + joinDay);
-        System.out.println("offCount : " + offCount);
 
-        // 연차를 신청한 일 중 가장 빠른 일자와 월, 일, 신청한 연차의 갯수
+        // 말일이 현재 월의 말일을 초과한 경우 현재 월의 말일로 변경
+        int lastDayOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth()).getDayOfMonth();
+        joinDay = Math.min(joinDay, lastDayOfMonth);
+
+        // 연차발생 시점
+        LocalDate annualCreateDate = LocalDate.of(currentYear, currentMonth, joinDay);
+
+        // 연차를 신청한 일 중 가장 빠른 일자와 연차 신청이 가능한 최대 일자
         LocalDate minDate = Arrays.stream(request.getUseDates()).min(LocalDate::compareTo).orElse(null);
-        int minDateMonth = Objects.requireNonNull(minDate).getMonthValue();
-        int minDateDay = Objects.requireNonNull(minDate).getDayOfMonth();
+        LocalDate minDatePlus30 = minDate.plusDays(30);
+
+        // 연차 사용 개수
         Long requestOffCount = (long) request.getUseDates().length;
+
+        // 요청타입이 연차인지 확인
         boolean isAnnual = request.getType().equals("연차") || request.getType().equals("반차(오전)") || request.getType().equals("반차(오후)") || request.getType().equals("월차");
-        System.out.println("minDate : " + minDate);
-        System.out.println("minDateMonth : " + minDateMonth);
-        System.out.println("minDateDay : " + minDateDay);
-        System.out.println("requestOffCount : " + requestOffCount);
-        System.out.println("isAnnual : " + isAnnual);
 
+        //연차를 신청한 날짜와 연차신청일+30 사이에 연차발생일자가 들어가는지 유무 확인
+        boolean isBetween = isDateBetween(minDate, minDatePlus30, annualCreateDate);
 
-
-        System.out.println("ChronoUnit.YEARS.between(joinDate, LocalDate.now()) : " + ChronoUnit.YEARS.between(joinDate, LocalDate.now()));
-
-        // 근속일수가 1년 미만
-        if(ChronoUnit.YEARS.between(joinDate, LocalDate.now()) < 1){
-            // 입사월과 현재 월일 비교하여 동일월인지 다음월인지 구분
-            if(joinMonth == currentMonth)
+        // 근속일수가 1년 미만인 경우 발생할 연차를 미리 신청할 수 있게 해준다.
+        // 비슷한 예로 1년 이상의 경우도 미리 신청은 가능하게 만들어야 한다
+        System.out.println("minDate : " + minDate + "\nminDatePlus30 : " + minDatePlus30 + "\nannualCreateDate : " + annualCreateDate + "\nisBetween : " + isBetween);
+        if (ChronoUnit.DAYS.between(joinDate, currentDate) < 365) {
+            //신청일 기준 30일 이내 연차가 생길 경우 +1을 하여 계산(실제 추가되지는 않음)
+            if(isBetween) {
                 offCount++;
+            }
         }
 
         // 신청 갯수보다 사용 가능한 연차가 적을 때
         if (offCount < requestOffCount && isAnnual) {
             throw new AppException(ErrorCode.INVALID_OPERATION, "사용 가능한 연차가 없습니다.");
-/*                //연차 사용 불가능한 조건들 열거
-
-            // 1. 근속일수가 1년 이상일 때
-            if (ChronoUnit.YEARS.between(joinDate, LocalDate.now()) >= 1) {
-                System.out.println("1Y up");
-            }
-            // 2. 근속일수가 1년 미만이나 입사일 기준 30일 이후의 미발생 연차를 사용하는 경우
-            if (!(minDateMonth == currentMonth && minDate.isBefore(LocalDate.now())) &&
-                    !(minDateMonth == currentMonth - 1 && minDate.isAfter(LocalDate.now()))) {
-                throw new AppException(ErrorCode.INVALID_OPERATION, "사용 가능한 연차가 없습니다. 1Y D ok");
-            }else if(employee.getEmployeeProfile().getAnnualQuantity()+1 < request.getUseDates().length){
-                throw new AppException(ErrorCode.INVALID_OPERATION, "사용 가능한 연차가 없습니다. 1Y D no");
-            }*/
         }
 
-        System.out.println("off insert");
         DetailsLeaveAbsence leaveRequest = DetailsLeaveAbsence.builder()
                 .employee(employee)
                 .absenceLeavePeriod(requestOffCount)
@@ -151,7 +137,7 @@ public class ApiLeaveService {
         }
 
         //검색 조건에 따른 검색 실행
-        List<DetailsLeaveAbsence> leaves = apiDetailsLeaveAbsenceRepository.findAll(LeaveSpecifications.withCriteria(request, empId),Sort.by(Sort.Direction.DESC, "applicationDate"));
+        List<DetailsLeaveAbsence> leaves = apiDetailsLeaveAbsenceRepository.findAll(LeaveSpecifications.withCriteria(request, empId), Sort.by(Sort.Direction.DESC, "applicationDate"));
 
         //검색 결과 반환
         return leaves.stream().map(leave -> new ApiOffListItemResponse(
@@ -174,7 +160,7 @@ public class ApiLeaveService {
         }
 
         DetailsLeaveAbsence leaveAbsence = apiDetailsLeaveAbsenceRepository.findById(requestId)
-                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND," 해당 신청서가 존재하지 않습니다."));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND, " 해당 신청서가 존재하지 않습니다."));
 
         Set<DetailsLeaveDate> leaveDates = leaveAbsence.getLeaveDates();
         LocalDate[] useDates = leaveDates.stream()
@@ -199,5 +185,10 @@ public class ApiLeaveService {
                 .reason(leaveAbsence.getApplicantComments())
                 .adminComment(leaveAbsence.getAdminComment())
                 .build();
+    }
+
+    private static boolean isDateBetween(LocalDate startDate, LocalDate endDate, LocalDate annualCreateDate) {
+        // 연차 발생시점이 신청일 이후이고 신청일로부터 30일 이내인지 확인
+        return !annualCreateDate.isBefore(startDate) && !annualCreateDate.isAfter(endDate);
     }
 }
